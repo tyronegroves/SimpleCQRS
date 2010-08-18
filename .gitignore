@@ -9,3 +9,4 @@ bin
 *.cache
 *.log
 *.user
+src/Simple CQRS.suo
