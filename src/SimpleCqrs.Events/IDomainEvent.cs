@@ -1,6 +1,6 @@
 ﻿namespace SimpleCqrs.Events
 {
-    public interface IEvent
+    public interface IDomainEvent
     {
     }
 }

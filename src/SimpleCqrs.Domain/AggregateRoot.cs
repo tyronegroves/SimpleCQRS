@@ -13,13 +13,13 @@ namespace SimpleCqrs.Domain
             this.aggregateRootEventHandlerInvoker = aggregateRootEventHandlerInvoker;
         }
 
-        public void RestoreFromEvents(IEnumerable<IEvent> events)
+        public void RestoreFromEvents(IEnumerable<IDomainEvent> domainEvents)
         {
-            events.ToList()
+            domainEvents.ToList()
                 .ForEach(e => aggregateRootEventHandlerInvoker.Invoke(this, e));
         }
 
-        protected void ApplyEvent(IEvent @event)
+        protected void ApplyEvent(IDomainEvent domainEvent)
         {
         }
     }
