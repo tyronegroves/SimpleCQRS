@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Domain", "SimpleCqrs.Domain\SimpleCqrs.Domain.csproj", "{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Events", "SimpleCqrs.Events\SimpleCqrs.Events.csproj", "{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
