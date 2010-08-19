@@ -7,6 +7,6 @@ namespace SimpleCqrs.EventStore
     public interface IEventStore
     {
         IEnumerable<IDomainEvent> GetAggregateEvents(Guid aggregateRootId);
-        void Insert(params IDomainEvent[] domainEvents);
+        void Insert(IEnumerable<IDomainEvent> domainEvents);
     }
 }

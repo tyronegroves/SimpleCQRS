@@ -25,10 +25,10 @@ namespace SimpleCqrs.EventStore
             return aggregateRoot;
         }
 
-        public void Add(AggregateRoot aggregateRoot)
+        public void Save(AggregateRoot aggregateRoot)
         {
             var domainEvents = aggregateRoot.UncommittedEvents;
-            eventStore.Insert(domainEvents.ToArray());
+            eventStore.Insert(domainEvents);
             eventBus.PublishEvents(domainEvents);
             aggregateRoot.CommitEvents();
         }

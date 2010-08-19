@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SimpleCqrs.Events;
@@ -144,51 +146,38 @@ namespace SimpleCqrs.Domain.Tests
         }
 
         [TestMethod]
-        public void ApplyEventsOrdersTheEventsBeforeEventsAreApplied()
+        public void EventsAreSortedByEventIdBeforeBeingAppliedToTheAggregateRoot()
         {
-            var domainEvent2 = new HandlerThatMeetsConventionEvent {EventId = 2};
-            var domainEvent1 = new HandlerThatMeetsConventionEvent {EventId = 1};
-            var domainEvent3 = new HandlerThatMeetsConventionEvent {EventId = 3};
-            var aggregateRoot = mockAggregateRoot.Object;
+            var aggregateRoot = new MyAggregateRoot();
+            var domainEvents = new List<HandlerThatMeetsConventionEvent>
+                                   {
+                                       new HandlerThatMeetsConventionEvent {EventId = 5},
+                                       new HandlerThatMeetsConventionEvent {EventId = 1},
+                                       new HandlerThatMeetsConventionEvent {EventId = 100},
+                                       new HandlerThatMeetsConventionEvent {EventId = 2}
+                                   };
 
-            var event1Applied = false;
-            var event2Applied = false;
-            var event3Applied = false;
+            aggregateRoot.ApplyEvents(domainEvents.ToArray());
 
-            mockAggregateRoot
-                .Setup(ar => ar.OnHandlerThatMeetsConventionEvent(domainEvent1))
-                .Callback(() =>
-                              {
-                                  Assert.IsTrue(event2Applied || event3Applied);
-                                  event1Applied = true;
-                              });
-
-            mockAggregateRoot
-                .Setup(ar => ar.OnHandlerThatMeetsConventionEvent(domainEvent2))
-                .Callback(() =>
-                              {
-                                  Assert.IsTrue(!event1Applied);
-                                  event2Applied = true;
-                              });
-
-            mockAggregateRoot
-                .Setup(ar => ar.OnHandlerThatMeetsConventionEvent(domainEvent3))
-                .Callback(() =>
-                              {
-                                  Assert.IsTrue(!event1Applied || !event2Applied);
-                                  event3Applied = true;
-                              });
-
-            aggregateRoot.ApplyEvents(domainEvent2, domainEvent1, domainEvent3);
-
-            Assert.IsTrue(event1Applied && event2Applied && event3Applied);
+            Assert.AreEqual(1, aggregateRoot.EventIds[0]);
+            Assert.AreEqual(2, aggregateRoot.EventIds[1]);
+            Assert.AreEqual(5, aggregateRoot.EventIds[2]);
+            Assert.AreEqual(100, aggregateRoot.EventIds[3]);
         }
     }
 
     public class MyAggregateRoot : AggregateRoot
     {
+        public MyAggregateRoot()
+        {
+            EventIds = new List<int>();
+        }
+
+        public List<int> EventIds { get; private set; }
+
         public virtual void OnHandlerThatMeetsConventionEvent(HandlerThatMeetsConventionEvent domainEvent)
         {
+            EventIds.Add(domainEvent.EventId);
         }
 
         public virtual void OnHandlerThatDoesNotMeetsConventionEvent(HandlerThatMeetsConventionEvent domainEvent)

@@ -24,11 +24,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Core.Tests", "Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore", "SimpleCqrs.EventStore\SimpleCqrs.EventStore.csproj", "{2E237224-97CE-46E6-A7D3-440493377D75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore.Tests", "Tests\SimpleCqrs.EventStore.Tests\SimpleCqrs.EventStore.Tests.csproj", "{7EFF780C-15C9-40C4-97E1-12B2EBEBFA1E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Commands", "SimpleCqrs.Commands\SimpleCqrs.Commands.csproj", "{539E864E-117F-49DC-82E8-B490E215A428}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Commands.Tests", "Tests\SimpleCqrs.Commands.Tests\SimpleCqrs.Commands.Tests.csproj", "{CD5AF951-E088-4798-8482-48B7D27D9EFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore.Tests", "Tests\SimpleCqrs.EventStore.Tests\SimpleCqrs.EventStore.Tests.csproj", "{7BB13E79-4290-463F-A709-FB95260D34AF}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -67,10 +67,6 @@ Global
 		{2E237224-97CE-46E6-A7D3-440493377D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E237224-97CE-46E6-A7D3-440493377D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E237224-97CE-46E6-A7D3-440493377D75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7EFF780C-15C9-40C4-97E1-12B2EBEBFA1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7EFF780C-15C9-40C4-97E1-12B2EBEBFA1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7EFF780C-15C9-40C4-97E1-12B2EBEBFA1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7EFF780C-15C9-40C4-97E1-12B2EBEBFA1E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{539E864E-117F-49DC-82E8-B490E215A428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{539E864E-117F-49DC-82E8-B490E215A428}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{539E864E-117F-49DC-82E8-B490E215A428}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,6 +75,10 @@ Global
 		{CD5AF951-E088-4798-8482-48B7D27D9EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD5AF951-E088-4798-8482-48B7D27D9EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD5AF951-E088-4798-8482-48B7D27D9EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BB13E79-4290-463F-A709-FB95260D34AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BB13E79-4290-463F-A709-FB95260D34AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BB13E79-4290-463F-A709-FB95260D34AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BB13E79-4290-463F-A709-FB95260D34AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,7 +87,7 @@ Global
 		{042E6156-6D03-4176-930C-917A044DA11C} = {BE8A5F95-23AD-4B5D-BA21-004909E80F00}
 		{B563CAAF-17D9-4E1E-9B9D-5AB67E7BE5DB} = {BE8A5F95-23AD-4B5D-BA21-004909E80F00}
 		{6AEAEE90-CF43-47CE-BD60-9F9519120BC6} = {BE8A5F95-23AD-4B5D-BA21-004909E80F00}
-		{7EFF780C-15C9-40C4-97E1-12B2EBEBFA1E} = {BE8A5F95-23AD-4B5D-BA21-004909E80F00}
 		{CD5AF951-E088-4798-8482-48B7D27D9EFB} = {BE8A5F95-23AD-4B5D-BA21-004909E80F00}
+		{7BB13E79-4290-463F-A709-FB95260D34AF} = {BE8A5F95-23AD-4B5D-BA21-004909E80F00}
 	EndGlobalSection
 EndGlobal
