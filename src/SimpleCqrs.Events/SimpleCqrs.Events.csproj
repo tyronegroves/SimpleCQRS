@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DomainEvent.cs" />
     <Compile Include="IDomainEvent.cs" />
+    <Compile Include="IEventBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
