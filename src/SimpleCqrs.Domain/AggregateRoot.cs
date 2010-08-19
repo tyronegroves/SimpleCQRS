@@ -12,31 +12,38 @@ namespace SimpleCqrs.Domain
         private readonly Queue<IDomainEvent> uncommittedEvents = new Queue<IDomainEvent>();
         private int currentEventId;
 
+        public Guid Id { get; protected set; }
+
         public ReadOnlyCollection<IDomainEvent> UncommittedEvents
         {
             get { return new ReadOnlyCollection<IDomainEvent>(uncommittedEvents.ToList()); }
         }
 
-        public void ApplyEvent(IDomainEvent domainEvent)
+        public void ApplyEvents(params IDomainEvent[] domainEvents)
         {
-            currentEventId = domainEvent.EventId;
-            var domainEventType = domainEvent.GetType();
-            var domainEventTypeName = domainEventType.Name;
-            var aggregateRootType = GetType();
+            domainEvents = domainEvents.OrderBy(domainEvent => domainEvent.EventId).ToArray();
+            currentEventId = domainEvents.Last().EventId;
 
-            var methodInfos = aggregateRootType
-                .FindMembers(MemberTypes.Method,
-                             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                             Type.FilterNameIgnoreCase,
-                             "On" + domainEventTypeName)
-                .Cast<MethodInfo>();
-
-            foreach (var methodInfo in methodInfos)
+            foreach (var domainEvent in domainEvents)
             {
-                if (!EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) continue;
+                var domainEventType = domainEvent.GetType();
+                var domainEventTypeName = domainEventType.Name;
+                var aggregateRootType = GetType();
 
-                methodInfo.Invoke(this, new[] {domainEvent});
-                return;
+                var methodInfos = aggregateRootType
+                    .FindMembers(MemberTypes.Method,
+                                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                                 Type.FilterNameIgnoreCase,
+                                 "On" + domainEventTypeName)
+                    .Cast<MethodInfo>();
+
+                foreach (var methodInfo in methodInfos)
+                {
+                    if (!EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) continue;
+
+                    methodInfo.Invoke(this, new[] {domainEvent});
+                    break;
+                }
             }
         }
 
@@ -48,7 +55,7 @@ namespace SimpleCqrs.Domain
         protected void PublishEvent(IDomainEvent domainEvent)
         {
             domainEvent.EventId = ++currentEventId;
-            ApplyEvent(domainEvent);
+            ApplyEvents(domainEvent);
             uncommittedEvents.Enqueue(domainEvent);
         }
 
