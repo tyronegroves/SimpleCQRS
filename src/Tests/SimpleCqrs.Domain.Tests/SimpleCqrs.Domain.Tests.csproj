@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMoq">
+      <HintPath>..\..\..\lib\AutoMoq.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -45,7 +48,18 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateRootTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SimpleCqrs.Domain\SimpleCqrs.Domain.csproj">
+      <Project>{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}</Project>
+      <Name>SimpleCqrs.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimpleCqrs.Events\SimpleCqrs.Events.csproj">
+      <Project>{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}</Project>
+      <Name>SimpleCqrs.Events</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
