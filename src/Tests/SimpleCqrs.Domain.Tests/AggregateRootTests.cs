@@ -163,6 +163,18 @@ namespace SimpleCqrs.Domain.Tests
             Assert.AreEqual(5, aggregateRoot.EventIds[2]);
             Assert.AreEqual(100, aggregateRoot.EventIds[3]);
         }
+
+        [TestMethod]
+        public void AggregateRootIdIsAssignedToTheEventWhenTheEventIsPublishedAndTheAggregateRootIdIsGuidEmpty()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void AggregateRootIdIsNotAssignedToTheEventWhenTheEventIsPublishedAndTheAggregateRootIdIsNotGuidEmpty()
+        {
+            Assert.Fail();
+        }
     }
 
     public class MyAggregateRoot : AggregateRoot

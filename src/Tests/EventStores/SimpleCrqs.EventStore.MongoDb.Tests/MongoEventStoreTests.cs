@@ -16,7 +16,7 @@ namespace SimpleCrqs.EventStore.MongoDb.Tests
         [TestMethod]
         public void Test()
         {
-            var eventStore = new MongoEventStore("Server=127.0.0.1");
+            var eventStore = new MongoEventStore("Server=127.0.0.1", new MyDomainEventTypeCatalog());
             var repository = new DomainRepository(eventStore, new MyEventBus());
 
             var customer = new Customer();
@@ -24,8 +24,6 @@ namespace SimpleCrqs.EventStore.MongoDb.Tests
             customer.Deactivate();
 
             repository.Save(customer);
-
-            var c = repository.GetById<Customer>(new Guid("ff4910ad-94bf-4862-b8d2-bb05e4fee46b"));
         }
     }
 
@@ -51,6 +49,14 @@ namespace SimpleCrqs.EventStore.MongoDb.Tests
         public void OnCustomerDeactivitedEvent(CustomerDeactivitedEvent customerDeactivitedEvent)
         {
             active = false;
+        }
+    }
+
+    public class MyDomainEventTypeCatalog : IDomainEventTypeCatalog
+    {
+        public IEnumerable<Type> GetAllEventTypes()
+        {
+            return new[] {typeof(CustomerAcceptedEvent), typeof(CustomerDeactivitedEvent)};
         }
     }
 
