@@ -18,7 +18,7 @@ namespace SimpleCqrs.EventStore
 
         public TAggregateRoot GetById<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot, new()
         {
-            var domainEvents = eventStore.GetAggregateEvents(aggregateRootId);
+            var domainEvents = eventStore.GetAggregateRootEvents(aggregateRootId);
             var aggregateRoot = new TAggregateRoot();
             aggregateRoot.ApplyEvents(domainEvents.ToArray());
 

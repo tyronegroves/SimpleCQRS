@@ -28,7 +28,7 @@ namespace SimpleCqrs.EventStore.Tests
             var domainEvents = new List<MyTestEvent> {new MyTestEvent(), new MyTestEvent(), new MyTestEvent()};
 
             mocker.GetMock<IEventStore>()
-                .Setup(eventStore => eventStore.GetAggregateEvents(aggregateRootId))
+                .Setup(eventStore => eventStore.GetAggregateRootEvents(aggregateRootId))
                 .Returns(domainEvents);
 
             var aggregateRoot = repository.GetById<MyTestAggregateRoot>(aggregateRootId);
@@ -50,7 +50,7 @@ namespace SimpleCqrs.EventStore.Tests
             repository.Save(aggregateRoot);
 
             mocker.GetMock<IEventStore>()
-                .Verify(eventStore => eventStore.Insert(It.Is<IEnumerable<IDomainEvent>>(events => events.All(domainEvents.Contains))), Times.Once());
+                .Verify(eventStore => eventStore.Insert(It.Is<IEnumerable<DomainEvent>>(events => events.All(domainEvents.Contains))), Times.Once());
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace SimpleCqrs.EventStore.Tests
             repository.Save(aggregateRoot);
 
             mocker.GetMock<IEventBus>()
-                .Verify(eventBus => eventBus.PublishEvents(It.IsAny<IEnumerable<IDomainEvent>>()), Times.Once());
+                .Verify(eventBus => eventBus.PublishEvents(It.IsAny<IEnumerable<DomainEvent>>()), Times.Once());
         }
 
         [TestMethod]

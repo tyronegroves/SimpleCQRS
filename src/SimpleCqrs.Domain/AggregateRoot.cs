@@ -9,17 +9,17 @@ namespace SimpleCqrs.Domain
 {
     public abstract class AggregateRoot
     {
-        private readonly Queue<IDomainEvent> uncommittedEvents = new Queue<IDomainEvent>();
+        private readonly Queue<DomainEvent> uncommittedEvents = new Queue<DomainEvent>();
         private int currentSequence;
 
         public Guid Id { get; protected set; }
 
-        public ReadOnlyCollection<IDomainEvent> UncommittedEvents
+        public ReadOnlyCollection<DomainEvent> UncommittedEvents
         {
-            get { return new ReadOnlyCollection<IDomainEvent>(uncommittedEvents.ToList()); }
+            get { return new ReadOnlyCollection<DomainEvent>(uncommittedEvents.ToList()); }
         }
 
-        public void ApplyEvents(params IDomainEvent[] domainEvents)
+        public void ApplyEvents(params DomainEvent[] domainEvents)
         {
             domainEvents = domainEvents.OrderBy(domainEvent => domainEvent.Sequence).ToArray();
             currentSequence = domainEvents.Last().Sequence;
@@ -52,7 +52,7 @@ namespace SimpleCqrs.Domain
             uncommittedEvents.Clear();
         }
 
-        protected void PublishEvent(IDomainEvent domainEvent)
+        protected void PublishEvent(DomainEvent domainEvent)
         {
             domainEvent.Sequence = ++currentSequence;
             ApplyEvents(domainEvent);

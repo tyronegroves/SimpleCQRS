@@ -4,7 +4,7 @@ namespace SimpleCqrs.Events
 {
     public interface IEventBus
     {
-        void PublishEvent(IDomainEvent domainEvent);
-        void PublishEvents(IEnumerable<IDomainEvent> domainEvents);
+        void PublishEvent(DomainEvent domainEvent);
+        void PublishEvents(IEnumerable<DomainEvent> domainEvents);
     }
 }

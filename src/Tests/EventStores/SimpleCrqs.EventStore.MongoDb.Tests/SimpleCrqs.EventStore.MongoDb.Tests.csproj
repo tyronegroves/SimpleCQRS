@@ -3,15 +3,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>
+    </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{201A4DF5-2217-4202-80E8-E784737366BC}</ProjectGuid>
+    <ProjectGuid>{38E51E8F-7008-47EC-AC9F-862A1F377532}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleCqrs.EventStore.MongoDb</RootNamespace>
-    <AssemblyName>SimpleCqrs.EventStore.MongoDb</AssemblyName>
+    <RootNamespace>SimpleCrqs.EventStore.MongoDb.Tests</RootNamespace>
+    <AssemblyName>SimpleCrqs.EventStore.MongoDb.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,40 +33,47 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB">
-      <HintPath>..\..\..\lib\MongoDB.dll</HintPath>
+    <Reference Include="AutoMoq">
+      <HintPath>..\..\..\..\lib\AutoMoq.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.GridFS">
-      <HintPath>..\..\..\lib\MongoDB.GridFS.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.XML" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MongoEventStore.cs" />
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MongoEventStoreTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SimpleCqrs.Core\SimpleCqrs.Core.csproj">
+    <ProjectReference Include="..\..\..\EventStores\SimpleCqrs.EventStore.MongoDb\SimpleCqrs.EventStore.MongoDb.csproj">
+      <Project>{201A4DF5-2217-4202-80E8-E784737366BC}</Project>
+      <Name>SimpleCqrs.EventStore.MongoDb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SimpleCqrs.Core\SimpleCqrs.Core.csproj">
       <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
       <Name>SimpleCqrs.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SimpleCqrs.Domain\SimpleCqrs.Domain.csproj">
+    <ProjectReference Include="..\..\..\SimpleCqrs.Domain\SimpleCqrs.Domain.csproj">
       <Project>{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}</Project>
       <Name>SimpleCqrs.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SimpleCqrs.EventStore\SimpleCqrs.EventStore.csproj">
+    <ProjectReference Include="..\..\..\SimpleCqrs.EventStore\SimpleCqrs.EventStore.csproj">
       <Project>{2E237224-97CE-46E6-A7D3-440493377D75}</Project>
       <Name>SimpleCqrs.EventStore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SimpleCqrs.Events\SimpleCqrs.Events.csproj">
+    <ProjectReference Include="..\..\..\SimpleCqrs.Events\SimpleCqrs.Events.csproj">
       <Project>{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}</Project>
       <Name>SimpleCqrs.Events</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
