@@ -74,7 +74,14 @@ namespace SimpleCqrs.EventStore.Tests
         public void UncommittedEventsShouldBeCommited()
         {
             var repository = CreateDomainRepository();
+            var aggregateRoot = new MyTestAggregateRoot();
 
+            aggregateRoot.PublishDomainEvent(new MyTestEvent());
+            aggregateRoot.PublishDomainEvent(new MyTestEvent());
+
+            repository.Save(aggregateRoot);
+
+            Assert.AreEqual(0, aggregateRoot.UncommittedEvents.Count);
         }
 
         public DomainRepository CreateDomainRepository()
@@ -95,7 +102,7 @@ namespace SimpleCqrs.EventStore.Tests
             private void OnMyTestEvent(MyTestEvent myTestEvent)
             {
                 MyTestEventHandleCount++;
-                EventIds.Add(myTestEvent.EventId);
+                EventIds.Add(myTestEvent.Sequence);
             }
 
             public void PublishDomainEvent(DomainEvent domainEvent)

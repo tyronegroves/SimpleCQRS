@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -122,14 +121,14 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent = new HandlerThatMeetsConventionEvent();
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.ApplyEvents(new HandlerThatMeetsConventionEvent {EventId = 203});
+            aggregateRoot.ApplyEvents(new HandlerThatMeetsConventionEvent {Sequence = 203});
             aggregateRoot.PublishMyDomainEvent(domainEvent);
 
-            Assert.AreEqual(204, domainEvent.EventId);
+            Assert.AreEqual(204, domainEvent.Sequence);
         }
 
         [TestMethod]
-        public void DomainEventsAreAssignedSequentialEventIdWhenPublished()
+        public void DomainEventsAreAssignedSequentialSequenceWhenPublished()
         {
             var domainEvent1 = new HandlerThatMeetsConventionEvent();
             var domainEvent2 = new HandlerThatMeetsConventionEvent();
@@ -140,21 +139,21 @@ namespace SimpleCqrs.Domain.Tests
             aggregateRoot.PublishMyDomainEvent(domainEvent2);
             aggregateRoot.PublishMyDomainEvent(domainEvent3);
 
-            Assert.AreEqual(1, domainEvent1.EventId);
-            Assert.AreEqual(2, domainEvent2.EventId);
-            Assert.AreEqual(3, domainEvent3.EventId);
+            Assert.AreEqual(1, domainEvent1.Sequence);
+            Assert.AreEqual(2, domainEvent2.Sequence);
+            Assert.AreEqual(3, domainEvent3.Sequence);
         }
 
         [TestMethod]
-        public void EventsAreSortedByEventIdBeforeBeingAppliedToTheAggregateRoot()
+        public void EventsAreSortedBySequenceBeforeBeingAppliedToTheAggregateRoot()
         {
             var aggregateRoot = new MyAggregateRoot();
             var domainEvents = new List<HandlerThatMeetsConventionEvent>
                                    {
-                                       new HandlerThatMeetsConventionEvent {EventId = 5},
-                                       new HandlerThatMeetsConventionEvent {EventId = 1},
-                                       new HandlerThatMeetsConventionEvent {EventId = 100},
-                                       new HandlerThatMeetsConventionEvent {EventId = 2}
+                                       new HandlerThatMeetsConventionEvent {Sequence = 5},
+                                       new HandlerThatMeetsConventionEvent {Sequence = 1},
+                                       new HandlerThatMeetsConventionEvent {Sequence = 100},
+                                       new HandlerThatMeetsConventionEvent {Sequence = 2}
                                    };
 
             aggregateRoot.ApplyEvents(domainEvents.ToArray());
@@ -174,10 +173,12 @@ namespace SimpleCqrs.Domain.Tests
         }
 
         public List<int> EventIds { get; private set; }
+        public bool OnPrivateHandlerThatMeetsConventionEventCalled { get; set; }
+        public bool OnProtectedHandlerThatMeetsConventionEventCalled { get; set; }
 
         public virtual void OnHandlerThatMeetsConventionEvent(HandlerThatMeetsConventionEvent domainEvent)
         {
-            EventIds.Add(domainEvent.EventId);
+            EventIds.Add(domainEvent.Sequence);
         }
 
         public virtual void OnHandlerThatDoesNotMeetsConventionEvent(HandlerThatMeetsConventionEvent domainEvent)
@@ -188,14 +189,10 @@ namespace SimpleCqrs.Domain.Tests
         {
         }
 
-        public bool OnPrivateHandlerThatMeetsConventionEventCalled { get; set; }
-
         private void OnPrivateHandlerThatMeetsConventionEvent(PrivateHandlerThatMeetsConventionEvent domainEvent)
         {
             OnPrivateHandlerThatMeetsConventionEventCalled = true;
         }
-
-        public bool OnProtectedHandlerThatMeetsConventionEventCalled { get; set; }
 
         protected void OnProtectedHandlerThatMeetsConventionEvent(ProtectedHandlerThatMeetsConventionEvent domainEvent)
         {
