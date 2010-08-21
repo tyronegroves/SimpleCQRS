@@ -24,9 +24,9 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent = new HandlerThatMeetsConventionEvent();
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.ApplyEvents(domainEvent);
+            aggregateRoot.Apply(domainEvent);
 
-            mockAggregateRoot.Verify(ar => ar.OnHandlerThatMeetsConventionEvent(domainEvent), Times.Once());
+            mockAggregateRoot.Verify(ar => ar.OnHandlerThatMeetsConvention(domainEvent), Times.Once());
         }
 
         [TestMethod]
@@ -35,9 +35,9 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent = new HandlerThatMeetsConventionEvent();
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.ApplyEvents(domainEvent);
+            aggregateRoot.Apply(domainEvent);
 
-            mockAggregateRoot.Verify(ar => ar.OnHandlerThatDoesNotMeetsConventionEvent(domainEvent), Times.Never());
+            mockAggregateRoot.Verify(ar => ar.OnHandlerThatDoesNotMeetsConvention(domainEvent), Times.Never());
         }
 
         [TestMethod]
@@ -46,9 +46,9 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent = new HandlerThatMeetsConventionEvent();
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.ApplyEvents(domainEvent);
+            aggregateRoot.Apply(domainEvent);
 
-            mockAggregateRoot.Verify(ar => ar.OnHandlerThatMeetsConventionEvent(domainEvent, "test"), Times.Never());
+            mockAggregateRoot.Verify(ar => ar.OnHandlerThatMeetsConvention(domainEvent, "test"), Times.Never());
         }
 
         [TestMethod]
@@ -57,9 +57,9 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent = new PrivateHandlerThatMeetsConventionEvent();
             var aggregateRoot = new MyAggregateRoot();
 
-            aggregateRoot.ApplyEvents(domainEvent);
+            aggregateRoot.Apply(domainEvent);
 
-            Assert.IsTrue(aggregateRoot.OnPrivateHandlerThatMeetsConventionEventCalled);
+            Assert.IsTrue(aggregateRoot.OnPrivateHandlerThatMeetsConventionCalled);
         }
 
         [TestMethod]
@@ -68,9 +68,9 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent = new ProtectedHandlerThatMeetsConventionEvent();
             var aggregateRoot = new MyAggregateRoot();
 
-            aggregateRoot.ApplyEvents(domainEvent);
+            aggregateRoot.Apply(domainEvent);
 
-            Assert.IsTrue(aggregateRoot.OnProtectedHandlerThatMeetsConventionEventCalled);
+            Assert.IsTrue(aggregateRoot.OnProtectedHandlerThatMeetsConventionCalled);
         }
 
         [TestMethod]
@@ -78,9 +78,9 @@ namespace SimpleCqrs.Domain.Tests
         {
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
-            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
-            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
+            aggregateRoot.Apply(new HandlerThatMeetsConventionEvent());
+            aggregateRoot.Apply(new HandlerThatMeetsConventionEvent());
+            aggregateRoot.Apply(new HandlerThatMeetsConventionEvent());
 
             aggregateRoot.CommitEvents();
 
@@ -93,7 +93,7 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent = new HandlerThatMeetsConventionEvent();
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.PublishMyDomainEvent(domainEvent);
+            aggregateRoot.Apply(domainEvent);
 
             Assert.AreSame(domainEvent, aggregateRoot.UncommittedEvents.First());
         }
@@ -106,9 +106,9 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent3 = new HandlerThatMeetsConventionEvent();
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.PublishMyDomainEvent(domainEvent1);
-            aggregateRoot.PublishMyDomainEvent(domainEvent2);
-            aggregateRoot.PublishMyDomainEvent(domainEvent3);
+            aggregateRoot.Apply(domainEvent1);
+            aggregateRoot.Apply(domainEvent2);
+            aggregateRoot.Apply(domainEvent3);
 
             Assert.AreEqual(3, aggregateRoot.UncommittedEvents.Count);
             Assert.AreSame(domainEvent1, aggregateRoot.UncommittedEvents.ElementAt(0));
@@ -122,8 +122,8 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent = new HandlerThatMeetsConventionEvent();
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.ApplyEvents(new HandlerThatMeetsConventionEvent {Sequence = 203});
-            aggregateRoot.PublishMyDomainEvent(domainEvent);
+            aggregateRoot.LoadFromHistoricalEvents(new HandlerThatMeetsConventionEvent {Sequence = 203});
+            aggregateRoot.Apply(domainEvent);
 
             Assert.AreEqual(204, domainEvent.Sequence);
         }
@@ -136,9 +136,9 @@ namespace SimpleCqrs.Domain.Tests
             var domainEvent3 = new HandlerThatMeetsConventionEvent();
             var aggregateRoot = mockAggregateRoot.Object;
 
-            aggregateRoot.PublishMyDomainEvent(domainEvent1);
-            aggregateRoot.PublishMyDomainEvent(domainEvent2);
-            aggregateRoot.PublishMyDomainEvent(domainEvent3);
+            aggregateRoot.Apply(domainEvent1);
+            aggregateRoot.Apply(domainEvent2);
+            aggregateRoot.Apply(domainEvent3);
 
             Assert.AreEqual(1, domainEvent1.Sequence);
             Assert.AreEqual(2, domainEvent2.Sequence);
@@ -157,7 +157,7 @@ namespace SimpleCqrs.Domain.Tests
                                        new HandlerThatMeetsConventionEvent {Sequence = 2}
                                    };
 
-            aggregateRoot.ApplyEvents(domainEvents.ToArray());
+            aggregateRoot.LoadFromHistoricalEvents(domainEvents.ToArray());
 
             Assert.AreEqual(1, aggregateRoot.EventIds[0]);
             Assert.AreEqual(2, aggregateRoot.EventIds[1]);
@@ -171,9 +171,9 @@ namespace SimpleCqrs.Domain.Tests
             var aggregateRoot = mockAggregateRoot.Object;
             var aggregateRootId = aggregateRoot.Id;
 
-            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
-            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
-            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
+            aggregateRoot.Apply(new HandlerThatMeetsConventionEvent());
+            aggregateRoot.Apply(new HandlerThatMeetsConventionEvent());
+            aggregateRoot.Apply(new HandlerThatMeetsConventionEvent());
 
             Assert.IsTrue(aggregateRoot.UncommittedEvents.All(domainEvent => domainEvent.AggregateRootId == aggregateRootId));
         }
@@ -188,35 +188,30 @@ namespace SimpleCqrs.Domain.Tests
         }
 
         public List<int> EventIds { get; private set; }
-        public bool OnPrivateHandlerThatMeetsConventionEventCalled { get; set; }
-        public bool OnProtectedHandlerThatMeetsConventionEventCalled { get; set; }
+        public bool OnPrivateHandlerThatMeetsConventionCalled { get; set; }
+        public bool OnProtectedHandlerThatMeetsConventionCalled { get; set; }
 
-        public virtual void OnHandlerThatMeetsConventionEvent(HandlerThatMeetsConventionEvent domainEvent)
+        public virtual void OnHandlerThatMeetsConvention(HandlerThatMeetsConventionEvent domainEvent)
         {
             EventIds.Add(domainEvent.Sequence);
         }
 
-        public virtual void OnHandlerThatDoesNotMeetsConventionEvent(HandlerThatMeetsConventionEvent domainEvent)
+        public virtual void OnHandlerThatDoesNotMeetsConvention(HandlerThatMeetsConventionEvent domainEvent)
         {
         }
 
-        public virtual void OnHandlerThatMeetsConventionEvent(HandlerThatMeetsConventionEvent domainEvent, string test)
+        public virtual void OnHandlerThatMeetsConvention(HandlerThatMeetsConventionEvent domainEvent, string test)
         {
         }
 
-        private void OnPrivateHandlerThatMeetsConventionEvent(PrivateHandlerThatMeetsConventionEvent domainEvent)
+        private void OnPrivateHandlerThatMeetsConvention(PrivateHandlerThatMeetsConventionEvent domainEvent)
         {
-            OnPrivateHandlerThatMeetsConventionEventCalled = true;
+            OnPrivateHandlerThatMeetsConventionCalled = true;
         }
 
-        protected void OnProtectedHandlerThatMeetsConventionEvent(ProtectedHandlerThatMeetsConventionEvent domainEvent)
+        protected void OnProtectedHandlerThatMeetsConvention(ProtectedHandlerThatMeetsConventionEvent domainEvent)
         {
-            OnProtectedHandlerThatMeetsConventionEventCalled = true;
-        }
-
-        public void PublishMyDomainEvent(HandlerThatMeetsConventionEvent domainEvent)
-        {
-            Apply(domainEvent);
+            OnProtectedHandlerThatMeetsConventionCalled = true;
         }
     }
 

@@ -43,9 +43,9 @@ namespace SimpleCqrs.EventStore.Tests
             var aggregateRoot = new MyTestAggregateRoot();
             var domainEvents = new List<DomainEvent> {new MyTestEvent(), new MyTestEvent(), new MyTestEvent()};
             
-            aggregateRoot.PublishDomainEvent(domainEvents[0]);
-            aggregateRoot.PublishDomainEvent(domainEvents[1]);
-            aggregateRoot.PublishDomainEvent(domainEvents[2]);
+            aggregateRoot.Apply(domainEvents[0]);
+            aggregateRoot.Apply(domainEvents[1]);
+            aggregateRoot.Apply(domainEvents[2]);
 
             repository.Save(aggregateRoot);
 
@@ -60,9 +60,9 @@ namespace SimpleCqrs.EventStore.Tests
             var aggregateRoot = new MyTestAggregateRoot();
             var domainEvents = new List<DomainEvent> { new MyTestEvent(), new MyTestEvent(), new MyTestEvent() };
 
-            aggregateRoot.PublishDomainEvent(domainEvents[0]);
-            aggregateRoot.PublishDomainEvent(domainEvents[1]);
-            aggregateRoot.PublishDomainEvent(domainEvents[2]);
+            aggregateRoot.Apply(domainEvents[0]);
+            aggregateRoot.Apply(domainEvents[1]);
+            aggregateRoot.Apply(domainEvents[2]);
 
             repository.Save(aggregateRoot);
 
@@ -76,8 +76,8 @@ namespace SimpleCqrs.EventStore.Tests
             var repository = CreateDomainRepository();
             var aggregateRoot = new MyTestAggregateRoot();
 
-            aggregateRoot.PublishDomainEvent(new MyTestEvent());
-            aggregateRoot.PublishDomainEvent(new MyTestEvent());
+            aggregateRoot.Apply(new MyTestEvent());
+            aggregateRoot.Apply(new MyTestEvent());
 
             repository.Save(aggregateRoot);
 
@@ -99,15 +99,10 @@ namespace SimpleCqrs.EventStore.Tests
                 EventIds = new List<int>();
             }
 
-            private void OnMyTestEvent(MyTestEvent myTestEvent)
+            private void OnMyTest(MyTestEvent myTestEvent)
             {
                 MyTestEventHandleCount++;
                 EventIds.Add(myTestEvent.Sequence);
-            }
-
-            public void PublishDomainEvent(DomainEvent domainEvent)
-            {
-                Apply(domainEvent);
             }
         }
 

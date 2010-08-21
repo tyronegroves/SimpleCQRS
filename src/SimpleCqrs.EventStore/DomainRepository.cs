@@ -20,7 +20,7 @@ namespace SimpleCqrs.EventStore
         {
             var domainEvents = eventStore.GetAggregateRootEvents(aggregateRootId);
             var aggregateRoot = new TAggregateRoot();
-            aggregateRoot.ApplyEvents(domainEvents.ToArray());
+            aggregateRoot.LoadFromHistoricalEvents(domainEvents.ToArray());
 
             return aggregateRoot;
         }

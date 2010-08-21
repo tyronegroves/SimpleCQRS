@@ -19,24 +19,21 @@ namespace SimpleCqrs.Domain
             get { return new ReadOnlyCollection<DomainEvent>(uncommittedEvents.ToList()); }
         }
 
-        public void ApplyEvents(params DomainEvent[] domainEvents)
+        public void LoadFromHistoricalEvents(params DomainEvent[] domainEvents)
         {
             domainEvents = domainEvents.OrderBy(domainEvent => domainEvent.Sequence).ToArray();
             currentSequence = domainEvents.Last().Sequence;
 
             foreach(var domainEvent in domainEvents)
-            {
-                var domainEventType = domainEvent.GetType();
-                var domainEventTypeName = domainEventType.Name;
-                var aggregateRootType = GetType();
+                ApplyEventToInternalState(domainEvent);
+        }
 
-                var methodInfo = aggregateRootType.GetMethod("On" + domainEventTypeName, 
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { domainEventType }, null);
-
-                if(methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) continue;
-
-                methodInfo.Invoke(this, new[] {domainEvent});
-            }
+        public void Apply(DomainEvent domainEvent)
+        {
+            domainEvent.Sequence = ++currentSequence;
+            ApplyEventToInternalState(domainEvent);
+            domainEvent.AggregateRootId = Id;
+            uncommittedEvents.Enqueue(domainEvent);
         }
 
         public void CommitEvents()
@@ -44,12 +41,24 @@ namespace SimpleCqrs.Domain
             uncommittedEvents.Clear();
         }
 
-        protected void Apply(DomainEvent domainEvent)
+        private void ApplyEventToInternalState(DomainEvent domainEvent)
         {
-            domainEvent.Sequence = ++currentSequence;
-            ApplyEvents(domainEvent);
-            domainEvent.AggregateRootId = Id;
-            uncommittedEvents.Enqueue(domainEvent);
+            var domainEventType = domainEvent.GetType();
+            var domainEventTypeName = domainEventType.Name;
+            var aggregateRootType = GetType();
+
+            var methodInfo = aggregateRootType.GetMethod(GetEventHandlerMethodName(domainEventTypeName),
+                                                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { domainEventType }, null);
+
+            if (methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
+
+            methodInfo.Invoke(this, new[] { domainEvent });
+        }
+
+        private static string GetEventHandlerMethodName(string domainEventTypeName)
+        {
+            var eventIndex = domainEventTypeName.LastIndexOf("Event");
+            return "On" + domainEventTypeName.Remove(eventIndex, 5);
         }
 
         private static bool EventHandlerMethodInfoHasCorrectParameter(MethodInfo eventHandlerMethodInfo, Type domainEventType)
