@@ -107,7 +107,7 @@ namespace SimpleCqrs.EventStore.Tests
 
             public void PublishDomainEvent(DomainEvent domainEvent)
             {
-                PublishEvent(domainEvent);
+                Apply(domainEvent);
             }
         }
 

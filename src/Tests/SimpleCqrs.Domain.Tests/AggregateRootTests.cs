@@ -216,7 +216,7 @@ namespace SimpleCqrs.Domain.Tests
 
         public void PublishMyDomainEvent(HandlerThatMeetsConventionEvent domainEvent)
         {
-            PublishEvent(domainEvent);
+            Apply(domainEvent);
         }
     }
 

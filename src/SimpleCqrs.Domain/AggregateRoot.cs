@@ -24,26 +24,18 @@ namespace SimpleCqrs.Domain
             domainEvents = domainEvents.OrderBy(domainEvent => domainEvent.Sequence).ToArray();
             currentSequence = domainEvents.Last().Sequence;
 
-            foreach (var domainEvent in domainEvents)
+            foreach(var domainEvent in domainEvents)
             {
                 var domainEventType = domainEvent.GetType();
                 var domainEventTypeName = domainEventType.Name;
                 var aggregateRootType = GetType();
 
-                var methodInfos = aggregateRootType
-                    .FindMembers(MemberTypes.Method,
-                                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                 Type.FilterNameIgnoreCase,
-                                 "On" + domainEventTypeName)
-                    .Cast<MethodInfo>();
+                var methodInfo = aggregateRootType.GetMethod("On" + domainEventTypeName, 
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { domainEventType }, null);
 
-                foreach (var methodInfo in methodInfos)
-                {
-                    if (!EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) continue;
+                if(methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) continue;
 
-                    methodInfo.Invoke(this, new[] {domainEvent});
-                    break;
-                }
+                methodInfo.Invoke(this, new[] {domainEvent});
             }
         }
 
@@ -52,7 +44,7 @@ namespace SimpleCqrs.Domain
             uncommittedEvents.Clear();
         }
 
-        protected void PublishEvent(DomainEvent domainEvent)
+        protected void Apply(DomainEvent domainEvent)
         {
             domainEvent.Sequence = ++currentSequence;
             ApplyEvents(domainEvent);

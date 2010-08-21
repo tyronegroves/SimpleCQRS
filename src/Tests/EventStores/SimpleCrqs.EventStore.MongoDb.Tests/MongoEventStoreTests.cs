@@ -33,12 +33,12 @@ namespace SimpleCrqs.EventStore.MongoDb.Tests
 
         public void Accept()
         {
-            PublishEvent(new CustomerAcceptedEvent { AggregateRootId = Guid.NewGuid() });
+            Apply(new CustomerAcceptedEvent { AggregateRootId = Guid.NewGuid() });
         }
 
         public void Deactivate()
         {
-            PublishEvent(new CustomerDeactivitedEvent());
+            Apply(new CustomerDeactivitedEvent());
         }
 
         public void OnCustomerAcceptedEvent(CustomerAcceptedEvent customerAcceptedEvent)
