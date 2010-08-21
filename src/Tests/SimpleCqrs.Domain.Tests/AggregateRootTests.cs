@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -165,15 +166,16 @@ namespace SimpleCqrs.Domain.Tests
         }
 
         [TestMethod]
-        public void AggregateRootIdIsAssignedToTheEventWhenTheEventIsPublishedAndTheAggregateRootIdIsGuidEmpty()
+        public void AggregateRootIdIsAssignedToTheEventWhenTheEventIsAppliedAndTheAggregateRootIdIsGuidEmpty()
         {
-            Assert.Fail();
-        }
+            var aggregateRoot = mockAggregateRoot.Object;
+            var aggregateRootId = aggregateRoot.Id;
 
-        [TestMethod]
-        public void AggregateRootIdIsNotAssignedToTheEventWhenTheEventIsPublishedAndTheAggregateRootIdIsNotGuidEmpty()
-        {
-            Assert.Fail();
+            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
+            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
+            aggregateRoot.PublishMyDomainEvent(new HandlerThatMeetsConventionEvent());
+
+            Assert.IsTrue(aggregateRoot.UncommittedEvents.All(domainEvent => domainEvent.AggregateRootId == aggregateRootId));
         }
     }
 
@@ -182,6 +184,7 @@ namespace SimpleCqrs.Domain.Tests
         public MyAggregateRoot()
         {
             EventIds = new List<int>();
+            Id = Guid.NewGuid();
         }
 
         public List<int> EventIds { get; private set; }

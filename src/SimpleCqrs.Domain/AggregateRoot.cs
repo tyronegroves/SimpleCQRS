@@ -56,6 +56,7 @@ namespace SimpleCqrs.Domain
         {
             domainEvent.Sequence = ++currentSequence;
             ApplyEvents(domainEvent);
+            domainEvent.AggregateRootId = Id;
             uncommittedEvents.Enqueue(domainEvent);
         }
 
