@@ -28,7 +28,7 @@ namespace SimpleCqrs.EventStore.Tests
             var domainEvents = new List<MyTestEvent> {new MyTestEvent(), new MyTestEvent(), new MyTestEvent()};
 
             mocker.GetMock<IEventStore>()
-                .Setup(eventStore => eventStore.GetAggregateRootEvents(aggregateRootId))
+                .Setup(eventStore => eventStore.GetEvents(aggregateRootId, 0))
                 .Returns(domainEvents);
 
             var aggregateRoot = repository.GetById<MyTestAggregateRoot>(aggregateRootId);

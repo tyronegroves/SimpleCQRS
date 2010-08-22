@@ -8,17 +8,19 @@ namespace SimpleCqrs.EventStore
     public class DomainRepository
     {
         private readonly IEventStore eventStore;
+        private readonly ISnapshotStore snapshotStore;
         private readonly IEventBus eventBus;
 
-        public DomainRepository(IEventStore eventStore, IEventBus eventBus)
+        public DomainRepository(IEventStore eventStore, ISnapshotStore snapshotStore, IEventBus eventBus)
         {
             this.eventStore = eventStore;
+            this.snapshotStore = snapshotStore;
             this.eventBus = eventBus;
         }
 
         public TAggregateRoot GetById<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot, new()
         {
-            var domainEvents = eventStore.GetAggregateRootEvents(aggregateRootId);
+            var domainEvents = eventStore.GetEvents(aggregateRootId, 0);
             var aggregateRoot = new TAggregateRoot();
             aggregateRoot.LoadFromHistoricalEvents(domainEvents.ToArray());
 

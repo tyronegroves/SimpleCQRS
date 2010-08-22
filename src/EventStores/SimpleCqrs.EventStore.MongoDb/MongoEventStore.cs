@@ -39,12 +39,13 @@ namespace SimpleCqrs.EventStore.MongoDb
             return configurationBuilder.BuildConfiguration();
         }
 
-        public IEnumerable<DomainEvent> GetAggregateRootEvents(Guid aggregateRootId)
+        public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
             var eventsCollection = database.GetCollection<DomainEvent>("events").Linq();
             return (from domainEvent in eventsCollection
-                   where domainEvent.AggregateRootId == aggregateRootId
-                   select domainEvent).ToList();
+                    where domainEvent.AggregateRootId == aggregateRootId
+                    where domainEvent.Sequence > startSequence
+                    select domainEvent).ToList();
         }
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)

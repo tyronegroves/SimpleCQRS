@@ -17,7 +17,7 @@ namespace SimpleCrqs.EventStore.MongoDb.Tests
         public void Test()
         {
             var eventStore = new MongoEventStore("Server=127.0.0.1", new MyDomainEventTypeCatalog());
-            var repository = new DomainRepository(eventStore, new MyEventBus());
+            var repository = new DomainRepository(eventStore, new NullSnapshotStore(), new MyEventBus());
 
             var customer = new Customer();
             customer.Accept();
@@ -25,9 +25,20 @@ namespace SimpleCrqs.EventStore.MongoDb.Tests
 
             repository.Save(customer);
         }
+
+        [TestMethod]
+        public void SnapshotTest()
+        {
+            var snapshotStore = new MongoSnapshotStore("Server=127.0.0.1");
+            var aggregateRootId = Guid.NewGuid();
+            
+            snapshotStore.SaveSnapshot(new CustomerSnapshot {Active = true, CreditStatus = "Declined", AggregateRootId = aggregateRootId});
+
+            var snapshot = snapshotStore.GetSnapshot<CustomerSnapshot>(aggregateRootId);
+        }
     }
 
-    public class Customer : AggregateRoot
+    public class Customer : AggregateRoot, ILoadSnapshots<CustomerSnapshot>
     {
         private bool active;
 
@@ -41,15 +52,32 @@ namespace SimpleCrqs.EventStore.MongoDb.Tests
             Apply(new CustomerDeactivitedEvent());
         }
 
-        public void OnCustomerAcceptedEvent(CustomerAcceptedEvent customerAcceptedEvent)
+        public CustomerSnapshot GetCurrentSnapshot()
+        {
+            return new CustomerSnapshot{Active = active};
+        }
+
+        public void LoadSnapshot(CustomerSnapshot snapshot)
+        {
+            active = snapshot.Active;
+        }
+
+        private void OnCustomerAcceptedEvent(CustomerAcceptedEvent customerAcceptedEvent)
         {
             Id = customerAcceptedEvent.AggregateRootId;
         }
 
-        public void OnCustomerDeactivitedEvent(CustomerDeactivitedEvent customerDeactivitedEvent)
+        private void OnCustomerDeactivitedEvent(CustomerDeactivitedEvent customerDeactivitedEvent)
         {
             active = false;
         }
+    }
+
+    public class CustomerSnapshot : ISnapshot
+    {
+        public bool Active { get; set; }
+        public Guid AggregateRootId { get; set; }
+        public string CreditStatus { get; set; }
     }
 
     public class MyDomainEventTypeCatalog : IDomainEventTypeCatalog

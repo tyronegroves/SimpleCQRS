@@ -10,9 +10,10 @@ namespace SimpleCqrs.Domain
     public abstract class AggregateRoot
     {
         private readonly Queue<DomainEvent> uncommittedEvents = new Queue<DomainEvent>();
-        private int currentSequence;
 
         public Guid Id { get; protected set; }
+
+        public int LastEventSequence { get; private set; }
 
         public ReadOnlyCollection<DomainEvent> UncommittedEvents
         {
@@ -22,7 +23,7 @@ namespace SimpleCqrs.Domain
         public void LoadFromHistoricalEvents(params DomainEvent[] domainEvents)
         {
             domainEvents = domainEvents.OrderBy(domainEvent => domainEvent.Sequence).ToArray();
-            currentSequence = domainEvents.Last().Sequence;
+            LastEventSequence = domainEvents.Last().Sequence;
 
             foreach(var domainEvent in domainEvents)
                 ApplyEventToInternalState(domainEvent);
@@ -30,7 +31,7 @@ namespace SimpleCqrs.Domain
 
         public void Apply(DomainEvent domainEvent)
         {
-            domainEvent.Sequence = ++currentSequence;
+            domainEvent.Sequence = ++LastEventSequence;
             ApplyEventToInternalState(domainEvent);
             domainEvent.AggregateRootId = Id;
             uncommittedEvents.Enqueue(domainEvent);

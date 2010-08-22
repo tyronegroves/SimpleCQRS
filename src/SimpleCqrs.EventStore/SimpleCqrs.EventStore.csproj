@@ -38,6 +38,8 @@
   <ItemGroup>
     <Compile Include="DomainRepository.cs" />
     <Compile Include="IEventStore.cs" />
+    <Compile Include="ISnapshotStore.cs" />
+    <Compile Include="NullSnapshotStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

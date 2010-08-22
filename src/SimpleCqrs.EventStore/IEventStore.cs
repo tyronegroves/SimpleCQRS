@@ -6,7 +6,7 @@ namespace SimpleCqrs.EventStore
 {
     public interface IEventStore
     {
-        IEnumerable<DomainEvent> GetAggregateRootEvents(Guid aggregateRootId);
+        IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence);
         void Insert(IEnumerable<DomainEvent> domainEvents);
     }
 }
