@@ -34,10 +34,8 @@ namespace SimpleCqrs.Unity
 
         public UnityServiceLocator(IUnityContainer container)
         {
-            if (container == null)
-            {
+            if(container == null)
                 throw new ArgumentNullException("container", "The specified Unity container cannot be null.");
-            }
 
             Container = container;
         }
