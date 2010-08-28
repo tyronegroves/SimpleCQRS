@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SimpleCqrs
 {
     public interface ITypeCatalog
     {
-        IEnumerable<Type> GetDerivedTypes(Type type);
-        IEnumerable<Type> GetGenericInterfaceImplementations(Type type);
+        Type[] GetDerivedTypes(Type type);
+        Type[] GetDerivedTypes<T>();
+        Type[] GetGenericInterfaceImplementations(Type type);
+        Type[] GetInterfaceImplementations(Type type);
+        Type[] GetInterfaceImplementations<T>();
     }
 }

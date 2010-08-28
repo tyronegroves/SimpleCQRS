@@ -6,59 +6,63 @@ using SimpleCqrs.Events;
 
 namespace SimpleCqrs
 {
-    public class Bootstrapper
+    public abstract class Bootstrapper<TServiceLocator> where TServiceLocator : IServiceLocator
     {
-        private IServiceLocator serviceLocator;
+        private IServiceLocator applicationServiceLocator;
 
         public IServiceLocator Run()
         {
-            serviceLocator = GetServiceLocator();
-            var assembliesToScan = GetAssembliesToScan();
+            applicationServiceLocator = GetServiceLocator();
+            var assembliesToScan = GetAssembliesToScan(applicationServiceLocator);
             var typeCatalog = GetTypeCatalog(assembliesToScan);
-            serviceLocator.Register(typeCatalog);
-            serviceLocator.Register(GetCommandBus(typeCatalog));
-            serviceLocator.Register(GetEventBus(typeCatalog));
-            serviceLocator.Register(GetSnapshotStore());
-            serviceLocator.Register(GetEventStore());
-            return serviceLocator;
+            applicationServiceLocator.Register(applicationServiceLocator);
+            applicationServiceLocator.Register(typeCatalog);
+            applicationServiceLocator.Register(GetCommandBus(applicationServiceLocator));
+            applicationServiceLocator.Register(GetEventBus(applicationServiceLocator));
+            applicationServiceLocator.Register(GetSnapshotStore(applicationServiceLocator));
+            applicationServiceLocator.Register(GetEventStore(applicationServiceLocator));
+            return applicationServiceLocator;
         }
 
         public void Shutdown()
         {
-            serviceLocator.Dispose();
+            applicationServiceLocator.Dispose();
         }
 
-        protected virtual ICommandBus GetCommandBus(ITypeCatalog typeCatalog)
+        protected virtual ICommandBus GetCommandBus(IServiceLocator serviceLocator)
         {
-            return new DirectCommandBus(typeCatalog, serviceLocator);
+            return serviceLocator.Resolve<DirectCommandBus>();
         }
 
-        protected virtual IEventBus GetEventBus(ITypeCatalog typeCatalog)
+        protected virtual IEventBus GetEventBus(IServiceLocator serviceLocator)
         {
-            return new DirectEventBus(typeCatalog);
+            return serviceLocator.Resolve<DirectEventBus>();
         }
 
-        protected virtual ISnapshotStore GetSnapshotStore()
+        protected virtual ISnapshotStore GetSnapshotStore(IServiceLocator serviceLocator)
         {
-            return new NullSnapshotStore();
+            var typeCatalog = serviceLocator.Resolve<ITypeCatalog>();
+            var snapshotStoreTypes = typeCatalog.GetInterfaceImplementations<ISnapshotStore>();
+
+            if (snapshotStoreTypes.Length > 1)
+                throw new Exception("Two snapshot stores");
+
+            return snapshotStoreTypes.Length == 0 ? new NullSnapshotStore() : (ISnapshotStore)serviceLocator.Resolve(snapshotStoreTypes[0]);
         }
 
-        protected virtual IEventStore GetEventStore()
-        {
-            return new NullEventStore();
-        }
+        protected abstract IEventStore GetEventStore(IServiceLocator serviceLocator);
 
         protected virtual ITypeCatalog GetTypeCatalog(IEnumerable<Assembly> assembliesToScan)
         {
             return new DefaultTypeCatalog(assembliesToScan);
         }
 
-        protected virtual IServiceLocator GetServiceLocator()
+        protected virtual TServiceLocator GetServiceLocator()
         {
-            return new DefaultServiceLocator();
+            return Activator.CreateInstance<TServiceLocator>();
         }
 
-        protected virtual IEnumerable<Assembly> GetAssembliesToScan()
+        protected virtual IEnumerable<Assembly> GetAssembliesToScan(IServiceLocator serviceLocator)
         {
             return AppDomain.CurrentDomain.GetAssemblies();
         }

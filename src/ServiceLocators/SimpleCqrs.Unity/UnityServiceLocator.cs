@@ -23,16 +23,16 @@ using Microsoft.Practices.Unity;
 
 #endregion
 
-namespace SimpleCqrs
+namespace SimpleCqrs.Unity
 {
-    public class DefaultServiceLocator : IServiceLocator
+    public class UnityServiceLocator : IServiceLocator
     {
-        public DefaultServiceLocator()
+        public UnityServiceLocator()
             : this(new UnityContainer())
         {
         }
 
-        public DefaultServiceLocator(IUnityContainer container)
+        public UnityServiceLocator(IUnityContainer container)
         {
             if (container == null)
             {

@@ -1,53 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace SimpleCqrs.Commands
 {
     internal class DirectCommandBus : ICommandBus
     {
         private readonly IServiceLocator serviceLocator;
-        private IDictionary<Type, List<CommandHandlerInfo>> commandHandlerMap;
+        private IDictionary<Type, CommandInvoker> commandInvokers;
 
         public DirectCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
             this.serviceLocator = serviceLocator;
-            BuildCommandHandlerMap(typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)));
+            BuildCommandInvokers(typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)));
         }
 
         public void Execute(Command command)
         {
-            var commandHandlerInfoList = commandHandlerMap[command.GetType()];
-            foreach (var commandHandlerInfo in commandHandlerInfoList)
-            {
-                var commandHandler = serviceLocator.Resolve(commandHandlerInfo.CommandHandlerType);
-                commandHandlerInfo.HandleMethod.Invoke(commandHandler, new object[] {command});
-            }
+            var commandInvoker = commandInvokers[command.GetType()];
+            commandInvoker.Execute(command);
         }
 
-        private void BuildCommandHandlerMap(IEnumerable<Type> commandHandlerTypes)
+        private void BuildCommandInvokers(IEnumerable<Type> commandHandlerTypes)
         {
-            commandHandlerMap = new Dictionary<Type, List<CommandHandlerInfo>>();
+            commandInvokers = new Dictionary<Type, CommandInvoker>();
             foreach (var commandHandlerType in commandHandlerTypes)
             {
                 foreach (var commandType in GetCommadTypes(commandHandlerType))
                 {
-                    if (!commandHandlerMap.ContainsKey(commandType))
-                        commandHandlerMap.Add(commandType, new List<CommandHandlerInfo>());
+                    CommandInvoker commandInvoker;
+                    if (!commandInvokers.TryGetValue(commandType, out commandInvoker))
+                        commandInvoker = new CommandInvoker(serviceLocator, commandType);
 
-                    var commandHandlerInfoList = commandHandlerMap[commandType];
-
-                    var handleMethod = typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
-                    commandHandlerInfoList.Add(new CommandHandlerInfo {CommandHandlerType = commandHandlerType, HandleMethod = handleMethod});
+                    commandInvoker.AddCommandHandlerType(commandHandlerType);
+                    commandInvokers[commandType] = commandInvoker;
                 }
             }
-        }
-
-        private class CommandHandlerInfo
-        {
-            public Type CommandHandlerType { get; set; }
-            public MethodInfo HandleMethod { get; set; }
         }
 
         private static IEnumerable<Type> GetCommadTypes(Type commandHandlerType)
@@ -55,6 +43,35 @@ namespace SimpleCqrs.Commands
             return from interfaceType in commandHandlerType.GetInterfaces()
                    where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandleCommands<>)
                    select interfaceType.GetGenericArguments()[0];
+        }
+
+        private class CommandInvoker
+        {
+            private readonly IServiceLocator serviceLocator;
+            private readonly Type commandType;
+            private readonly List<Type> commandHandlerTypes;
+
+            public CommandInvoker(IServiceLocator serviceLocator, Type commandType)
+            {
+                this.serviceLocator = serviceLocator;
+                this.commandType = commandType;
+                commandHandlerTypes = new List<Type>();
+            }
+
+            public void AddCommandHandlerType(Type commandHandlerType)
+            {
+                commandHandlerTypes.Add(commandHandlerType);
+            }
+
+            public void Execute(Command command)
+            {
+                var handleMethod = typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
+                foreach (var commandHandlerType in commandHandlerTypes)
+                {
+                    var commandHandler = serviceLocator.Resolve(commandHandlerType);
+                    handleMethod.Invoke(commandHandler, new object[] {command});
+                }
+            }
         }
     }
 }

@@ -14,22 +14,41 @@ namespace SimpleCqrs
             this.assemblies = assemblies;
         }
 
-        public IEnumerable<Type> GetDerivedTypes(Type type)
+        public Type[] GetDerivedTypes(Type type)
         {
             return (from assembly in assemblies
                    from derivedType in assembly.GetTypes()
                    where type != derivedType
                    where type.IsAssignableFrom(derivedType)
-                   select derivedType).ToList();
+                   select derivedType).ToArray();
         }
 
-        public IEnumerable<Type> GetGenericInterfaceImplementations(Type type)
+        public Type[] GetDerivedTypes<T>()
+        {
+            return GetDerivedTypes(typeof(T));
+        }
+
+        public Type[] GetGenericInterfaceImplementations(Type type)
         {
             return (from assembly in assemblies
                     from derivedType in assembly.GetTypes()
                     from interfaceType in derivedType.GetInterfaces()
                     where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == type
-                    select derivedType).Distinct().ToList();
+                    select derivedType).Distinct().ToArray();
+        }
+
+        public Type[] GetInterfaceImplementations(Type type)
+        {
+            return (from assembly in assemblies
+                    from derivedType in assembly.GetTypes()
+                    from interfaceType in derivedType.GetInterfaces()
+                    where interfaceType == type
+                    select derivedType).Distinct().ToArray();
+        }
+
+        public Type[] GetInterfaceImplementations<T>()
+        {
+            return GetInterfaceImplementations(typeof(T));
         }
     }
 }

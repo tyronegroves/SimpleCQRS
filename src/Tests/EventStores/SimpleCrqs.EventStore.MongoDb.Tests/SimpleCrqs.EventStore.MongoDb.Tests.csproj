@@ -48,13 +48,16 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MongoEventStoreTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\EventStores\SimpleCqrs.EventStore.MongoDb\SimpleCqrs.EventStore.MongoDb.csproj">
       <Project>{201A4DF5-2217-4202-80E8-E784737366BC}</Project>
       <Name>SimpleCqrs.EventStore.MongoDb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ServiceLocators\SimpleCqrs.Unity\SimpleCqrs.Unity.csproj">
+      <Project>{00634E6C-A282-404A-B08B-338FD4CA41A9}</Project>
+      <Name>SimpleCqrs.Unity</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SimpleCqrs.Core\SimpleCqrs.Core.csproj">
       <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
