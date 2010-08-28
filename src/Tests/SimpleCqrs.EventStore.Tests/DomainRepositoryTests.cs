@@ -42,7 +42,7 @@ namespace SimpleCqrs.EventStore.Tests
             var repository = CreateDomainRepository();
             var aggregateRoot = new MyTestAggregateRoot();
             var domainEvents = new List<DomainEvent> {new MyTestEvent(), new MyTestEvent(), new MyTestEvent()};
-            
+
             aggregateRoot.Apply(domainEvents[0]);
             aggregateRoot.Apply(domainEvents[1]);
             aggregateRoot.Apply(domainEvents[2]);
@@ -58,7 +58,7 @@ namespace SimpleCqrs.EventStore.Tests
         {
             var repository = CreateDomainRepository();
             var aggregateRoot = new MyTestAggregateRoot();
-            var domainEvents = new List<DomainEvent> { new MyTestEvent(), new MyTestEvent(), new MyTestEvent() };
+            var domainEvents = new List<DomainEvent> {new MyTestEvent(), new MyTestEvent(), new MyTestEvent()};
 
             aggregateRoot.Apply(domainEvents[0]);
             aggregateRoot.Apply(domainEvents[1]);

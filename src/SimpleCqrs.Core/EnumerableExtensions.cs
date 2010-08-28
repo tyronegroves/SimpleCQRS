@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SimpleCqrs.Core
+namespace SimpleCqrs
 {
     public static class EnumerableExtensions
     {

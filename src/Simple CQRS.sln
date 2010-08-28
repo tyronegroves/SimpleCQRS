@@ -1,10 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Domain", "SimpleCqrs.Domain\SimpleCqrs.Domain.csproj", "{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Events", "SimpleCqrs.Events\SimpleCqrs.Events.csproj", "{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BE8A5F95-23AD-4B5D-BA21-004909E80F00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Domain.Tests", "Tests\SimpleCqrs.Domain.Tests\SimpleCqrs.Domain.Tests.csproj", "{042E6156-6D03-4176-930C-917A044DA11C}"
@@ -21,10 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Core", "SimpleCqrs.Core\SimpleCqrs.Core.csproj", "{EC740994-5BB9-40B6-BB1A-614FC5E5D315}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Core.Tests", "Tests\SimpleCqrs.Core.Tests\SimpleCqrs.Core.Tests.csproj", "{6AEAEE90-CF43-47CE-BD60-9F9519120BC6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore", "SimpleCqrs.EventStore\SimpleCqrs.EventStore.csproj", "{2E237224-97CE-46E6-A7D3-440493377D75}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Commands", "SimpleCqrs.Commands\SimpleCqrs.Commands.csproj", "{539E864E-117F-49DC-82E8-B490E215A428}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Commands.Tests", "Tests\SimpleCqrs.Commands.Tests\SimpleCqrs.Commands.Tests.csproj", "{CD5AF951-E088-4798-8482-48B7D27D9EFB}"
 EndProject
@@ -47,14 +39,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}.Release|Any CPU.Build.0 = Release|Any CPU
-		{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{042E6156-6D03-4176-930C-917A044DA11C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{042E6156-6D03-4176-930C-917A044DA11C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{042E6156-6D03-4176-930C-917A044DA11C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,14 +55,6 @@ Global
 		{6AEAEE90-CF43-47CE-BD60-9F9519120BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AEAEE90-CF43-47CE-BD60-9F9519120BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AEAEE90-CF43-47CE-BD60-9F9519120BC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E237224-97CE-46E6-A7D3-440493377D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E237224-97CE-46E6-A7D3-440493377D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E237224-97CE-46E6-A7D3-440493377D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E237224-97CE-46E6-A7D3-440493377D75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{539E864E-117F-49DC-82E8-B490E215A428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{539E864E-117F-49DC-82E8-B490E215A428}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{539E864E-117F-49DC-82E8-B490E215A428}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{539E864E-117F-49DC-82E8-B490E215A428}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CD5AF951-E088-4798-8482-48B7D27D9EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD5AF951-E088-4798-8482-48B7D27D9EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD5AF951-E088-4798-8482-48B7D27D9EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU

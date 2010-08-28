@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 using SimpleCqrs.Domain;
-using SimpleCqrs.Events;
 
-namespace SimpleCqrs.EventStore
+namespace SimpleCqrs.Events
 {
     public class DomainRepository
     {
@@ -20,8 +19,11 @@ namespace SimpleCqrs.EventStore
 
         public TAggregateRoot GetById<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot, new()
         {
-            var domainEvents = eventStore.GetEvents(aggregateRootId, 0);
+            var snapshot = GetSnapshotFromSnapshotStore(aggregateRootId);
             var aggregateRoot = new TAggregateRoot();
+            LoadSnapshot(aggregateRoot, snapshot);
+
+            var domainEvents = eventStore.GetEvents(aggregateRootId, snapshot.LastEventSequence);
             aggregateRoot.LoadFromHistoricalEvents(domainEvents.ToArray());
 
             return aggregateRoot;
@@ -33,6 +35,18 @@ namespace SimpleCqrs.EventStore
             eventStore.Insert(domainEvents);
             eventBus.PublishEvents(domainEvents);
             aggregateRoot.CommitEvents();
+        }
+
+        private static void LoadSnapshot(AggregateRoot aggregateRoot, Snapshot snapshot)
+        {
+            var snapshotOriginator = aggregateRoot as ISnapshotOriginator;
+            if (snapshotOriginator != null)
+                snapshotOriginator.LoadSnapshot(snapshot);
+        }
+
+        private Snapshot GetSnapshotFromSnapshotStore(Guid aggregateRootId)
+        {
+            return snapshotStore.GetSnapshot(aggregateRootId) ?? new Snapshot();
         }
     }
 }

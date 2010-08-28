@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using AutoMoq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SimpleCqrs.Core;
-using SimpleCqrs.Domain;
+using SimpleCqrs;
+using SimpleCqrs.Commands;
 using SimpleCqrs.Events;
-using SimpleCqrs.EventStore;
 using SimpleCqrs.EventStore.MongoDb;
 
 namespace SimpleCrqs.EventStore.MongoDb.Tests
@@ -16,94 +13,62 @@ namespace SimpleCrqs.EventStore.MongoDb.Tests
         [TestMethod]
         public void Test()
         {
-            var eventStore = new MongoEventStore("Server=127.0.0.1", new MyDomainEventTypeCatalog());
-            var repository = new DomainRepository(eventStore, new NullSnapshotStore(), new MyEventBus());
-
-            var customer = new Customer();
-            customer.Accept();
-            customer.Deactivate();
-
-            repository.Save(customer);
-        }
-
-        [TestMethod]
-        public void SnapshotTest()
-        {
-            var snapshotStore = new MongoSnapshotStore("Server=127.0.0.1");
-            var aggregateRootId = Guid.NewGuid();
+            var bootstrapper = new MyBootstrapper();
+            var serviceLocator = bootstrapper.Run();
             
-            snapshotStore.SaveSnapshot(new CustomerSnapshot {Active = true, CreditStatus = "Declined", AggregateRootId = aggregateRootId});
+            var commandBus = serviceLocator.Resolve<ICommandBus>();
 
-            var snapshot = snapshotStore.GetSnapshot<CustomerSnapshot>(aggregateRootId);
+            commandBus.Execute(new MyCommand());
+            commandBus.Execute(new MyCommand2());
         }
     }
 
-    public class Customer : AggregateRoot, ILoadSnapshots<CustomerSnapshot>
+    public class MyCommandHandler2 : MyCommandHandler
     {
-        private bool active;
-
-        public void Accept()
+        public override void Handle(MyCommand command)
         {
-            Apply(new CustomerAcceptedEvent { AggregateRootId = Guid.NewGuid() });
-        }
-
-        public void Deactivate()
-        {
-            Apply(new CustomerDeactivitedEvent());
-        }
-
-        public CustomerSnapshot GetCurrentSnapshot()
-        {
-            return new CustomerSnapshot{Active = active};
-        }
-
-        public void LoadSnapshot(CustomerSnapshot snapshot)
-        {
-            active = snapshot.Active;
-        }
-
-        private void OnCustomerAcceptedEvent(CustomerAcceptedEvent customerAcceptedEvent)
-        {
-            Id = customerAcceptedEvent.AggregateRootId;
-        }
-
-        private void OnCustomerDeactivitedEvent(CustomerDeactivitedEvent customerDeactivitedEvent)
-        {
-            active = false;
+            base.Handle(command);
         }
     }
 
-    public class CustomerSnapshot : ISnapshot
+    public class MyCommandHandler : IHandleCommands<MyCommand>, IHandleCommands<MyCommand2>
     {
-        public bool Active { get; set; }
-        public Guid AggregateRootId { get; set; }
-        public string CreditStatus { get; set; }
-    }
-
-    public class MyDomainEventTypeCatalog : IDomainEventTypeCatalog
-    {
-        public IEnumerable<Type> GetAllEventTypes()
-        {
-            return new[] {typeof(CustomerAcceptedEvent), typeof(CustomerDeactivitedEvent)};
-        }
-    }
-
-    public class MyEventBus : IEventBus
-    {
-        public void PublishEvent(DomainEvent domainEvent)
+        public virtual void Handle(MyCommand command)
         {
         }
 
-        public void PublishEvents(IEnumerable<DomainEvent> domainEvents)
+        public virtual void Handle(MyCommand2 command)
         {
         }
     }
 
-    public class CustomerAcceptedEvent : DomainEvent
+    public class MyCommand2 : Command
     {
     }
 
-    public class CustomerDeactivitedEvent : DomainEvent
+    public class MyCommand : Command
     {
+    }
+
+    public class MyEventHandler : IHandleDomainEvents<MyEvent>
+    {
+        public void Handle(MyEvent domainEvent)
+        {  
+        }
+    }
+
+    public class MyEvent : DomainEvent
+    {
+    }
+
+    public class MyBootstrapper : Bootstrapper
+    {
+        protected override ICommandBus GetCommandBus(ITypeCatalog typeCatalog)
+        {
+            var domainEvent = typeCatalog.GetDerivedTypes(typeof(DomainEvent));
+
+
+            return base.GetCommandBus(typeCatalog);
+        }
     }
 }

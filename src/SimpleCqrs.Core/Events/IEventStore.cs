@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using SimpleCqrs.Events;
 
-namespace SimpleCqrs.EventStore
+namespace SimpleCqrs.Events
 {
     public interface IEventStore
     {

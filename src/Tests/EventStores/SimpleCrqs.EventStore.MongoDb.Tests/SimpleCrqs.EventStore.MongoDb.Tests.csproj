@@ -60,18 +60,6 @@
       <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
       <Name>SimpleCqrs.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SimpleCqrs.Domain\SimpleCqrs.Domain.csproj">
-      <Project>{300D3EA0-6B55-4ACA-A12B-60A5E2DFDA82}</Project>
-      <Name>SimpleCqrs.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SimpleCqrs.EventStore\SimpleCqrs.EventStore.csproj">
-      <Project>{2E237224-97CE-46E6-A7D3-440493377D75}</Project>
-      <Name>SimpleCqrs.EventStore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SimpleCqrs.Events\SimpleCqrs.Events.csproj">
-      <Project>{637C74F8-F4E7-4032-B6AF-F23C13E2C55A}</Project>
-      <Name>SimpleCqrs.Events</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,7 +5,6 @@ using System.Reflection;
 using MongoDB;
 using MongoDB.Configuration;
 using MongoDB.Configuration.Builders;
-using SimpleCqrs.Core;
 using SimpleCqrs.Events;
 
 namespace SimpleCqrs.EventStore.MongoDb
@@ -15,16 +14,16 @@ namespace SimpleCqrs.EventStore.MongoDb
         private static readonly MethodInfo MapMethod = typeof(MappingStoreBuilder).GetMethod("Map", Type.EmptyTypes);
         private readonly IMongoDatabase database;
 
-        public MongoEventStore(string connectionString, IDomainEventTypeCatalog domainEventTypeCatalog)
+        public MongoEventStore(string connectionString, ITypeCatalog typeCatalog)
         {
-            var configuration = BuildMongoConfiguration(domainEventTypeCatalog, connectionString);
+            var configuration = BuildMongoConfiguration(typeCatalog, connectionString);
             var mongo = new Mongo(configuration);
             mongo.Connect();
 
             database = mongo.GetDatabase("eventstore");
         }
 
-        private static MongoConfiguration BuildMongoConfiguration(IDomainEventTypeCatalog domainEventTypeCatalog, string connectionString)
+        private static MongoConfiguration BuildMongoConfiguration(ITypeCatalog domainEventTypeCatalog, string connectionString)
         {
             var configurationBuilder = new MongoConfigurationBuilder();
             configurationBuilder.ConnectionString(connectionString);
@@ -32,7 +31,7 @@ namespace SimpleCqrs.EventStore.MongoDb
                                              {
                                                  mapping.DefaultProfile(profile => profile.SubClassesAre(type => type.IsSubclassOf(typeof(DomainEvent))));
                                                  domainEventTypeCatalog
-                                                     .GetAllEventTypes()
+                                                     .GetDerivedTypes(typeof(DomainEvent))
                                                      .ForEach(type => MapEventType(type, mapping));
                                              });
 
