@@ -26,16 +26,18 @@ namespace SimpleCqrs.Commands
             commandInvokers = new Dictionary<Type, CommandInvoker>();
             foreach(var commandHandlerType in commandHandlerTypes)
             {
-                var commandTypes = GetCommadTypes(commandHandlerType);
+                var commandTypes = GetCommadTypesForCommandHandler(commandHandlerType);
+                foreach(var commandType in commandTypes)
+                {
+                    if(commandInvokers.ContainsKey(commandType))
+                        throw new DuplicateCommandHandlersException(commandType);
 
-                if(commandTypes.Length > 1)
-                    throw new Exception("More than one command handler for this command");
-
-                commandInvokers.Add(commandTypes[0], new CommandInvoker(serviceLocator, commandTypes[0], commandHandlerType));
+                    commandInvokers.Add(commandType, new CommandInvoker(serviceLocator, commandType, commandHandlerType));
+                }
             }
         }
 
-        private static Type[] GetCommadTypes(Type commandHandlerType)
+        private static IEnumerable<Type> GetCommadTypesForCommandHandler(Type commandHandlerType)
         {
             return (from interfaceType in commandHandlerType.GetInterfaces()
                     where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandleCommands<>)

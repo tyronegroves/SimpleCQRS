@@ -38,9 +38,10 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\DuplicateCommandHandlersException.cs" />
     <Compile Include="Commands\ICommandBus.cs" />
     <Compile Include="Commands\IHandleCommands.cs" />
-    <Compile Include="DefaultTypeCatalog.cs" />
+    <Compile Include="TypeCatalog.cs" />
     <Compile Include="Commands\DirectCommandBus.cs" />
     <Compile Include="Domain\AggregateRoot.cs" />
     <Compile Include="Domain\ISnapshotOriginator.cs" />
