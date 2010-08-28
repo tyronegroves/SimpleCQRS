@@ -9,4 +9,5 @@ bin
 *.cache
 *.log
 *.user
+*.gpState
 TestResults
