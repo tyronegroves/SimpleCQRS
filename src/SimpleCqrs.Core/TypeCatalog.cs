@@ -5,11 +5,11 @@ using System.Reflection;
 
 namespace SimpleCqrs
 {
-    internal class DefaultTypeCatalog : ITypeCatalog
+    internal class TypeCatalog : ITypeCatalog
     {
         private readonly IEnumerable<Assembly> assemblies;
 
-        public DefaultTypeCatalog(IEnumerable<Assembly> assemblies)
+        public TypeCatalog(IEnumerable<Assembly> assemblies)
         {
             this.assemblies = assemblies;
         }

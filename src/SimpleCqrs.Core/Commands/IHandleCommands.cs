@@ -1,7 +1,7 @@
 ﻿namespace SimpleCqrs.Commands
 {
-    public interface IHandleCommands<TCommand> where TCommand : Command
+    public interface IHandleCommands<in TCommand> where TCommand : Command
     {
-        void Handle(TCommand command);
+        int Handle(TCommand command);
     }
 }

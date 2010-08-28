@@ -15,62 +15,51 @@ namespace SimpleCqrs.Commands
             BuildCommandInvokers(typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)));
         }
 
-        public void Execute(Command command)
+        public int Execute(Command command)
         {
             var commandInvoker = commandInvokers[command.GetType()];
-            commandInvoker.Execute(command);
+            return commandInvoker.Execute(command);
         }
 
         private void BuildCommandInvokers(IEnumerable<Type> commandHandlerTypes)
         {
             commandInvokers = new Dictionary<Type, CommandInvoker>();
-            foreach (var commandHandlerType in commandHandlerTypes)
+            foreach(var commandHandlerType in commandHandlerTypes)
             {
-                foreach (var commandType in GetCommadTypes(commandHandlerType))
-                {
-                    CommandInvoker commandInvoker;
-                    if (!commandInvokers.TryGetValue(commandType, out commandInvoker))
-                        commandInvoker = new CommandInvoker(serviceLocator, commandType);
+                var commandTypes = GetCommadTypes(commandHandlerType);
 
-                    commandInvoker.AddCommandHandlerType(commandHandlerType);
-                    commandInvokers[commandType] = commandInvoker;
-                }
+                if(commandTypes.Length > 1)
+                    throw new Exception("More than one command handler for this command");
+
+                commandInvokers.Add(commandTypes[0], new CommandInvoker(serviceLocator, commandTypes[0], commandHandlerType));
             }
         }
 
-        private static IEnumerable<Type> GetCommadTypes(Type commandHandlerType)
+        private static Type[] GetCommadTypes(Type commandHandlerType)
         {
-            return from interfaceType in commandHandlerType.GetInterfaces()
-                   where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandleCommands<>)
-                   select interfaceType.GetGenericArguments()[0];
+            return (from interfaceType in commandHandlerType.GetInterfaces()
+                    where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandleCommands<>)
+                    select interfaceType.GetGenericArguments()[0]).ToArray();
         }
 
         private class CommandInvoker
         {
-            private readonly IServiceLocator serviceLocator;
+            private readonly Type commandHandlerType;
             private readonly Type commandType;
-            private readonly List<Type> commandHandlerTypes;
+            private readonly IServiceLocator serviceLocator;
 
-            public CommandInvoker(IServiceLocator serviceLocator, Type commandType)
+            public CommandInvoker(IServiceLocator serviceLocator, Type commandType, Type commandHandlerType)
             {
                 this.serviceLocator = serviceLocator;
                 this.commandType = commandType;
-                commandHandlerTypes = new List<Type>();
+                this.commandHandlerType = commandHandlerType;
             }
 
-            public void AddCommandHandlerType(Type commandHandlerType)
-            {
-                commandHandlerTypes.Add(commandHandlerType);
-            }
-
-            public void Execute(Command command)
+            public int Execute(Command command)
             {
                 var handleMethod = typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
-                foreach (var commandHandlerType in commandHandlerTypes)
-                {
-                    var commandHandler = serviceLocator.Resolve(commandHandlerType);
-                    handleMethod.Invoke(commandHandler, new object[] {command});
-                }
+                var commandHandler = serviceLocator.Resolve(commandHandlerType);
+                return (int)handleMethod.Invoke(commandHandler, new object[] {command});
             }
         }
     }
