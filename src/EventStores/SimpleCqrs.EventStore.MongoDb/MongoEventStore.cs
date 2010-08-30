@@ -5,7 +5,7 @@ using System.Reflection;
 using MongoDB;
 using MongoDB.Configuration;
 using MongoDB.Configuration.Builders;
-using SimpleCqrs.Events;
+using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs.EventStore.MongoDb
 {

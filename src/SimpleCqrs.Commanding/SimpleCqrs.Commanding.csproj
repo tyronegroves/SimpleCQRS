@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</ProjectGuid>
+    <ProjectGuid>{679AE05D-B80E-421D-B259-387D9926E335}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleCqrs</RootNamespace>
-    <AssemblyName>SimpleCqrs.Core</AssemblyName>
+    <RootNamespace>SimpleCqrs.Commanding</RootNamespace>
+    <AssemblyName>SimpleCqrs.Commanding</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,39 +33,15 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Commanding\CommandHandlerNotFoundException.cs" />
-    <Compile Include="Commanding\DuplicateCommandHandlersException.cs" />
-    <Compile Include="Commanding\ICommandBus.cs" />
-    <Compile Include="Commanding\IHandleCommands.cs" />
-    <Compile Include="Eventing\IDomainRepository.cs" />
-    <Compile Include="TypeCatalog.cs" />
-    <Compile Include="Commanding\DirectCommandBus.cs" />
-    <Compile Include="Domain\AggregateRoot.cs" />
-    <Compile Include="Domain\ISnapshotOriginator.cs" />
-    <Compile Include="Domain\Snapshot.cs" />
-    <Compile Include="Eventing\DirectEventBus.cs" />
-    <Compile Include="Eventing\DomainEvent.cs" />
-    <Compile Include="Eventing\DomainRepository.cs" />
-    <Compile Include="Eventing\IEventBus.cs" />
-    <Compile Include="Eventing\IEventStore.cs" />
-    <Compile Include="Eventing\IHandleDomainEvents.cs" />
-    <Compile Include="Eventing\ISnapshotStore.cs" />
-    <Compile Include="Eventing\NullSnapshotStore.cs" />
-    <Compile Include="IServiceLocator.cs" />
-    <Compile Include="ITypeCatalog.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Command.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceResolutionException.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
-      <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
-      <Name>SimpleCqrs.Commanding</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

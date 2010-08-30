@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using SimpleCqrs.Commands;
-using SimpleCqrs.Events;
+using SimpleCqrs.Commanding;
+using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs
 {
@@ -19,6 +19,7 @@ namespace SimpleCqrs
             serviceLocator.Register(GetEventBus(serviceLocator));
             serviceLocator.Register(GetSnapshotStore(serviceLocator));
             serviceLocator.Register(GetEventStore(serviceLocator));
+            serviceLocator.Register<IDomainRepository, DomainRepository>();
             return serviceLocator;
         }
 

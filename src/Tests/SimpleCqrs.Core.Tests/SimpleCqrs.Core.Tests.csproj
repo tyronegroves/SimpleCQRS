@@ -48,13 +48,17 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\DirectCommandBusTests.cs" />
+    <Compile Include="Commanding\DirectCommandBusTests.cs" />
     <Compile Include="Domain\AggregateRootTests.cs" />
     <Compile Include="Events\DirectEventBusTests.cs" />
     <Compile Include="Events\DomainRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
+      <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
+      <Name>SimpleCqrs.Commanding</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SimpleCqrs.Core\SimpleCqrs.Core.csproj">
       <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
       <Name>SimpleCqrs.Core</Name>

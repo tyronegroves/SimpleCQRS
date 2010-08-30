@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using AutoMoq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using SimpleCqrs.Events;
+using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs.Core.Tests.Events
 {

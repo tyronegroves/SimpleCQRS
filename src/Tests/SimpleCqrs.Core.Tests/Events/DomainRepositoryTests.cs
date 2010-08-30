@@ -5,7 +5,7 @@ using AutoMoq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SimpleCqrs.Domain;
-using SimpleCqrs.Events;
+using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs.Core.Tests
 {
@@ -84,7 +84,7 @@ namespace SimpleCqrs.Core.Tests
             Assert.AreEqual(0, aggregateRoot.UncommittedEvents.Count);
         }
 
-        public DomainRepository CreateDomainRepository()
+        private DomainRepository CreateDomainRepository()
         {
             return mocker.Resolve<DomainRepository>();
         }

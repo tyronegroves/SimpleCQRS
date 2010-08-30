@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="c9609e3f-e84c-4396-aa94-84a92b032ee2" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:63691/CommandService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="CommandService.xsd" MetadataType="Schema" ID="1e78596f-3ef3-4827-a582-8d39e7a8d4f5" SourceId="1" SourceUrl="http://localhost:63691/CommandService.svc?xsd=xsd3" />
+    <MetadataFile FileName="CommandService1.xsd" MetadataType="Schema" ID="a48d2aca-436c-4753-82cb-b77a13a27289" SourceId="1" SourceUrl="http://localhost:63691/CommandService.svc?xsd=xsd2" />
+    <MetadataFile FileName="CommandService.disco" MetadataType="Disco" ID="faf0ff15-d05f-4827-a9e3-4017959c7a66" SourceId="1" SourceUrl="http://localhost:63691/CommandService.svc?disco" />
+    <MetadataFile FileName="CommandService.wsdl" MetadataType="Wsdl" ID="9e0b71e8-76d6-4b5c-a3b3-6c339e74d68c" SourceId="1" SourceUrl="http://localhost:63691/CommandService.svc?wsdl" />
+    <MetadataFile FileName="CommandService2.xsd" MetadataType="Schema" ID="55845d51-3806-4472-b927-32ab0602c0c0" SourceId="1" SourceUrl="http://localhost:63691/CommandService.svc?xsd=xsd1" />
+    <MetadataFile FileName="CommandService3.xsd" MetadataType="Schema" ID="7f9e9733-20fb-4fa6-b34d-e63871bb4ecd" SourceId="1" SourceUrl="http://localhost:63691/CommandService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
