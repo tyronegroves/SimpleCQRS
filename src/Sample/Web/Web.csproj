@@ -88,6 +88,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Views\Cart\AddProductToCart.aspx" />
     <Content Include="Views\Cart\Index.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -121,9 +122,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
       <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>

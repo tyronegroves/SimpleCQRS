@@ -50,7 +50,6 @@
     <Compile Include="Domain\ISnapshotOriginator.cs" />
     <Compile Include="Domain\Snapshot.cs" />
     <Compile Include="Eventing\DirectEventBus.cs" />
-    <Compile Include="Eventing\DomainEvent.cs" />
     <Compile Include="Eventing\DomainRepository.cs" />
     <Compile Include="Eventing\IEventBus.cs" />
     <Compile Include="Eventing\IEventStore.cs" />
@@ -67,6 +66,10 @@
     <ProjectReference Include="..\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
       <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
       <Name>SimpleCqrs.Commanding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
+      <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
+      <Name>SimpleCqrs.Eventing</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

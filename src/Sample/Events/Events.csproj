@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{201A4DF5-2217-4202-80E8-E784737366BC}</ProjectGuid>
+    <ProjectGuid>{05AA037A-0977-4AC3-935F-118F065C56AC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleCqrs.EventStore.MongoDb</RootNamespace>
-    <AssemblyName>SimpleCqrs.EventStore.MongoDb</AssemblyName>
+    <RootNamespace>Events</RootNamespace>
+    <AssemblyName>Events</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,27 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB">
-      <HintPath>..\..\..\lib\MongoDB.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.GridFS">
-      <HintPath>..\..\..\lib\MongoDB.GridFS.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MongoEventStore.cs" />
-    <Compile Include="MongoSnapshotStore.cs" />
+    <Compile Include="CartCreatedEvent.cs" />
+    <Compile Include="ProductAddedToCartEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SimpleCqrs.Core\SimpleCqrs.Core.csproj">
-      <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
-      <Name>SimpleCqrs.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
       <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
       <Name>SimpleCqrs.Eventing</Name>

@@ -14,16 +14,35 @@
   <wsdl:message name="ICommandService_CreateCart_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateCartResponse" />
   </wsdl:message>
+  <wsdl:message name="ICommandService_AddProductToCart_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddProductToCart" />
+  </wsdl:message>
+  <wsdl:message name="ICommandService_AddProductToCart_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddProductToCartResponse" />
+  </wsdl:message>
   <wsdl:portType name="ICommandService">
     <wsdl:operation name="CreateCart">
       <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/CreateCart" message="tns:ICommandService_CreateCart_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICommandService/CreateCartResponse" message="tns:ICommandService_CreateCart_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddProductToCart">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/AddProductToCart" message="tns:ICommandService_AddProductToCart_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICommandService/AddProductToCartResponse" message="tns:ICommandService_AddProductToCart_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICommandService" type="tns:ICommandService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="CreateCart">
       <soap:operation soapAction="http://tempuri.org/ICommandService/CreateCart" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddProductToCart">
+      <soap:operation soapAction="http://tempuri.org/ICommandService/AddProductToCart" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

@@ -7,5 +7,8 @@ namespace Commands
     {
         [OperationContract]
         int CreateCart(CreateCartCommand createCartCommand);
+
+        [OperationContract]
+        void AddProductToCart(AddProductToCartCommand addProductToCartCommand);
     }
 }

@@ -17,6 +17,8 @@ namespace SimpleCqrs.Eventing
 
         public void PublishEvent(DomainEvent domainEvent)
         {
+            if (!eventHandlerInvokers.ContainsKey(domainEvent.GetType())) return;
+
             var eventHandlerInvoker = eventHandlerInvokers[domainEvent.GetType()];
             eventHandlerInvoker.Publish(domainEvent);
         }

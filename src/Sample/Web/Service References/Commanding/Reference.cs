@@ -17,6 +17,9 @@ namespace Web.Commanding {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommandService/CreateCart", ReplyAction="http://tempuri.org/ICommandService/CreateCartResponse")]
         int CreateCart(Commands.CreateCartCommand createCartCommand);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommandService/AddProductToCart", ReplyAction="http://tempuri.org/ICommandService/AddProductToCartResponse")]
+        void AddProductToCart(Commands.AddProductToCartCommand addProductToCartCommand);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -48,6 +51,10 @@ namespace Web.Commanding {
         
         public int CreateCart(Commands.CreateCartCommand createCartCommand) {
             return base.Channel.CreateCart(createCartCommand);
+        }
+        
+        public void AddProductToCart(Commands.AddProductToCartCommand addProductToCartCommand) {
+            base.Channel.AddProductToCart(addProductToCartCommand);
         }
     }
 }

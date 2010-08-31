@@ -64,11 +64,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandHandlers\Cart.cs" />
+    <Compile Include="CommandHandlers\AddProductToCartCommandHandler.cs" />
+    <Compile Include="CommandHandlers\CreateCartCommandHandler.cs" />
     <Compile Include="CommandService.svc.cs">
       <DependentUpon>CommandService.svc</DependentUpon>
     </Compile>
     <Compile Include="CommandServiceHostFactory.cs" />
+    <Compile Include="Domain\Cart.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -76,9 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebBootstrapper.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\EventStores\SimpleCqrs.EventStore.MongoDb\SimpleCqrs.EventStore.MongoDb.csproj">
       <Project>{201A4DF5-2217-4202-80E8-E784737366BC}</Project>
@@ -96,9 +96,17 @@
       <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
       <Name>SimpleCqrs.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
+      <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
+      <Name>SimpleCqrs.Eventing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Commands\Commands.csproj">
       <Project>{5506E31E-B698-4941-8996-235CCFA61E55}</Project>
       <Name>Commands</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Events\Events.csproj">
+      <Project>{05AA037A-0977-4AC3-935F-118F065C56AC}</Project>
+      <Name>Events</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

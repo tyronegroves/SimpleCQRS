@@ -17,5 +17,10 @@ namespace Commands
         {
             return commandBus.Execute(createCartCommand);
         }
+
+        public void AddProductToCart(AddProductToCartCommand addProductToCartCommand)
+        {
+            commandBus.Execute(addProductToCartCommand);
+        }
     }
 }

@@ -4,6 +4,6 @@ namespace SimpleCqrs.Commanding
 {
     public abstract class Command
     {
-        public Guid AggregateRootId { get; set; }
+        public Guid Id { get; set; }
     }
 }

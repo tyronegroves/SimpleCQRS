@@ -3,7 +3,7 @@
   <xs:import schemaLocation="http://localhost:63691/CommandService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:complexType name="Command">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AggregateRootId" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Command" nillable="true" type="tns:Command" />

@@ -7,7 +7,7 @@ namespace Commands
     {
         public CreateCartCommand()
         {
-            AggregateRootId = Guid.NewGuid();
+            Id = Guid.NewGuid();
         }
     }
 }

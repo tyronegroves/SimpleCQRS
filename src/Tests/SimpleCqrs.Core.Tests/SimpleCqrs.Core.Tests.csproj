@@ -63,6 +63,10 @@
       <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
       <Name>SimpleCqrs.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
+      <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
+      <Name>SimpleCqrs.Eventing</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
