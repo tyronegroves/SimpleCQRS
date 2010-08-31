@@ -37,7 +37,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Commanding\CommandHandler.cs" />
     <Compile Include="Commanding\CommandHandlerNotFoundException.cs" />
+    <Compile Include="Commanding\ICommandHandlingContext.cs" />
     <Compile Include="Commanding\DuplicateCommandHandlersException.cs" />
     <Compile Include="Commanding\ICommandBus.cs" />
     <Compile Include="Commanding\IHandleCommands.cs" />

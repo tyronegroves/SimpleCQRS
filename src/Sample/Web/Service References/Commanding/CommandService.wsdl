@@ -11,9 +11,13 @@
   <wsdl:message name="ICommandService_CreateCart_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateCart" />
   </wsdl:message>
+  <wsdl:message name="ICommandService_CreateCart_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateCartResponse" />
+  </wsdl:message>
   <wsdl:portType name="ICommandService">
     <wsdl:operation name="CreateCart">
       <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/CreateCart" message="tns:ICommandService_CreateCart_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICommandService/CreateCartResponse" message="tns:ICommandService_CreateCart_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICommandService" type="tns:ICommandService">
@@ -23,6 +27,9 @@
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="CommandService">

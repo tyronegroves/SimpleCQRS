@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace SimpleCqrs.Commanding
 {
@@ -27,12 +28,12 @@ namespace SimpleCqrs.Commanding
         private void BuildCommandInvokers(IEnumerable<Type> commandHandlerTypes)
         {
             commandInvokers = new Dictionary<Type, CommandInvoker>();
-            foreach(var commandHandlerType in commandHandlerTypes)
+            foreach (var commandHandlerType in commandHandlerTypes)
             {
                 var commandTypes = GetCommadTypesForCommandHandler(commandHandlerType);
-                foreach(var commandType in commandTypes)
+                foreach (var commandType in commandTypes)
                 {
-                    if(commandInvokers.ContainsKey(commandType))
+                    if (commandInvokers.ContainsKey(commandType))
                         throw new DuplicateCommandHandlersException(commandType);
 
                     commandInvokers.Add(commandType, new CommandInvoker(serviceLocator, commandType, commandHandlerType));
@@ -64,7 +65,56 @@ namespace SimpleCqrs.Commanding
             {
                 var handleMethod = typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
                 var commandHandler = serviceLocator.Resolve(commandHandlerType);
-                return (int)handleMethod.Invoke(commandHandler, new object[] {command});
+
+                var handlingContextType = typeof(CommandHandlingContext<>).MakeGenericType(commandType);
+                var handlingContext = (ICommandHandlingContext)Activator.CreateInstance(handlingContextType, command);
+
+                ThreadPool.QueueUserWorkItem(delegate
+                                                 {
+                                                     handleMethod.Invoke(commandHandler, new object[] {handlingContext});
+                                                     handlingContext.WaitHandle.Set();
+                                                 });
+                handlingContext.WaitHandle.WaitOne();
+
+                return handlingContext.ReturnValue;
+            }
+        }
+
+        private interface ICommandHandlingContext
+        {
+            Command Command { get; }
+            int ReturnValue { get; }
+            ManualResetEvent WaitHandle { get; }
+        }
+
+        private class CommandHandlingContext<TCommand> : ICommandHandlingContext, ICommandHandlingContext<TCommand> where TCommand : Command
+        {
+            private readonly ManualResetEvent waitHandle;
+
+            public CommandHandlingContext(TCommand command)
+            {
+                waitHandle = new ManualResetEvent(false);
+                Command = command;
+            }
+
+            public TCommand Command { get; private set; }
+
+            Command ICommandHandlingContext.Command
+            {
+                get { return Command; }
+            }
+
+            ManualResetEvent ICommandHandlingContext.WaitHandle
+            {
+                get { return waitHandle; }
+            }
+
+            public int ReturnValue { get; private set; }
+
+            public void Return(int value)
+            {
+                ReturnValue = value;
+                waitHandle.Set();
             }
         }
     }

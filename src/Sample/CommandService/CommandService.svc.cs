@@ -13,9 +13,9 @@ namespace Commands
             this.commandBus = commandBus;
         }
 
-        public void CreateCart(CreateCartCommand createCartCommand)
+        public int CreateCart(CreateCartCommand createCartCommand)
         {
-            commandBus.Execute(createCartCommand);
+            return commandBus.Execute(createCartCommand);
         }
     }
 }

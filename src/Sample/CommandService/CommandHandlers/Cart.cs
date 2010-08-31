@@ -1,12 +1,23 @@
-﻿using SimpleCqrs.Commanding;
+﻿using System.Threading;
+using SimpleCqrs.Commanding;
+using SimpleCqrs.Eventing;
 
 namespace Commands.CommandHandlers
 {
-    public class Cart : IHandleCommands<CreateCartCommand>
+    public class Cart : CommandHandler<CreateCartCommand>
     {
-        public int Handle(CreateCartCommand command)
+        private readonly IDomainRepository repository;
+
+        public Cart(IDomainRepository repository)
         {
-            return 0;
+            this.repository = repository;
+        }
+
+        protected override void Handle(CreateCartCommand command)
+        {
+            Return(15);
+
+            Thread.Sleep(12000);
         }
     }
 }

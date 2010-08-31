@@ -9,62 +9,14 @@
 //------------------------------------------------------------------------------
 
 namespace Web.Commanding {
-    using System.Runtime.Serialization;
-    using System;
     
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Command", Namespace="http://schemas.datacontract.org/2004/07/SimpleCqrs.Commanding")]
-    [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Commands.CreateCartCommand))]
-    public partial class Command : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid AggregateRootIdField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid AggregateRootId {
-            get {
-                return this.AggregateRootIdField;
-            }
-            set {
-                if ((this.AggregateRootIdField.Equals(value) != true)) {
-                    this.AggregateRootIdField = value;
-                    this.RaisePropertyChanged("AggregateRootId");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Commanding.ICommandService")]
     public interface ICommandService {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICommandService/CreateCart")]
-        void CreateCart(Commands.CreateCartCommand createCartCommand);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommandService/CreateCart", ReplyAction="http://tempuri.org/ICommandService/CreateCartResponse")]
+        int CreateCart(Commands.CreateCartCommand createCartCommand);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -94,8 +46,8 @@ namespace Web.Commanding {
                 base(binding, remoteAddress) {
         }
         
-        public void CreateCart(Commands.CreateCartCommand createCartCommand) {
-            base.Channel.CreateCart(createCartCommand);
+        public int CreateCart(Commands.CreateCartCommand createCartCommand) {
+            return base.Channel.CreateCart(createCartCommand);
         }
     }
 }

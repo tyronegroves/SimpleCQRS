@@ -5,7 +5,7 @@ namespace Commands
     [ServiceContract]
     public interface ICommandService
     {
-        [OperationContract(IsOneWay = true)]
-        void CreateCart(CreateCartCommand createCartCommand);
+        [OperationContract]
+        int CreateCart(CreateCartCommand createCartCommand);
     }
 }

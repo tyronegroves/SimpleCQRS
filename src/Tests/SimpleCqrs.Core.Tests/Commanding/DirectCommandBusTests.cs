@@ -69,22 +69,22 @@ namespace SimpleCqrs.Core.Tests.Commanding
 
     public class MyTestCommandHandler : IHandleCommands<MyTestCommand>
     {
-        public int Handle(MyTestCommand command)
+        public void Handle(ICommandHandlingContext<MyTestCommand> handlingContext)
         {
-            return 101;
+            handlingContext.Return(101);
         }
     }
 
     public class MyTest2CommandHandler : IHandleCommands<MyTestCommand>, IHandleCommands<MyTest2Command>
     {
-        public int Handle(MyTest2Command command)
+        public void Handle(ICommandHandlingContext<MyTestCommand> handlingContext)
         {
-            return 45;
+            handlingContext.Return(102);
         }
 
-        public int Handle(MyTestCommand command)
+        public void Handle(ICommandHandlingContext<MyTest2Command> handlingContext)
         {
-            return 102;
+            handlingContext.Return(45);
         }
     }
 

@@ -2,6 +2,6 @@
 {
     public interface IHandleCommands<in TCommand> where TCommand : Command
     {
-        int Handle(TCommand command);
+        void Handle(ICommandHandlingContext<TCommand> handlingContext);
     }
 }
