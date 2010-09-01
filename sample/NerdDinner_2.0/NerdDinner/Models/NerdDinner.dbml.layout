@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="NerdDinner">
+  <DataContextMoniker Name="/NerdDinnerDataContext" />
+  <nestedChildShapes>
+    <classShape Id="ca99e816-22ab-4057-8941-43618a1b1c1d" absoluteBounds="0.5, 0.5, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/NerdDinnerDataContext/Dinner" />
+      <nestedChildShapes>
+        <elementListCompartment Id="99eef688-b088-4ab9-a645-4fdfa4cc3ee3" absoluteBounds="0.515, 0.96, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7edca3c8-60ef-460d-8b99-e51fba7a1fb5" absoluteBounds="3.25, 1.125, 2, 1.3862939453124998">
+      <DataClassMoniker Name="/NerdDinnerDataContext/RSVP" />
+      <nestedChildShapes>
+        <elementListCompartment Id="28a0ebc1-d495-475d-85e8-ab8851f3cbe0" absoluteBounds="3.265, 1.585, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.5 : 1.81814697265625); (3.25 : 1.81814697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/NerdDinnerDataContext/Dinner/Dinner_RSVP" />
+      <nodes>
+        <classShapeMoniker Id="ca99e816-22ab-4057-8941-43618a1b1c1d" />
+        <classShapeMoniker Id="7edca3c8-60ef-460d-8b99-e51fba7a1fb5" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

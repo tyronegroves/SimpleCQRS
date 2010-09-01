@@ -1,0 +1,11 @@
+﻿body, h2, h3, ul{padding:0; margin:0}
+#nd-wrapper{border:#c66 1px dotted; width:150px; overflow:hidden}
+#nd-outer{margin:0}
+h2, #nd-outer{font:13px/1.231 arial,helvetica,clean,sans-serif}
+h3{text-align:center}
+ul{padding-left:20px}
+a{color:#600}
+#nd-footer, ul{font-size:11px}
+#nd-footer{text-align:center; border-top:black 1px dotted; margin-top:2px}
+#nd-header{background-image:url(http://nerddinner.com/Content/Img/flair-logo.png); background-repeat:no-repeat; height:43px; text-indent:-5000px}
+#nd-bummer{font-size:11px; padding-bottom:5px; padding-left:5px; padding-right:5px; padding-top:5px}

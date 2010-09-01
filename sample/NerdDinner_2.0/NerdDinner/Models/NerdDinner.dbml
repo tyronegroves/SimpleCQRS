@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="NerdDinner" Class="NerdDinnerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\SQLEXPRESS;AttachDbFilename=|DataDirectory|\NerdDinner.mdf;Integrated Security=True;User Instance=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="NerdDinnerConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Dinners" Member="Dinners">
+    <Type Name="Dinner">
+      <Column Name="DinnerID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EventDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Column Name="HostedBy" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactPhone" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Country" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Latitude" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Longitude" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Dinner_RSVP" Member="RSVPs" ThisKey="DinnerID" OtherKey="DinnerID" Type="RSVP" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RSVP" Member="RSVPs">
+    <Type Name="RSVP">
+      <Column Name="RsvpID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DinnerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AttendeeName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Dinner_RSVP" Member="Dinner" ThisKey="DinnerID" OtherKey="DinnerID" Type="Dinner" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.NearestDinners" Method="NearestDinners" IsComposable="true">
+    <Parameter Name="lat" Type="System.Single" DbType="Real" />
+    <Parameter Name="long" Type="System.Single" DbType="Real" />
+    <ElementType Name="NearestDinnersResult">
+      <Column Name="DinnerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.DistanceBetween" Method="DistanceBetween" IsComposable="true">
+    <Parameter Name="Lat1" Parameter="lat1" Type="System.Single" DbType="Real" />
+    <Parameter Name="Long1" Parameter="long1" Type="System.Single" DbType="Real" />
+    <Parameter Name="Lat2" Parameter="lat2" Type="System.Single" DbType="Real" />
+    <Parameter Name="Long2" Parameter="long2" Type="System.Single" DbType="Real" />
+    <Return Type="System.Single" />
+  </Function>
+</Database>
