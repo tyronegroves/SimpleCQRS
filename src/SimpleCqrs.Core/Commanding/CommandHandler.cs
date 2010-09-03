@@ -1,6 +1,6 @@
 ﻿namespace SimpleCqrs.Commanding
 {
-    public abstract class CommandHandler<TCommand> : IHandleCommands<TCommand> where TCommand : Command
+    public abstract class CommandHandler<TCommand> : IHandleCommands<TCommand> where TCommand : ICommand
     {
         private ICommandHandlingContext<TCommand> context;
 

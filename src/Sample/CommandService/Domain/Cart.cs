@@ -7,7 +7,7 @@ namespace Commands.Domain
 {
     public class Cart : AggregateRoot
     {
-        private List<CartProduct> products = new List<CartProduct>();
+        private readonly List<CartProduct> products = new List<CartProduct>();
 
         public static Cart Create(Guid cartId)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
+using SimpleCqrs;
 
 namespace Commands
 {
@@ -8,7 +9,7 @@ namespace Commands
     {
         public override ServiceHostBase CreateServiceHost(string constructorString, Uri[] baseAddresses)
         {
-            var serviceLocator = Global.ServiceLocator;
+            var serviceLocator = ServiceLocator.Current;
             return new ServiceHost(serviceLocator.Resolve<CommandService>(), baseAddresses);
         }
     }

@@ -3,11 +3,13 @@ using SimpleCqrs.Commanding;
 
 namespace Commands
 {
-    public class CreateCartCommand : Command
+    public class CreateCartCommand : ICommand
     {
         public CreateCartCommand()
         {
-            Id = Guid.NewGuid();
+            CartId = Guid.NewGuid();
         }
+
+        public Guid CartId { get; private set; }
     }
 }

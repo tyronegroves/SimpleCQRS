@@ -88,11 +88,11 @@ namespace SimpleCqrs.Core.Tests.Commanding
         }
     }
 
-    public class MyTestCommand : Command
+    public class MyTestCommand : ICommand
     {
     }
 
-    public class MyTest2Command : Command
+    public class MyTest2Command : ICommand
     {
     }
 

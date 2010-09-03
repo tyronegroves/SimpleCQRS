@@ -2,6 +2,6 @@
 {
     public interface ICommandBus
     {
-        int Execute(Command command);
+        int Execute(ICommand command);
     }
 }

@@ -16,7 +16,7 @@ namespace SimpleCqrs.Commanding
             BuildCommandInvokers(typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)));
         }
 
-        public int Execute(Command command)
+        public int Execute(ICommand command)
         {
             CommandInvoker commandInvoker;
             if (!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
@@ -61,7 +61,7 @@ namespace SimpleCqrs.Commanding
                 this.commandHandlerType = commandHandlerType;
             }
 
-            public int Execute(Command command)
+            public int Execute(ICommand command)
             {
                 var handleMethod = typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
                 var commandHandler = serviceLocator.Resolve(commandHandlerType);
@@ -82,12 +82,12 @@ namespace SimpleCqrs.Commanding
 
         private interface ICommandHandlingContext
         {
-            Command Command { get; }
+            ICommand Command { get; }
             int ReturnValue { get; }
             ManualResetEvent WaitHandle { get; }
         }
 
-        private class CommandHandlingContext<TCommand> : ICommandHandlingContext, ICommandHandlingContext<TCommand> where TCommand : Command
+        private class CommandHandlingContext<TCommand> : ICommandHandlingContext, ICommandHandlingContext<TCommand> where TCommand : ICommand
         {
             private readonly ManualResetEvent waitHandle;
 
@@ -99,7 +99,7 @@ namespace SimpleCqrs.Commanding
 
             public TCommand Command { get; private set; }
 
-            Command ICommandHandlingContext.Command
+            ICommand ICommandHandlingContext.Command
             {
                 get { return Command; }
             }

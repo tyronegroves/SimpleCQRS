@@ -6,12 +6,12 @@ namespace Commands
 {
     public class Global : HttpApplication
     {
-        public static IServiceLocator ServiceLocator { get; private set; }
+        public static WebRuntime WebRuntime { get; private set; }
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            var bootstrapper = new WebBootstrapper();
-            ServiceLocator = bootstrapper.Run();
+            WebRuntime = new WebRuntime();
+            WebRuntime.Start();
         }
 
         protected void Session_Start(object sender, EventArgs e)

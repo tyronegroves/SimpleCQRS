@@ -33,6 +33,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\lib\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -76,7 +79,7 @@
     </Compile>
     <Compile Include="ICommandService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebBootstrapper.cs" />
+    <Compile Include="WebRuntime.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

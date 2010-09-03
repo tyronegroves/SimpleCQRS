@@ -16,7 +16,7 @@ namespace Commands.CommandHandlers
 
         protected override void Handle(CreateCartCommand command)
         {
-            if (command.Id == Guid.Empty)
+            if (command.CartId == Guid.Empty)
             {
                 Return(1);
                 return;
@@ -24,7 +24,7 @@ namespace Commands.CommandHandlers
 
             Return(0);
 
-            var cart = Cart.Create(command.Id);
+            var cart = Cart.Create(command.CartId);
             repository.Save(cart);
         }
     }

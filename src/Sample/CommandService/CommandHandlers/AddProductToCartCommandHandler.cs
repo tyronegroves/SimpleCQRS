@@ -1,26 +1,13 @@
 ﻿using Commands.Domain;
 using SimpleCqrs.Commanding;
-using SimpleCqrs.Eventing;
 
 namespace Commands.CommandHandlers
 {
-    public class AddProductToCartCommandHandler : CommandHandler<AddProductToCartCommand>
+    public class AddProductToCartCommandHandler : AggregateRootCommandHandler<AddProductToCartCommand, Cart>
     {
-        private readonly IDomainRepository domainRepository;
-
-        public AddProductToCartCommandHandler(IDomainRepository domainRepository)
+        protected override void Handle(AddProductToCartCommand command, Cart cart)
         {
-            this.domainRepository = domainRepository;
-        }
-
-        protected override void Handle(AddProductToCartCommand command)
-        {
-            Return(0);
-
-            var cart = domainRepository.GetById<Cart>(command.Id);
             cart.AddProduct(command.ProductId, command.Quantity);
-
-            domainRepository.Save(cart);
         }
     }
 }

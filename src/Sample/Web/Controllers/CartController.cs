@@ -11,14 +11,14 @@ namespace Web.Controllers
         {
             var commandService = new CommandServiceClient();
             var createCartCommand = new CreateCartCommand();
-            Session["CartId"] = createCartCommand.Id;
+            Session["CartId"] = createCartCommand.CartId;
             commandService.CreateCart(createCartCommand);
             return View();
         }
 
         public ActionResult AddProductToCart()
         {
-            return View(new AddProductToCartCommand {Id = (Guid)Session["CartId"]});
+            return View(new AddProductToCartCommand {AggregateRootId = (Guid)Session["CartId"]});
         }
 
         [HttpPost]

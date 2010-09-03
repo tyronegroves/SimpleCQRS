@@ -22,6 +22,8 @@ namespace SimpleCqrs.Domain
 
         public void LoadFromHistoricalEvents(params DomainEvent[] domainEvents)
         {
+            if (domainEvents.Length == 0) return;
+
             domainEvents = domainEvents.OrderBy(domainEvent => domainEvent.Sequence).ToArray();
             LastEventSequence = domainEvents.Last().Sequence;
 
