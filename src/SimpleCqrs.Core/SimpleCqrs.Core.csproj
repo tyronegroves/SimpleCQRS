@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="SimpleCqrsRuntime.cs" />
-    <Compile Include="Commanding\AggregateRootCommandHandler.cs" />
     <Compile Include="Commanding\CommandHandler.cs" />
     <Compile Include="Commanding\CommandHandlerNotFoundException.cs" />
     <Compile Include="Commanding\ICommandHandlingContext.cs" />
