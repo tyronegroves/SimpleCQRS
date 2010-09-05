@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Commands.CommandService" Factory="Commands.CommandServiceHostFactory" CodeBehind="CommandService.svc.cs" %>

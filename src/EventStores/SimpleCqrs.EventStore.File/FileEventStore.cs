@@ -24,15 +24,11 @@ namespace SimpleCqrs.EventStore.File
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
-            var aggregateRootDirectory = Path.Combine(baseDirectory, aggregateRootId.ToString());
-            var eventSequences = from fileName in Directory.GetFiles(aggregateRootDirectory)
-                                 orderby fileName
-                                 select new { Sequence = int.Parse(fileName), Path = Path.Combine(aggregateRootDirectory, fileName) };
-            
+            var eventInfos = GetEventInfosForAggregateRoot(aggregateRootId, startSequence);
             var domainEvents = new List<DomainEvent>();
-            foreach (var eventSequence in eventSequences)
+            foreach (var eventInfo in eventInfos)
             {
-                using (var stream = System.IO.File.OpenRead(eventSequence.Path))
+                using (var stream = System.IO.File.OpenRead(eventInfo.FilePath))
                 {
                     var domainEvent = (DomainEvent)serializer.ReadObject(stream);
                     domainEvents.Add(domainEvent);
@@ -51,9 +47,22 @@ namespace SimpleCqrs.EventStore.File
                     Directory.CreateDirectory(aggregateRootDirectory);
 
                 var eventPath = Path.Combine(aggregateRootDirectory, string.Format("{0}.xml", domainEvent.Sequence));
-                var stream = new FileStream(eventPath, FileMode.Create);
-                serializer.WriteObject(stream, domainEvent);
+                using(var stream = new FileStream(eventPath, FileMode.Create))
+                {
+                    serializer.WriteObject(stream, domainEvent);
+                }
             }
+        }
+
+        private IEnumerable<dynamic> GetEventInfosForAggregateRoot(Guid aggregateRootId, int startSequence)
+        {
+            var aggregateRootDirectory = Path.Combine(baseDirectory, aggregateRootId.ToString());
+            return from filePath in Directory.GetFiles(aggregateRootDirectory)
+                   let fileName = Path.GetFileNameWithoutExtension(filePath)
+                   where fileName != null
+                   let sequence = int.Parse(fileName)
+                   where sequence > startSequence
+                   select new { Sequence = sequence, FilePath = filePath };
         }
     }
 }
