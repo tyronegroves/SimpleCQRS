@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using SimpleCqrs.Commanding;
 using SimpleCqrs.Eventing;
@@ -24,8 +23,9 @@ namespace SimpleCqrs
             ServiceLocator.SetCurrent(serviceLocator);
         }
 
-        public void Shutdown(IServiceLocator serviceLocator)
+        public void Shutdown()
         {
+            var serviceLocator = ServiceLocator.Current;
             serviceLocator.Dispose();
         }
 

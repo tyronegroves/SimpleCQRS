@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="NerdDinner.CommandService.CommandService" CodeBehind="CommandService.svc.cs" %>

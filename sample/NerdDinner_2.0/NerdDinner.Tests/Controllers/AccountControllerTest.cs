@@ -8,6 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NerdDinner;
 using NerdDinner.Commands;
 using NerdDinner.Controllers;
+using NerdDinner.Models;
+using NerdDinner.Services;
 
 namespace NerdDinner.Tests.Controllers {
 
@@ -119,14 +121,14 @@ namespace NerdDinner.Tests.Controllers {
         public void ConstructorSetsProperties() {
             // Arrange
             IFormsAuthentication formsAuth = new MockFormsAuthenticationService();
-            IMembershipService membershipService = new AccountMembershipService();
-
-            // Act
-            AccountController controller = new AccountController(formsAuth, membershipService);
+            var membershipReadModel = new MembershipReadModel();
+            
+            // Act  
+            AccountController controller = new AccountController(formsAuth, new CommandServiceClient(),  membershipReadModel);
 
             // Assert
             Assert.AreEqual(formsAuth, controller.FormsAuth, "FormsAuth property did not match.");
-            Assert.AreEqual(membershipService, controller.MembershipService, "MembershipService property did not match.");
+            Assert.AreEqual(membershipReadModel, controller.MembershipReadModel, "MembershipReadModel property did not match.");
         }
 
         [TestMethod]
@@ -136,7 +138,7 @@ namespace NerdDinner.Tests.Controllers {
 
             // Assert
             Assert.IsNotNull(controller.FormsAuth, "FormsAuth property is null.");
-            Assert.IsNotNull(controller.MembershipService, "MembershipService property is null.");
+            Assert.IsNotNull(controller.MembershipReadModel, "MembershipReadModel property is null.");
         }
 
         [TestMethod]
@@ -343,7 +345,7 @@ namespace NerdDinner.Tests.Controllers {
             IFormsAuthentication formsAuth = new MockFormsAuthenticationService();
             MembershipProvider membershipProvider = new MockMembershipProvider();
             AccountMembershipService membershipService = new AccountMembershipService(membershipProvider);
-            AccountController controller = new AccountController(formsAuth, membershipService);
+            AccountController controller = new AccountController(formsAuth, new CommandServiceClient(), new MembershipReadModel());
             
             ControllerContext controllerContext = new ControllerContext(new MockHttpContext(), new RouteData(), controller);
             controller.ControllerContext = controllerContext;

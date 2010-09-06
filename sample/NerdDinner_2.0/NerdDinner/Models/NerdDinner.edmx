@@ -6,13 +6,41 @@
     <edmx:StorageModels>
     <Schema Namespace="NerdDinnerModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="NerdDinnerModelStoreContainer">
+          <EntitySet Name="CanonicalUsernames" EntityType="NerdDinnerModel.Store.CanonicalUsernames" store:Type="Tables" store:Schema="dbo" store:Name="CanonicalUsernames">
+            <DefiningQuery>SELECT 
+      [CanonicalUsernames].[Username] AS [Username], 
+      [CanonicalUsernames].[LoweredUserName] AS [LoweredUserName]
+      FROM [dbo].[CanonicalUsernames] AS [CanonicalUsernames]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="Dinners" EntityType="NerdDinnerModel.Store.Dinners" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MinPasswordLength" EntityType="NerdDinnerModel.Store.MinPasswordLength" store:Type="Tables" store:Schema="dbo" store:Name="MinPasswordLength">
+            <DefiningQuery>SELECT 
+      [MinPasswordLength].[MinLength] AS [MinLength]
+      FROM [dbo].[MinPasswordLength] AS [MinPasswordLength]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="RSVP" EntityType="NerdDinnerModel.Store.RSVP" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ValidateUser" EntityType="NerdDinnerModel.Store.ValidateUser" store:Type="Tables" store:Schema="dbo" store:Name="ValidateUser">
+            <DefiningQuery>SELECT 
+      [ValidateUser].[Username] AS [Username], 
+      [ValidateUser].[Password] AS [Password]
+      FROM [dbo].[ValidateUser] AS [ValidateUser]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_RSVP_Dinners" Association="NerdDinnerModel.Store.FK_RSVP_Dinners">
             <End Role="Dinners" EntitySet="Dinners" />
             <End Role="RSVP" EntitySet="RSVP" />
           </AssociationSet>
         </EntityContainer>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'C:\_APPLICATION\SIMPLE-CQRS\SAMPLE\NERDDINNER_2.0\NERDDINNER\APP_DATA\NERDDINNER.MDF.dbo.CanonicalUsernames' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="CanonicalUsernames">
+          <Key>
+            <PropertyRef Name="Username" />
+            <PropertyRef Name="LoweredUserName" />
+          </Key>
+          <Property Name="Username" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="LoweredUserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+        </EntityType>
         <EntityType Name="Dinners">
           <Key>
             <PropertyRef Name="DinnerID" />
@@ -29,6 +57,15 @@
           <Property Name="Latitude" Type="float" Nullable="false" />
           <Property Name="Longitude" Type="float" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'C:\_APPLICATION\SIMPLE-CQRS\SAMPLE\NERDDINNER_2.0\NERDDINNER\APP_DATA\NERDDINNER.MDF.dbo.MinPasswordLength' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="MinPasswordLength">
+          <Key>
+            <PropertyRef Name="MinLength" />
+          </Key>
+          <Property Name="MinLength" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="RSVP">
           <Key>
             <PropertyRef Name="RsvpID" />
@@ -37,6 +74,17 @@
           <Property Name="DinnerID" Type="int" Nullable="false" />
           <Property Name="AttendeeName" Type="nvarchar" Nullable="false" MaxLength="256" />
           <Property Name="AttendeeNameId" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'C:\_APPLICATION\SIMPLE-CQRS\SAMPLE\NERDDINNER_2.0\NERDDINNER\APP_DATA\NERDDINNER.MDF.dbo.ValidateUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="ValidateUser">
+          <Key>
+            <PropertyRef Name="Username" />
+            <PropertyRef Name="Password" />
+          </Key>
+          <Property Name="Username" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="256" />
         </EntityType>
         <Association Name="FK_RSVP_Dinners">
           <End Role="Dinners" Type="NerdDinnerModel.Store.Dinners" Multiplicity="1" />
@@ -50,11 +98,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="DistanceBetween" ReturnType="float" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Lat1" Type="float" Mode="In" />
-          <Parameter Name="Long1" Type="float" Mode="In" />
-          <Parameter Name="Lat2" Type="float" Mode="In" />
-          <Parameter Name="Long2" Type="float" Mode="In" />
+        <Function Name="DistanceBetween" ReturnType="real" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Lat1" Type="real" Mode="In" />
+          <Parameter Name="Long1" Type="real" Mode="In" />
+          <Parameter Name="Lat2" Type="real" Mode="In" />
+          <Parameter Name="Long2" Type="real" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -67,6 +115,9 @@
             <End Role="Dinners" EntitySet="Dinners" />
             <End Role="RSVP" EntitySet="RSVPs" />
           </AssociationSet>
+          <EntitySet Name="MinPasswordLengths" EntityType="NerdDinnerModel.MinPasswordLength" />
+          <EntitySet Name="CanonicalUsernames" EntityType="NerdDinnerModel.CanonicalUsername" />
+          <EntitySet Name="ValidateUsers" EntityType="NerdDinnerModel.ValidateUser" />
         </EntityContainer>
         <EntityType Name="Dinner">
           <Key>
@@ -107,6 +158,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="MinPasswordLength">
+          <Key>
+            <PropertyRef Name="MinLength" />
+          </Key>
+          <Property Type="Int32" Name="MinLength" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CanonicalUsername">
+          <Key>
+            <PropertyRef Name="Username" />
+            <PropertyRef Name="LoweredUserName" />
+          </Key>
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LoweredUserName" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ValidateUser">
+          <Key>
+            <PropertyRef Name="Username" />
+            <PropertyRef Name="Password" />
+          </Key>
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -132,6 +205,29 @@
             <ScalarProperty Name="DinnerID" ColumnName="DinnerID" />
             <ScalarProperty Name="AttendeeName" ColumnName="AttendeeName" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="MinPasswordLengths">
+            <EntityTypeMapping TypeName="NerdDinnerModel.MinPasswordLength">
+              <MappingFragment StoreEntitySet="MinPasswordLength">
+                <ScalarProperty Name="MinLength" ColumnName="MinLength" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CanonicalUsernames">
+            <EntityTypeMapping TypeName="NerdDinnerModel.CanonicalUsername">
+              <MappingFragment StoreEntitySet="CanonicalUsernames">
+                <ScalarProperty Name="LoweredUserName" ColumnName="LoweredUserName" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ValidateUsers">
+            <EntityTypeMapping TypeName="NerdDinnerModel.ValidateUser">
+              <MappingFragment StoreEntitySet="ValidateUser">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -159,6 +255,9 @@
           <ConnectorPoint PointX="2.25" PointY="2.5189925130208337" />
           <ConnectorPoint PointX="3" PointY="2.5189925130208337" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="NerdDinnerModel.MinPasswordLength" Width="1.5" PointX="5.25" PointY="1.125" Height="1.2110807291666674" />
+        <EntityTypeShape EntityType="NerdDinnerModel.CanonicalUsername" Width="1.5" PointX="7.125" PointY="1.125" Height="1.2110807291666674" />
+        <EntityTypeShape EntityType="NerdDinnerModel.ValidateUser" Width="1.5" PointX="3.375" PointY="4.75" Height="1.4033821614583317" />
       </Diagram>
     </Diagrams>
   </Designer>

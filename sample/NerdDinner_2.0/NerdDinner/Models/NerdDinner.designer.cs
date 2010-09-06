@@ -101,6 +101,54 @@ namespace NerdDinner.Models
             }
         }
         private ObjectSet<RSVP> _RSVPs;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<MinPasswordLength> MinPasswordLengths
+        {
+            get
+            {
+                if ((_MinPasswordLengths == null))
+                {
+                    _MinPasswordLengths = base.CreateObjectSet<MinPasswordLength>("MinPasswordLengths");
+                }
+                return _MinPasswordLengths;
+            }
+        }
+        private ObjectSet<MinPasswordLength> _MinPasswordLengths;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<CanonicalUsername> CanonicalUsernames
+        {
+            get
+            {
+                if ((_CanonicalUsernames == null))
+                {
+                    _CanonicalUsernames = base.CreateObjectSet<CanonicalUsername>("CanonicalUsernames");
+                }
+                return _CanonicalUsernames;
+            }
+        }
+        private ObjectSet<CanonicalUsername> _CanonicalUsernames;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<ValidateUser> ValidateUsers
+        {
+            get
+            {
+                if ((_ValidateUsers == null))
+                {
+                    _ValidateUsers = base.CreateObjectSet<ValidateUser>("ValidateUsers");
+                }
+                return _ValidateUsers;
+            }
+        }
+        private ObjectSet<ValidateUser> _ValidateUsers;
 
         #endregion
         #region AddTo Methods
@@ -120,6 +168,30 @@ namespace NerdDinner.Models
         {
             base.AddObject("RSVPs", rSVP);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the MinPasswordLengths EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToMinPasswordLengths(MinPasswordLength minPasswordLength)
+        {
+            base.AddObject("MinPasswordLengths", minPasswordLength);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the CanonicalUsernames EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToCanonicalUsernames(CanonicalUsername canonicalUsername)
+        {
+            base.AddObject("CanonicalUsernames", canonicalUsername);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the ValidateUsers EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToValidateUsers(ValidateUser validateUser)
+        {
+            base.AddObject("ValidateUsers", validateUser);
+        }
 
         #endregion
     }
@@ -128,6 +200,90 @@ namespace NerdDinner.Models
     #endregion
     
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="CanonicalUsername")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class CanonicalUsername : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new CanonicalUsername object.
+        /// </summary>
+        /// <param name="username">Initial value of the Username property.</param>
+        /// <param name="loweredUserName">Initial value of the LoweredUserName property.</param>
+        public static CanonicalUsername CreateCanonicalUsername(global::System.String username, global::System.String loweredUserName)
+        {
+            CanonicalUsername canonicalUsername = new CanonicalUsername();
+            canonicalUsername.Username = username;
+            canonicalUsername.LoweredUserName = loweredUserName;
+            return canonicalUsername;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Username
+        {
+            get
+            {
+                return _Username;
+            }
+            set
+            {
+                if (_Username != value)
+                {
+                    OnUsernameChanging(value);
+                    ReportPropertyChanging("Username");
+                    _Username = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("Username");
+                    OnUsernameChanged();
+                }
+            }
+        }
+        private global::System.String _Username;
+        partial void OnUsernameChanging(global::System.String value);
+        partial void OnUsernameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LoweredUserName
+        {
+            get
+            {
+                return _LoweredUserName;
+            }
+            set
+            {
+                if (_LoweredUserName != value)
+                {
+                    OnLoweredUserNameChanging(value);
+                    ReportPropertyChanging("LoweredUserName");
+                    _LoweredUserName = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("LoweredUserName");
+                    OnLoweredUserNameChanged();
+                }
+            }
+        }
+        private global::System.String _LoweredUserName;
+        partial void OnLoweredUserNameChanging(global::System.String value);
+        partial void OnLoweredUserNameChanged();
+
+        #endregion
+    
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -470,6 +626,61 @@ namespace NerdDinner.Models
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="MinPasswordLength")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class MinPasswordLength : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new MinPasswordLength object.
+        /// </summary>
+        /// <param name="minLength">Initial value of the MinLength property.</param>
+        public static MinPasswordLength CreateMinPasswordLength(global::System.Int32 minLength)
+        {
+            MinPasswordLength minPasswordLength = new MinPasswordLength();
+            minPasswordLength.MinLength = minLength;
+            return minPasswordLength;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 MinLength
+        {
+            get
+            {
+                return _MinLength;
+            }
+            set
+            {
+                if (_MinLength != value)
+                {
+                    OnMinLengthChanging(value);
+                    ReportPropertyChanging("MinLength");
+                    _MinLength = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("MinLength");
+                    OnMinLengthChanged();
+                }
+            }
+        }
+        private global::System.Int32 _MinLength;
+        partial void OnMinLengthChanging(global::System.Int32 value);
+        partial void OnMinLengthChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="RSVP")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -637,6 +848,90 @@ namespace NerdDinner.Models
         }
 
         #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="ValidateUser")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ValidateUser : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new ValidateUser object.
+        /// </summary>
+        /// <param name="username">Initial value of the Username property.</param>
+        /// <param name="password">Initial value of the Password property.</param>
+        public static ValidateUser CreateValidateUser(global::System.String username, global::System.String password)
+        {
+            ValidateUser validateUser = new ValidateUser();
+            validateUser.Username = username;
+            validateUser.Password = password;
+            return validateUser;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Username
+        {
+            get
+            {
+                return _Username;
+            }
+            set
+            {
+                if (_Username != value)
+                {
+                    OnUsernameChanging(value);
+                    ReportPropertyChanging("Username");
+                    _Username = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("Username");
+                    OnUsernameChanged();
+                }
+            }
+        }
+        private global::System.String _Username;
+        partial void OnUsernameChanging(global::System.String value);
+        partial void OnUsernameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Password
+        {
+            get
+            {
+                return _Password;
+            }
+            set
+            {
+                if (_Password != value)
+                {
+                    OnPasswordChanging(value);
+                    ReportPropertyChanging("Password");
+                    _Password = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("Password");
+                    OnPasswordChanged();
+                }
+            }
+        }
+        private global::System.String _Password;
+        partial void OnPasswordChanging(global::System.String value);
+        partial void OnPasswordChanged();
+
+        #endregion
+    
     }
 
     #endregion

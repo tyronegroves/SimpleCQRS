@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System.Web.Security" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System.Web.Security" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="MembershipCreateStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="InvalidUserName" />
+      <xs:enumeration value="InvalidPassword" />
+      <xs:enumeration value="InvalidQuestion" />
+      <xs:enumeration value="InvalidAnswer" />
+      <xs:enumeration value="InvalidEmail" />
+      <xs:enumeration value="DuplicateUserName" />
+      <xs:enumeration value="DuplicateEmail" />
+      <xs:enumeration value="UserRejected" />
+      <xs:enumeration value="InvalidProviderUserKey" />
+      <xs:enumeration value="DuplicateProviderUserKey" />
+      <xs:enumeration value="ProviderError" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="MembershipCreateStatus" nillable="true" type="tns:MembershipCreateStatus" />
+</xs:schema>

@@ -52,9 +52,6 @@
     <Reference Include="OpenSearchToolkit">
       <HintPath>lib\OpenSearchToolkit.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleCqrs.Commanding">
-      <HintPath>..\..\lib\SimpleCqrs.Commanding.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -114,6 +111,12 @@
     <Compile Include="Helpers\ControllerHelpers.cs" />
     <Compile Include="Helpers\iCalResult.cs" />
     <Compile Include="Helpers\InMemoryTokenManager.cs" />
+    <Compile Include="Models\MembershipReadModel.cs" />
+    <Compile Include="Service References\Services\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Services\JSONPSupportBehavior.cs" />
     <Compile Include="Helpers\PaginatedList.cs" />
     <Compile Include="Helpers\PhoneValidator.cs" />
@@ -194,6 +197,13 @@
     <Content Include="Scripts\smothness\jquery_ui_datepicker.css" />
     <Content Include="Scripts\timepicker_plug\css\style.css" />
     <Content Include="Scripts\timepicker_plug\timepicker.js" />
+    <None Include="Service References\Services\CommandService.disco" />
+    <None Include="Service References\Services\configuration91.svcinfo" />
+    <None Include="Service References\Services\configuration.svcinfo" />
+    <None Include="Service References\Services\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Services\OData.svc" />
     <Content Include="Views\Dinners\My.aspx" />
     <Content Include="Views\Dinners\WebSlice.aspx" />
@@ -233,6 +243,22 @@
     <Content Include="Views\Shared\LoginStatus.ascx" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
+    <None Include="Service References\Services\CommandService.wsdl" />
+    <None Include="Service References\Services\CommandService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Services\CommandService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Services\CommandService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Services\CommandService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Services\CommandService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -324,10 +350,20 @@
     <Content Include="Services\OpenSearch.ashx" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
+      <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
+      <Name>SimpleCqrs.Commanding</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NerdDinner.Commands\NerdDinner.Commands.csproj">
       <Project>{ABA8CA3F-5074-4B3E-8A82-116188C3560D}</Project>
       <Name>NerdDinner.Commands</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

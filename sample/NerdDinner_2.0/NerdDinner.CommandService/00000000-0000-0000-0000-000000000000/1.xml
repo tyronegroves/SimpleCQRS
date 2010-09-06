@@ -1,0 +1,1 @@
+<DomainEvent i:type="a:UserCreatedEvent" xmlns="http://schemas.datacontract.org/2004/07/SimpleCqrs.Eventing" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:a="http://schemas.datacontract.org/2004/07/NerdDinner.CommandService.Events"><AggregateRootId>00000000-0000-0000-0000-000000000000</AggregateRootId><Sequence>1</Sequence></DomainEvent>

@@ -61,9 +61,6 @@
       <HintPath>lib\Moq.dll</HintPath>
     </Reference>
     <Reference Include="OpenSearchToolkit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="SimpleCqrs.Commanding">
-      <HintPath>..\..\lib\SimpleCqrs.Commanding.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -126,6 +123,10 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
+      <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
+      <Name>SimpleCqrs.Commanding</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NerdDinner.Commands\NerdDinner.Commands.csproj">
       <Project>{ABA8CA3F-5074-4B3E-8A82-116188C3560D}</Project>
       <Name>NerdDinner.Commands</Name>

@@ -1,15 +1,9 @@
-﻿using System;
-using SimpleCqrs.Commanding;
+﻿using SimpleCqrs.Commanding;
 
 namespace NerdDinner.Commands
 {
-    public class RegisterUserCommand : Command
+    public class RegisterUserCommand : CommandWithAggregateRootId
     {
-        public RegisterUserCommand()
-        {
-            Id = Guid.NewGuid();
-        }
-
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

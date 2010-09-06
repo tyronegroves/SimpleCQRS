@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using NerdDinner.Commands;
+using NerdDinner.Models;
+using NerdDinner.Services;
 
 namespace NerdDinner.Controllers
 {
@@ -16,22 +18,25 @@ namespace NerdDinner.Controllers
         // the default forms authentication and membership providers.
 
         public AccountController()
-            : this(null, null)
+            : this(null, null, null)
         {
         }
 
         // This constructor is not used by the MVC framework but is instead provided for ease
         // of unit testing this type. See the comments at the end of this file for more
         // information.
-        public AccountController(IFormsAuthentication formsAuth, IMembershipService service)
+        public AccountController(IFormsAuthentication formsAuthentication, CommandServiceClient commandService, MembershipReadModel membershipReadModel)
         {
-            FormsAuth = formsAuth ?? new FormsAuthenticationService();
-            MembershipService = service ?? new AccountMembershipService();
+            FormsAuth = formsAuthentication ?? new FormsAuthenticationService();
+            CommandService = commandService ?? new CommandServiceClient();
+            MembershipReadModel = membershipReadModel ?? new MembershipReadModel();
         }
 
         public IFormsAuthentication FormsAuth { get; private set; }
 
-        public IMembershipService MembershipService { get; private set; }
+        public CommandServiceClient CommandService { get; private set; }
+
+        public MembershipReadModel MembershipReadModel { get; private set; }
 
         public ActionResult LogOn()
         {
@@ -51,7 +56,7 @@ namespace NerdDinner.Controllers
 
             // Make sure we have the username with the right capitalization
             // since we do case sensitive checks for OpenID Claimed Identifiers later.
-            userName = MembershipService.GetCanonicalUsername(userName);
+            userName = MembershipReadModel.GetCanonicalUsername(userName);
 
             var authTicket = new
                 FormsAuthenticationTicket(1, //version
@@ -83,7 +88,7 @@ namespace NerdDinner.Controllers
 
         public ActionResult Register()
         {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            ViewData["PasswordLength"] = MembershipReadModel.GetMinPasswordLength();
 
             return View();
         }
@@ -91,12 +96,12 @@ namespace NerdDinner.Controllers
         [HttpPost]
         public ActionResult Register(RegisterUserCommand registerUserCommand)
         {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            ViewData["PasswordLength"] = MembershipReadModel.GetMinPasswordLength();
 
             if (ValidateRegistration(registerUserCommand.UserName, registerUserCommand.Email, registerUserCommand.Password, registerUserCommand.ConfirmPassword))
             {
                 // Attempt to register the user
-                var createStatus = MembershipService.CreateUser(registerUserCommand.UserName, registerUserCommand.Password, registerUserCommand.Email);
+                var createStatus = CommandService.RegisterUser(registerUserCommand);
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
@@ -116,7 +121,7 @@ namespace NerdDinner.Controllers
         [Authorize]
         public ActionResult ChangePassword()
         {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            ViewData["PasswordLength"] = MembershipReadModel.GetMinPasswordLength();
 
             return View();
         }
@@ -127,7 +132,7 @@ namespace NerdDinner.Controllers
             Justification = "Exceptions result in password not being changed.")]
         public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            ViewData["PasswordLength"] = MembershipReadModel.GetMinPasswordLength();
 
             if (!ValidateChangePassword(currentPassword, newPassword, confirmPassword))
             {
@@ -136,7 +141,14 @@ namespace NerdDinner.Controllers
 
             try
             {
-                if (MembershipService.ChangePassword(User.Identity.Name, currentPassword, newPassword))
+                var changePasswordCommand = new ChangePasswordCommand
+                                                {
+                                                    Name = User.Identity.Name,
+                                                    CurrentPassword = currentPassword,
+                                                    NewPassword = newPassword
+                                                };
+
+                if (CommandService.ChangePassword(changePasswordCommand))
                 {
                     return RedirectToAction("ChangePasswordSuccess");
                 }
@@ -175,12 +187,12 @@ namespace NerdDinner.Controllers
             {
                 ModelState.AddModelError("currentPassword", "You must specify a current password.");
             }
-            if (newPassword == null || newPassword.Length < MembershipService.MinPasswordLength)
+            if (newPassword == null || newPassword.Length < MembershipReadModel.GetMinPasswordLength())
             {
                 ModelState.AddModelError("newPassword",
                                          String.Format(CultureInfo.CurrentCulture,
                                                        "You must specify a new password of {0} or more characters.",
-                                                       MembershipService.MinPasswordLength));
+                                                       MembershipReadModel.GetMinPasswordLength()));
             }
 
             if (!String.Equals(newPassword, confirmPassword, StringComparison.Ordinal))
@@ -201,7 +213,7 @@ namespace NerdDinner.Controllers
             {
                 ModelState.AddModelError("password", "You must specify a password.");
             }
-            if (!MembershipService.ValidateUser(userName, password))
+            if (!MembershipReadModel.ValidateUser(userName, password))
             {
                 ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
             }
@@ -219,12 +231,12 @@ namespace NerdDinner.Controllers
             {
                 ModelState.AddModelError("email", "You must specify an email address.");
             }
-            if (password == null || password.Length < MembershipService.MinPasswordLength)
+            if (password == null || password.Length < MembershipReadModel.GetMinPasswordLength())
             {
                 ModelState.AddModelError("password",
                                          String.Format(CultureInfo.CurrentCulture,
                                                        "You must specify a password of {0} or more characters.",
-                                                       MembershipService.MinPasswordLength));
+                                                       MembershipReadModel.GetMinPasswordLength()));
             }
             if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
             {

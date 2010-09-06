@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/NerdDinner.Commands" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/NerdDinner.Commands" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/SimpleCqrs.Commanding" />
+  <xs:complexType name="RegisterUserCommand">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/SimpleCqrs.Commanding" base="q1:CommandWithAggregateRootId">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ConfirmPassword" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="RegisterUserCommand" nillable="true" type="tns:RegisterUserCommand" />
+  <xs:complexType name="ChangePasswordCommand">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/SimpleCqrs.Commanding" base="q2:CommandWithAggregateRootId">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CurrentPassword" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NewPassword" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ChangePasswordCommand" nillable="true" type="tns:ChangePasswordCommand" />
+</xs:schema>
