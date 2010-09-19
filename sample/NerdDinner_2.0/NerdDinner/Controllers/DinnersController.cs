@@ -2,182 +2,143 @@ using System;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NerdDinner.Commands;
 using NerdDinner.Helpers;
 using NerdDinner.Models;
+using NerdDinner.Services;
 
-namespace NerdDinner.Controllers {
-
+namespace NerdDinner.Controllers
+{
     [HandleErrorWithELMAH]
-    public class DinnersController : Controller {
+    public class DinnersController : Controller
+    {
+        private readonly DinnerReadModel dinnerReadModel = new DinnerReadModel();
+        private readonly CommandServiceClient commandService = new CommandServiceClient();
 
-        IDinnerRepository dinnerRepository;
-
-        //
-        // Dependency Injection enabled constructors
-
-        public DinnersController()
-            : this(new DinnerRepository()) {
-        }
-
-        public DinnersController(IDinnerRepository repository) {
-            dinnerRepository = repository;
-        }
-
-        //
-        // GET: /Dinners/
-        //      /Dinners/Page/2
-        //      /Dinners?q=term
-
-        public ActionResult Index(string q, int? page) {
-
+        public ActionResult Index(string q, int? page)
+        {
             const int pageSize = 25;
 
-            IQueryable<Dinner> dinners = null;
+            IQueryable<Dinner> dinners;
 
             //Searching?
-            if (!string.IsNullOrWhiteSpace(q))
-                dinners = dinnerRepository.FindDinnersByText(q).OrderBy(d => d.EventDate);
-            else 
-                dinners = dinnerRepository.FindUpcomingDinners();
+            if(!string.IsNullOrWhiteSpace(q))
+                dinners = dinnerReadModel.FindDinnersByText(q).OrderBy(d => d.EventDate);
+            else
+                dinners = dinnerReadModel.FindUpcomingDinners();
 
             var paginatedDinners = new PaginatedList<Dinner>(dinners, page ?? 0, pageSize);
 
             return View(paginatedDinners);
         }
 
-        //
-        // GET: /Dinners/Details/5
+        public ActionResult Details(Guid? id)
+        {
+            if(id == null)
+                return new FileNotFoundResult {Message = "No Dinner found due to invalid dinner id"};
 
-        public ActionResult Details(int? id) {
-            if (id == null) {
-                return new FileNotFoundResult { Message = "No Dinner found due to invalid dinner id" };
-            }
+            var dinner = dinnerReadModel.GetDinnerById(id.Value);
 
-            Dinner dinner = dinnerRepository.GetDinner(id.Value);
+            if(dinner == null)
+                dinner = TempData["Dinner"] as Dinner;
 
-            if (dinner == null) {
-                return new FileNotFoundResult { Message = "No Dinner found for that id" };
-            }
+            if(dinner == null)
+                return new FileNotFoundResult {Message = "No Dinner found for that id"};
 
             return View(dinner);
         }
-
-        //
-        // GET: /Dinners/Edit/5
 
         [Authorize]
-        public ActionResult Edit(int id) {
+        public ActionResult Edit(Guid id)
+        {
+            var dinner = dinnerReadModel.GetDinnerById(id);
 
-            Dinner dinner = dinnerRepository.GetDinner(id);
-
-            if (!dinner.IsHostedBy(User.Identity.Name))
+            if(!dinnerReadModel.DinnerIsHostedBy(id, User.Identity.Name))
                 return View("InvalidOwner");
 
             return View(dinner);
         }
 
-        //
-        // POST: /Dinners/Edit/5
-
         [HttpPost, Authorize]
-        public ActionResult Edit(int id, FormCollection collection) {
+        public ActionResult Edit(EditDinnerCommand editDinnerCommand)
+        {
+            var dinnerId = editDinnerCommand.DinnerId;
+            var dinner = dinnerReadModel.GetDinnerById(dinnerId);
 
-            Dinner dinner = dinnerRepository.GetDinner(id);
-
-            if (!dinner.IsHostedBy(User.Identity.Name))
+            if(!dinnerReadModel.DinnerIsHostedBy(dinnerId, User.Identity.Name))
                 return View("InvalidOwner");
 
-            try {
-                UpdateModel(dinner, "Dinner");
+            try
+            {
+                var dinnerHost = new DinnerHost();
+                var location = new Location();
+                UpdateModel(dinnerHost);
+                UpdateModel(location);
 
-                dinnerRepository.Save();
-
-                return RedirectToAction("Details", new { id=dinner.DinnerID });
+                editDinnerCommand.Host = dinnerHost;
+                editDinnerCommand.Location = location;
+                commandService.EditDinner(editDinnerCommand);
+                TempData["Dinner"] = dinner;
+                return RedirectToAction("Details", new {id = dinner.DinnerId});
             }
-            catch {
+            catch
+            {
                 return View(dinner);
             }
         }
 
-        //
-        // GET: /Dinners/Create
-
         [Authorize]
-        public ActionResult Create() {
-
-            Dinner dinner = new Dinner() {
-               EventDate = DateTime.Now.AddDays(7)
-            };
-
-            return View(new DinnerFormViewModel(dinner));
-        } 
-
-        //
-        // POST: /Dinners/Create
-
-        [HttpPost, Authorize]
-        public ActionResult Create(Dinner dinner) {
-
-            if (ModelState.IsValid) {
-                NerdIdentity nerd = (NerdIdentity)User.Identity;
-                dinner.HostedById = nerd.Name;
-                dinner.HostedBy = nerd.FriendlyName;
-
-                RSVP rsvp = new RSVP();
-                rsvp.AttendeeNameId = nerd.Name;
-                rsvp.AttendeeName = nerd.FriendlyName;
-                dinner.RSVPs.Add(rsvp);
-
-                dinnerRepository.Add(dinner);
-                dinnerRepository.Save();
-
-                return RedirectToAction("Details", new { id=dinner.DinnerID });
-            }
-
-            return View(new DinnerFormViewModel(dinner));
+        public ActionResult Create()
+        {
+            return View(new Dinner {EventDate = DateTime.Now.AddDays(7)});
         }
 
-        //
-        // HTTP GET: /Dinners/Delete/1
+        [HttpPost, Authorize]
+        public ActionResult Create(CreateDinnerCommand createDinnerCommand, Dinner dinner)
+        {
+            if (ModelState.IsValid)
+            {
+                var nerd = (NerdIdentity)User.Identity;
+                var dinnerId = Guid.NewGuid();
+
+                createDinnerCommand.Host = new DinnerHost {HostedById = nerd.UserId, HostedBy = nerd.FriendlyName};
+                createDinnerCommand.Location = new Location {Address = dinner.Address, Country = dinner.Country, Latitude = dinner.Latitude, Longitude = dinner.Longitude};
+                createDinnerCommand.DinnerId = dinnerId;
+
+                commandService.CreateDinner(createDinnerCommand);
+
+                return RedirectToAction("Details", new { id = dinnerId });
+            }
+
+            return View(dinner);
+        }
 
         [Authorize]
-        public ActionResult Delete(int id) {
-
-            Dinner dinner = dinnerRepository.GetDinner(id);
+        public ActionResult Delete(Guid id)
+        {
+            var dinner = dinnerReadModel.GetDinnerById(id);
 
             if (dinner == null)
                 return View("NotFound");
 
-            if (!dinner.IsHostedBy(User.Identity.Name))
+            if (!dinnerReadModel.DinnerIsHostedBy(id, User.Identity.Name))
                 return View("InvalidOwner");
 
             return View(dinner);
         }
 
-        // 
-        // HTTP POST: /Dinners/Delete/1
-
         [HttpPost, Authorize]
-        public ActionResult Delete(int id, string confirmButton) {
-
-            Dinner dinner = dinnerRepository.GetDinner(id);
-
-            if (dinner == null)
+        public ActionResult Delete(Guid id, string confirmButton)
+        {
+            if (!dinnerReadModel.DinnerExists(id))
                 return View("NotFound");
 
-            if (!dinner.IsHostedBy(User.Identity.Name))
+            if (!dinnerReadModel.DinnerIsHostedBy(id, User.Identity.Name))
                 return View("InvalidOwner");
-
-            dinnerRepository.Delete(dinner);
-            dinnerRepository.Save();
-
+            
+            commandService.CancelDinner(new CancelDinnerCommand {DinnerId = id});
+            
             return View("Deleted");
-        }
-
-  
-        protected override void HandleUnknownAction(string actionName)
-        {
-            throw new HttpException(404, "Action not found");
         }
 
         public ActionResult Confused()
@@ -193,40 +154,30 @@ namespace NerdDinner.Controllers {
         [Authorize]
         public ActionResult My()
         {
-
-            NerdIdentity nerd = (NerdIdentity)User.Identity;
-            var userDinners = from dinner in dinnerRepository.FindAllDinners()
-                              where
-                                (
-                                String.Equals((dinner.HostedById ?? dinner.HostedBy), nerd.Name)
-                                    ||
-                                dinner.RSVPs.Any(r => r.AttendeeNameId == nerd.Name || (r.AttendeeNameId == null && r.AttendeeName == nerd.Name)) 
-                                )
-                              orderby dinner.EventDate
-                              select dinner;
-
+            var nerd = (NerdIdentity)User.Identity;
+            var userDinners = dinnerReadModel.FindAllDinnersByUserId(nerd.UserId);
+                              
             return View(userDinners);
         }
 
         public ActionResult WebSlicePopular()
         {
             ViewData["Title"] = "Popular Nerd Dinners";
-            var model = from dinner in dinnerRepository.FindUpcomingDinners()
-                                        orderby dinner.RSVPs.Count descending
-                                        select dinner;
-            return View("WebSlice",model.Take(5));
+            var dinners = dinnerReadModel.FindPopularDinners().Take(5);
+            return View("WebSlice", dinners);
         }
 
         public ActionResult WebSliceUpcoming()
         {
             ViewData["Title"] = "Upcoming Nerd Dinners";
-            DateTime d = DateTime.Now.AddMonths(2);
-            var model = from dinner in dinnerRepository.FindUpcomingDinners()
-                        where dinner.EventDate < d
-                        orderby dinner.EventDate descending
-                    select dinner;
-            return View("WebSlice", model.Take(5));
+            var d = DateTime.Now.AddMonths(2);
+            var dinners = dinnerReadModel.FindUpcomingDinners(d);
+            return View("WebSlice", dinners);
         }
 
+        protected override void HandleUnknownAction(string actionName)
+        {
+            throw new HttpException(404, "Action not found");
+        }
     }
 }

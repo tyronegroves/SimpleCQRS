@@ -1,4 +1,5 @@
-<%@ Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NerdDinner.Models.DinnerFormViewModel>" %>
+<%@ Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NerdDinner.Models.Dinner>" %>
+<%@ Import Namespace="NerdDinner.Helpers" %>
 
 <script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
 <script src="/Scripts/MicrosoftMvcAjax.js" type="text/javascript"></script>
@@ -14,31 +15,31 @@
 
         <p>
             <label for="Title">Dinner Title:</label>
-            <%: Html.EditorFor(m => Model.Dinner.Title) %>
+            <%: Html.EditorFor(m => Model.Title) %>
         </p>
         <p>
             <label for="EventDate">Event Date:</label>
-            <%: Html.EditorFor(m => m.Dinner.EventDate) %>
+            <%: Html.EditorFor(m => m.EventDate) %>
         </p>
         <p>
             <label for="Description">Description:</label>
-            <%: Html.TextAreaFor(m => Model.Dinner.Description, 6, 35, null) %>
+            <%: Html.TextAreaFor(m => Model.Description, 6, 35, null) %>
         </p>
         <p>
             <label for="Address">Address:</label>
-            <%: Html.EditorFor(m => Model.Dinner.Address)%>
+            <%: Html.EditorFor(m => Model.Address)%>
         </p>
         <p>
             <label for="Country">Country:</label>
-            <%: Html.DropDownList("Dinner.Country", Model.Countries) %>                
+            <%: Html.DropDownListFor(m => Model.Country, new SelectList(PhoneValidator.Countries, Model.Country))%>                
         </p>
         <p>
             <label for="ContactPhone">Contact Info:</label>
-            <%: Html.EditorFor(m => Model.Dinner.ContactPhone)%>
+            <%: Html.EditorFor(m => Model.ContactPhone)%>
         </p>
         <p>
-            <%: Html.HiddenFor(m => Model.Dinner.Latitude)%>
-            <%: Html.HiddenFor(m => Model.Dinner.Longitude)%>
+            <%: Html.HiddenFor(m => Model.Latitude)%>
+            <%: Html.HiddenFor(m => Model.Longitude)%>
         </p>                 
         <p>
             <input type="submit" value="Save" />
@@ -47,7 +48,7 @@
         </div>
         
         <div id="mapDiv">    
-            <% Html.RenderPartial("Map", Model.Dinner); %>
+            <% Html.RenderPartial("Map", Model); %>
             (drag the pin in the map if it doesn't look right)
         </div> 
             
@@ -61,12 +62,12 @@
     $(document).ready(function () {
         NerdDinner.EnableMapMouseClickCallback();
 
-        $("#Dinner_Address").blur(function (evt) {
+        $("#Address").blur(function (evt) {
             //If it's time to look for an address, 
             // clear out the Lat and Lon
-            $("#Dinner_Latitude").val("0");
-            $("#Dinner_Longitude").val("0");
-            var address = jQuery.trim($("#Dinner_Address").val());
+            $("#Latitude").val("0");
+            $("#Longitude").val("0");
+            var address = jQuery.trim($("#Address").val());
             if (address.length < 1)
                 return;
             NerdDinner.FindAddressOnMap(address);

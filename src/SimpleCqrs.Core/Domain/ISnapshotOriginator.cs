@@ -4,5 +4,6 @@
     {
         Snapshot GetSnapshot();
         void LoadSnapshot(Snapshot snapshot);
+        bool HasSnapshot { get; }
     }
 }

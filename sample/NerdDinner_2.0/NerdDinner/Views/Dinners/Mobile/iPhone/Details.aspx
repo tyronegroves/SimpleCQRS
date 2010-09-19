@@ -11,14 +11,14 @@
 
 <div id="whoscoming" title="<%: Model.Title %>" class="panel">
     <h2>Who's Coming?</h2>
-            <%if (Model.RSVPs.Count == 0){%>
+            <%if (Model.GetRsvpCount() == 0){%>
                   <ul><li>No one has registered.</li></ul>
             <% } %>
 
-        <%if(Model.RSVPs.Count > 0) {%>
+        <%if(Model.GetRsvpCount() > 0) {%>
         <ul id="attendees">
-            <%foreach (var RSVP in Model.RSVPs){%>
-              <li><%: RSVP.AttendeeName.Replace("@"," at ") %></li>    
+            <%foreach (var rsvp in Model.GetRsvps()){%>
+              <li><%: rsvp.AttendeeName.Replace("@", " at ")%></li>    
             <% } %>
         </ul>
         <%} %>

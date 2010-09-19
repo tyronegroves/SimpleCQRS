@@ -41,9 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CancelDinnerCommand.cs" />
     <Compile Include="ChangePasswordCommand.cs" />
+    <Compile Include="CreateDinnerCommand.cs" />
+    <Compile Include="DinnerHost.cs" />
+    <Compile Include="EditDinnerCommand.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="RegisterUserCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RsvpForDinnerCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NerdDinner.Commands" />
-  <xs:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System.Web.Security" />
+  <xs:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System.Web.Security" />
+  <xs:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/NerdDinner.CommandService.CommandHandlers" />
   <xs:element name="RegisterUser">
     <xs:complexType>
       <xs:sequence>
@@ -27,6 +28,48 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="ChangePasswordResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateDinner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NerdDinner.Commands" minOccurs="0" name="createDinnerCommand" nillable="true" type="q4:CreateDinnerCommand" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateDinnerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/NerdDinner.CommandService.CommandHandlers" minOccurs="0" name="CreateDinnerResult" type="q5:CreateDinnerStatus" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CancelDinner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/NerdDinner.Commands" minOccurs="0" name="cancelDinnerCommand" nillable="true" type="q6:CancelDinnerCommand" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CancelDinnerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/NerdDinner.CommandService.CommandHandlers" minOccurs="0" name="CancelDinnerResult" type="q7:CancelDinnerStatus" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EditDinner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/NerdDinner.Commands" minOccurs="0" name="editDinnerCommand" nillable="true" type="q8:EditDinnerCommand" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RsvpForDinner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/NerdDinner.Commands" minOccurs="0" name="rsvpForDinnerCommand" nillable="true" type="q9:RsvpForDinnerCommand" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

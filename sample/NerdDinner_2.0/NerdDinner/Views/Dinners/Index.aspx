@@ -18,7 +18,7 @@
             <% foreach (var dinner in Model) { %>
         
                 <li>     
-                    <%: Html.ActionLink(dinner.Title, "Details", new { id=dinner.DinnerID }) %>
+                    <%: Html.ActionLink(dinner.Title, "Details", new { id=dinner.DinnerId }) %>
                     on 
                     <strong><%: dinner.EventDate.ToString("yyyy-MMM-dd")%> 
                     <%: dinner.EventDate.ToString("HH:mm tt")%></strong>

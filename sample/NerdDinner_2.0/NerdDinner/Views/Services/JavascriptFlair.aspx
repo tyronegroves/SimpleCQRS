@@ -8,7 +8,7 @@ document.write('<div id=\"nd-wrapper\"><h2 id=\"nd-header\">NerdDinner.com</h2><
 <% } else { %>
 document.write('<h3>  Dinners Near You</h3><ul>');
     <% foreach (var item in Model.Dinners) { %>
-document.write('<li><a target=\"_blank\" href=\"http://nrddnr.com/<%: item.DinnerID %>\"><%: item.Title.Truncate(20) %> with <%: item.HostedBy %> on <%: item.EventDate.ToShortDateString() %></a></li>');
+document.write('<li><a target=\"_blank\" href=\"http://nrddnr.com/<%: item.DinnerId %>\"><%: item.Title.Truncate(20) %> with <%: item.HostedBy %> on <%: item.EventDate.ToShortDateString() %></a></li>');
     <% } %>
 document.write('</ul>');
 <% } %>

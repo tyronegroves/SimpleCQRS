@@ -16,11 +16,6 @@ using System.Xml.Serialization;
 using System.Runtime.Serialization;
 
 [assembly: EdmSchemaAttribute()]
-#region EDM Relationship Metadata
-
-[assembly: EdmRelationshipAttribute("NerdDinnerModel", "FK_RSVP_Dinners", "Dinners", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(NerdDinner.Models.Dinner), "RSVP", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(NerdDinner.Models.RSVP), true)]
-
-#endregion
 
 namespace NerdDinner.Models
 {
@@ -73,6 +68,22 @@ namespace NerdDinner.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<Membership> Memberships
+        {
+            get
+            {
+                if ((_Memberships == null))
+                {
+                    _Memberships = base.CreateObjectSet<Membership>("Memberships");
+                }
+                return _Memberships;
+            }
+        }
+        private ObjectSet<Membership> _Memberships;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<Dinner> Dinners
         {
             get
@@ -89,69 +100,45 @@ namespace NerdDinner.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<RSVP> RSVPs
+        public ObjectSet<PopularDinner> PopularDinners
         {
             get
             {
-                if ((_RSVPs == null))
+                if ((_PopularDinners == null))
                 {
-                    _RSVPs = base.CreateObjectSet<RSVP>("RSVPs");
+                    _PopularDinners = base.CreateObjectSet<PopularDinner>("PopularDinners");
                 }
-                return _RSVPs;
+                return _PopularDinners;
             }
         }
-        private ObjectSet<RSVP> _RSVPs;
+        private ObjectSet<PopularDinner> _PopularDinners;
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<MinPasswordLength> MinPasswordLengths
+        public ObjectSet<Rsvp> Rsvps
         {
             get
             {
-                if ((_MinPasswordLengths == null))
+                if ((_Rsvps == null))
                 {
-                    _MinPasswordLengths = base.CreateObjectSet<MinPasswordLength>("MinPasswordLengths");
+                    _Rsvps = base.CreateObjectSet<Rsvp>("Rsvps");
                 }
-                return _MinPasswordLengths;
+                return _Rsvps;
             }
         }
-        private ObjectSet<MinPasswordLength> _MinPasswordLengths;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<CanonicalUsername> CanonicalUsernames
-        {
-            get
-            {
-                if ((_CanonicalUsernames == null))
-                {
-                    _CanonicalUsernames = base.CreateObjectSet<CanonicalUsername>("CanonicalUsernames");
-                }
-                return _CanonicalUsernames;
-            }
-        }
-        private ObjectSet<CanonicalUsername> _CanonicalUsernames;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<ValidateUser> ValidateUsers
-        {
-            get
-            {
-                if ((_ValidateUsers == null))
-                {
-                    _ValidateUsers = base.CreateObjectSet<ValidateUser>("ValidateUsers");
-                }
-                return _ValidateUsers;
-            }
-        }
-        private ObjectSet<ValidateUser> _ValidateUsers;
+        private ObjectSet<Rsvp> _Rsvps;
 
         #endregion
         #region AddTo Methods
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Memberships EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToMemberships(Membership membership)
+        {
+            base.AddObject("Memberships", membership);
+        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the Dinners EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -162,35 +149,19 @@ namespace NerdDinner.Models
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the RSVPs EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the PopularDinners EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToRSVPs(RSVP rSVP)
+        public void AddToPopularDinners(PopularDinner popularDinner)
         {
-            base.AddObject("RSVPs", rSVP);
+            base.AddObject("PopularDinners", popularDinner);
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the MinPasswordLengths EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the Rsvps EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToMinPasswordLengths(MinPasswordLength minPasswordLength)
+        public void AddToRsvps(Rsvp rsvp)
         {
-            base.AddObject("MinPasswordLengths", minPasswordLength);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the CanonicalUsernames EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToCanonicalUsernames(CanonicalUsername canonicalUsername)
-        {
-            base.AddObject("CanonicalUsernames", canonicalUsername);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the ValidateUsers EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToValidateUsers(ValidateUser validateUser)
-        {
-            base.AddObject("ValidateUsers", validateUser);
+            base.AddObject("Rsvps", rsvp);
         }
 
         #endregion
@@ -200,90 +171,6 @@ namespace NerdDinner.Models
     #endregion
     
     #region Entities
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="CanonicalUsername")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class CanonicalUsername : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new CanonicalUsername object.
-        /// </summary>
-        /// <param name="username">Initial value of the Username property.</param>
-        /// <param name="loweredUserName">Initial value of the LoweredUserName property.</param>
-        public static CanonicalUsername CreateCanonicalUsername(global::System.String username, global::System.String loweredUserName)
-        {
-            CanonicalUsername canonicalUsername = new CanonicalUsername();
-            canonicalUsername.Username = username;
-            canonicalUsername.LoweredUserName = loweredUserName;
-            return canonicalUsername;
-        }
-
-        #endregion
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Username
-        {
-            get
-            {
-                return _Username;
-            }
-            set
-            {
-                if (_Username != value)
-                {
-                    OnUsernameChanging(value);
-                    ReportPropertyChanging("Username");
-                    _Username = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("Username");
-                    OnUsernameChanged();
-                }
-            }
-        }
-        private global::System.String _Username;
-        partial void OnUsernameChanging(global::System.String value);
-        partial void OnUsernameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LoweredUserName
-        {
-            get
-            {
-                return _LoweredUserName;
-            }
-            set
-            {
-                if (_LoweredUserName != value)
-                {
-                    OnLoweredUserNameChanging(value);
-                    ReportPropertyChanging("LoweredUserName");
-                    _LoweredUserName = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("LoweredUserName");
-                    OnLoweredUserNameChanged();
-                }
-            }
-        }
-        private global::System.String _LoweredUserName;
-        partial void OnLoweredUserNameChanging(global::System.String value);
-        partial void OnLoweredUserNameChanged();
-
-        #endregion
-    
-    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -298,7 +185,7 @@ namespace NerdDinner.Models
         /// <summary>
         /// Create a new Dinner object.
         /// </summary>
-        /// <param name="dinnerID">Initial value of the DinnerID property.</param>
+        /// <param name="dinnerId">Initial value of the DinnerId property.</param>
         /// <param name="title">Initial value of the Title property.</param>
         /// <param name="eventDate">Initial value of the EventDate property.</param>
         /// <param name="description">Initial value of the Description property.</param>
@@ -308,10 +195,10 @@ namespace NerdDinner.Models
         /// <param name="country">Initial value of the Country property.</param>
         /// <param name="latitude">Initial value of the Latitude property.</param>
         /// <param name="longitude">Initial value of the Longitude property.</param>
-        public static Dinner CreateDinner(global::System.Int32 dinnerID, global::System.String title, global::System.DateTime eventDate, global::System.String description, global::System.String hostedBy, global::System.String contactPhone, global::System.String address, global::System.String country, global::System.Double latitude, global::System.Double longitude)
+        public static Dinner CreateDinner(global::System.Guid dinnerId, global::System.String title, global::System.DateTime eventDate, global::System.String description, global::System.String hostedBy, global::System.String contactPhone, global::System.String address, global::System.String country, global::System.Double latitude, global::System.Double longitude)
         {
             Dinner dinner = new Dinner();
-            dinner.DinnerID = dinnerID;
+            dinner.DinnerId = dinnerId;
             dinner.Title = title;
             dinner.EventDate = eventDate;
             dinner.Description = description;
@@ -332,27 +219,27 @@ namespace NerdDinner.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 DinnerID
+        public global::System.Guid DinnerId
         {
             get
             {
-                return _DinnerID;
+                return _DinnerId;
             }
             set
             {
-                if (_DinnerID != value)
+                if (_DinnerId != value)
                 {
-                    OnDinnerIDChanging(value);
-                    ReportPropertyChanging("DinnerID");
-                    _DinnerID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("DinnerID");
-                    OnDinnerIDChanged();
+                    OnDinnerIdChanging(value);
+                    ReportPropertyChanging("DinnerId");
+                    _DinnerId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("DinnerId");
+                    OnDinnerIdChanged();
                 }
             }
         }
-        private global::System.Int32 _DinnerID;
-        partial void OnDinnerIDChanging(global::System.Int32 value);
-        partial void OnDinnerIDChanged();
+        private global::System.Guid _DinnerId;
+        partial void OnDinnerIdChanging(global::System.Guid value);
+        partial void OnDinnerIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -425,6 +312,30 @@ namespace NerdDinner.Models
         private global::System.String _Description;
         partial void OnDescriptionChanging(global::System.String value);
         partial void OnDescriptionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Guid> HostedById
+        {
+            get
+            {
+                return _HostedById;
+            }
+            set
+            {
+                OnHostedByIdChanging(value);
+                ReportPropertyChanging("HostedById");
+                _HostedById = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HostedById");
+                OnHostedByIdChanged();
+            }
+        }
+        private Nullable<global::System.Guid> _HostedById;
+        partial void OnHostedByIdChanging(Nullable<global::System.Guid> value);
+        partial void OnHostedByIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -569,13 +480,305 @@ namespace NerdDinner.Models
         private global::System.Double _Longitude;
         partial void OnLongitudeChanging(global::System.Double value);
         partial void OnLongitudeChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="Membership")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Membership : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Membership object.
+        /// </summary>
+        /// <param name="userId">Initial value of the UserId property.</param>
+        /// <param name="userName">Initial value of the UserName property.</param>
+        /// <param name="password">Initial value of the Password property.</param>
+        /// <param name="email">Initial value of the Email property.</param>
+        /// <param name="canonicalUsername">Initial value of the CanonicalUsername property.</param>
+        public static Membership CreateMembership(global::System.Guid userId, global::System.String userName, global::System.String password, global::System.String email, global::System.String canonicalUsername)
+        {
+            Membership membership = new Membership();
+            membership.UserId = userId;
+            membership.UserName = userName;
+            membership.Password = password;
+            membership.Email = email;
+            membership.CanonicalUsername = canonicalUsername;
+            return membership;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid UserId
+        {
+            get
+            {
+                return _UserId;
+            }
+            set
+            {
+                if (_UserId != value)
+                {
+                    OnUserIdChanging(value);
+                    ReportPropertyChanging("UserId");
+                    _UserId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("UserId");
+                    OnUserIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _UserId;
+        partial void OnUserIdChanging(global::System.Guid value);
+        partial void OnUserIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String UserName
+        {
+            get
+            {
+                return _UserName;
+            }
+            set
+            {
+                OnUserNameChanging(value);
+                ReportPropertyChanging("UserName");
+                _UserName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("UserName");
+                OnUserNameChanged();
+            }
+        }
+        private global::System.String _UserName;
+        partial void OnUserNameChanging(global::System.String value);
+        partial void OnUserNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Password
+        {
+            get
+            {
+                return _Password;
+            }
+            set
+            {
+                OnPasswordChanging(value);
+                ReportPropertyChanging("Password");
+                _Password = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Password");
+                OnPasswordChanged();
+            }
+        }
+        private global::System.String _Password;
+        partial void OnPasswordChanging(global::System.String value);
+        partial void OnPasswordChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Email
+        {
+            get
+            {
+                return _Email;
+            }
+            set
+            {
+                OnEmailChanging(value);
+                ReportPropertyChanging("Email");
+                _Email = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Email");
+                OnEmailChanged();
+            }
+        }
+        private global::System.String _Email;
+        partial void OnEmailChanging(global::System.String value);
+        partial void OnEmailChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CanonicalUsername
+        {
+            get
+            {
+                return _CanonicalUsername;
+            }
+            set
+            {
+                OnCanonicalUsernameChanging(value);
+                ReportPropertyChanging("CanonicalUsername");
+                _CanonicalUsername = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CanonicalUsername");
+                OnCanonicalUsernameChanged();
+            }
+        }
+        private global::System.String _CanonicalUsername;
+        partial void OnCanonicalUsernameChanging(global::System.String value);
+        partial void OnCanonicalUsernameChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="PopularDinner")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class PopularDinner : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new PopularDinner object.
+        /// </summary>
+        /// <param name="dinnerId">Initial value of the DinnerId property.</param>
+        /// <param name="title">Initial value of the Title property.</param>
+        /// <param name="eventDate">Initial value of the EventDate property.</param>
+        /// <param name="description">Initial value of the Description property.</param>
+        public static PopularDinner CreatePopularDinner(global::System.Guid dinnerId, global::System.String title, global::System.DateTime eventDate, global::System.String description)
+        {
+            PopularDinner popularDinner = new PopularDinner();
+            popularDinner.DinnerId = dinnerId;
+            popularDinner.Title = title;
+            popularDinner.EventDate = eventDate;
+            popularDinner.Description = description;
+            return popularDinner;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid DinnerId
+        {
+            get
+            {
+                return _DinnerId;
+            }
+            set
+            {
+                if (_DinnerId != value)
+                {
+                    OnDinnerIdChanging(value);
+                    ReportPropertyChanging("DinnerId");
+                    _DinnerId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("DinnerId");
+                    OnDinnerIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _DinnerId;
+        partial void OnDinnerIdChanging(global::System.Guid value);
+        partial void OnDinnerIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Title
+        {
+            get
+            {
+                return _Title;
+            }
+            set
+            {
+                OnTitleChanging(value);
+                ReportPropertyChanging("Title");
+                _Title = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Title");
+                OnTitleChanged();
+            }
+        }
+        private global::System.String _Title;
+        partial void OnTitleChanging(global::System.String value);
+        partial void OnTitleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime EventDate
+        {
+            get
+            {
+                return _EventDate;
+            }
+            set
+            {
+                OnEventDateChanging(value);
+                ReportPropertyChanging("EventDate");
+                _EventDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EventDate");
+                OnEventDateChanged();
+            }
+        }
+        private global::System.DateTime _EventDate;
+        partial void OnEventDateChanging(global::System.DateTime value);
+        partial void OnEventDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                OnDescriptionChanging(value);
+                ReportPropertyChanging("Description");
+                _Description = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Description");
+                OnDescriptionChanged();
+            }
+        }
+        private global::System.String _Description;
+        partial void OnDescriptionChanging(global::System.String value);
+        partial void OnDescriptionChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String HostedById
+        public Nullable<global::System.Guid> HostedById
         {
             get
             {
@@ -585,122 +788,210 @@ namespace NerdDinner.Models
             {
                 OnHostedByIdChanging(value);
                 ReportPropertyChanging("HostedById");
-                _HostedById = StructuralObject.SetValidValue(value, true);
+                _HostedById = StructuralObject.SetValidValue(value);
                 ReportPropertyChanged("HostedById");
                 OnHostedByIdChanged();
             }
         }
-        private global::System.String _HostedById;
-        partial void OnHostedByIdChanging(global::System.String value);
+        private Nullable<global::System.Guid> _HostedById;
+        partial void OnHostedByIdChanging(Nullable<global::System.Guid> value);
         partial void OnHostedByIdChanged();
-
-        #endregion
-    
-        #region Navigation Properties
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("NerdDinnerModel", "FK_RSVP_Dinners", "RSVP")]
-        public EntityCollection<RSVP> RSVPs
+        public global::System.String HostedBy
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<RSVP>("NerdDinnerModel.FK_RSVP_Dinners", "RSVP");
+                return _HostedBy;
             }
             set
             {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<RSVP>("NerdDinnerModel.FK_RSVP_Dinners", "RSVP", value);
-                }
+                OnHostedByChanging(value);
+                ReportPropertyChanging("HostedBy");
+                _HostedBy = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("HostedBy");
+                OnHostedByChanged();
             }
         }
+        private global::System.String _HostedBy;
+        partial void OnHostedByChanging(global::System.String value);
+        partial void OnHostedByChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ContactPhone
+        {
+            get
+            {
+                return _ContactPhone;
+            }
+            set
+            {
+                OnContactPhoneChanging(value);
+                ReportPropertyChanging("ContactPhone");
+                _ContactPhone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ContactPhone");
+                OnContactPhoneChanged();
+            }
+        }
+        private global::System.String _ContactPhone;
+        partial void OnContactPhoneChanging(global::System.String value);
+        partial void OnContactPhoneChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Address
+        {
+            get
+            {
+                return _Address;
+            }
+            set
+            {
+                OnAddressChanging(value);
+                ReportPropertyChanging("Address");
+                _Address = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Address");
+                OnAddressChanged();
+            }
+        }
+        private global::System.String _Address;
+        partial void OnAddressChanging(global::System.String value);
+        partial void OnAddressChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Country
+        {
+            get
+            {
+                return _Country;
+            }
+            set
+            {
+                OnCountryChanging(value);
+                ReportPropertyChanging("Country");
+                _Country = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Country");
+                OnCountryChanged();
+            }
+        }
+        private global::System.String _Country;
+        partial void OnCountryChanging(global::System.String value);
+        partial void OnCountryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Latitude
+        {
+            get
+            {
+                return _Latitude;
+            }
+            set
+            {
+                OnLatitudeChanging(value);
+                ReportPropertyChanging("Latitude");
+                _Latitude = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Latitude");
+                OnLatitudeChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Latitude;
+        partial void OnLatitudeChanging(Nullable<global::System.Double> value);
+        partial void OnLatitudeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Longitude
+        {
+            get
+            {
+                return _Longitude;
+            }
+            set
+            {
+                OnLongitudeChanging(value);
+                ReportPropertyChanging("Longitude");
+                _Longitude = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Longitude");
+                OnLongitudeChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Longitude;
+        partial void OnLongitudeChanging(Nullable<global::System.Double> value);
+        partial void OnLongitudeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> RsvpCount
+        {
+            get
+            {
+                return _RsvpCount;
+            }
+            set
+            {
+                OnRsvpCountChanging(value);
+                ReportPropertyChanging("RsvpCount");
+                _RsvpCount = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RsvpCount");
+                OnRsvpCountChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _RsvpCount;
+        partial void OnRsvpCountChanging(Nullable<global::System.Int32> value);
+        partial void OnRsvpCountChanged();
 
         #endregion
+    
     }
     
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="MinPasswordLength")]
+    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="Rsvp")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class MinPasswordLength : EntityObject
+    public partial class Rsvp : EntityObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new MinPasswordLength object.
+        /// Create a new Rsvp object.
         /// </summary>
-        /// <param name="minLength">Initial value of the MinLength property.</param>
-        public static MinPasswordLength CreateMinPasswordLength(global::System.Int32 minLength)
-        {
-            MinPasswordLength minPasswordLength = new MinPasswordLength();
-            minPasswordLength.MinLength = minLength;
-            return minPasswordLength;
-        }
-
-        #endregion
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 MinLength
-        {
-            get
-            {
-                return _MinLength;
-            }
-            set
-            {
-                if (_MinLength != value)
-                {
-                    OnMinLengthChanging(value);
-                    ReportPropertyChanging("MinLength");
-                    _MinLength = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("MinLength");
-                    OnMinLengthChanged();
-                }
-            }
-        }
-        private global::System.Int32 _MinLength;
-        partial void OnMinLengthChanging(global::System.Int32 value);
-        partial void OnMinLengthChanged();
-
-        #endregion
-    
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="RSVP")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class RSVP : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new RSVP object.
-        /// </summary>
-        /// <param name="rsvpID">Initial value of the RsvpID property.</param>
-        /// <param name="dinnerID">Initial value of the DinnerID property.</param>
+        /// <param name="dinnerId">Initial value of the DinnerId property.</param>
+        /// <param name="attendeeId">Initial value of the AttendeeId property.</param>
         /// <param name="attendeeName">Initial value of the AttendeeName property.</param>
-        public static RSVP CreateRSVP(global::System.Int32 rsvpID, global::System.Int32 dinnerID, global::System.String attendeeName)
+        public static Rsvp CreateRsvp(global::System.Guid dinnerId, global::System.Guid attendeeId, global::System.String attendeeName)
         {
-            RSVP rSVP = new RSVP();
-            rSVP.RsvpID = rsvpID;
-            rSVP.DinnerID = dinnerID;
-            rSVP.AttendeeName = attendeeName;
-            return rSVP;
+            Rsvp rsvp = new Rsvp();
+            rsvp.DinnerId = dinnerId;
+            rsvp.AttendeeId = attendeeId;
+            rsvp.AttendeeName = attendeeName;
+            return rsvp;
         }
 
         #endregion
@@ -711,51 +1002,54 @@ namespace NerdDinner.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 RsvpID
+        public global::System.Guid DinnerId
         {
             get
             {
-                return _RsvpID;
+                return _DinnerId;
             }
             set
             {
-                if (_RsvpID != value)
+                if (_DinnerId != value)
                 {
-                    OnRsvpIDChanging(value);
-                    ReportPropertyChanging("RsvpID");
-                    _RsvpID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("RsvpID");
-                    OnRsvpIDChanged();
+                    OnDinnerIdChanging(value);
+                    ReportPropertyChanging("DinnerId");
+                    _DinnerId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("DinnerId");
+                    OnDinnerIdChanged();
                 }
             }
         }
-        private global::System.Int32 _RsvpID;
-        partial void OnRsvpIDChanging(global::System.Int32 value);
-        partial void OnRsvpIDChanged();
+        private global::System.Guid _DinnerId;
+        partial void OnDinnerIdChanging(global::System.Guid value);
+        partial void OnDinnerIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 DinnerID
+        public global::System.Guid AttendeeId
         {
             get
             {
-                return _DinnerID;
+                return _AttendeeId;
             }
             set
             {
-                OnDinnerIDChanging(value);
-                ReportPropertyChanging("DinnerID");
-                _DinnerID = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("DinnerID");
-                OnDinnerIDChanged();
+                if (_AttendeeId != value)
+                {
+                    OnAttendeeIdChanging(value);
+                    ReportPropertyChanging("AttendeeId");
+                    _AttendeeId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("AttendeeId");
+                    OnAttendeeIdChanged();
+                }
             }
         }
-        private global::System.Int32 _DinnerID;
-        partial void OnDinnerIDChanging(global::System.Int32 value);
-        partial void OnDinnerIDChanged();
+        private global::System.Guid _AttendeeId;
+        partial void OnAttendeeIdChanging(global::System.Guid value);
+        partial void OnAttendeeIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -780,155 +1074,6 @@ namespace NerdDinner.Models
         private global::System.String _AttendeeName;
         partial void OnAttendeeNameChanging(global::System.String value);
         partial void OnAttendeeNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String AttendeeNameId
-        {
-            get
-            {
-                return _AttendeeNameId;
-            }
-            set
-            {
-                OnAttendeeNameIdChanging(value);
-                ReportPropertyChanging("AttendeeNameId");
-                _AttendeeNameId = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("AttendeeNameId");
-                OnAttendeeNameIdChanged();
-            }
-        }
-        private global::System.String _AttendeeNameId;
-        partial void OnAttendeeNameIdChanging(global::System.String value);
-        partial void OnAttendeeNameIdChanged();
-
-        #endregion
-    
-        #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("NerdDinnerModel", "FK_RSVP_Dinners", "Dinners")]
-        public Dinner Dinner
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Dinner>("NerdDinnerModel.FK_RSVP_Dinners", "Dinners").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Dinner>("NerdDinnerModel.FK_RSVP_Dinners", "Dinners").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Dinner> DinnerReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Dinner>("NerdDinnerModel.FK_RSVP_Dinners", "Dinners");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Dinner>("NerdDinnerModel.FK_RSVP_Dinners", "Dinners", value);
-                }
-            }
-        }
-
-        #endregion
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="NerdDinnerModel", Name="ValidateUser")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class ValidateUser : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new ValidateUser object.
-        /// </summary>
-        /// <param name="username">Initial value of the Username property.</param>
-        /// <param name="password">Initial value of the Password property.</param>
-        public static ValidateUser CreateValidateUser(global::System.String username, global::System.String password)
-        {
-            ValidateUser validateUser = new ValidateUser();
-            validateUser.Username = username;
-            validateUser.Password = password;
-            return validateUser;
-        }
-
-        #endregion
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Username
-        {
-            get
-            {
-                return _Username;
-            }
-            set
-            {
-                if (_Username != value)
-                {
-                    OnUsernameChanging(value);
-                    ReportPropertyChanging("Username");
-                    _Username = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("Username");
-                    OnUsernameChanged();
-                }
-            }
-        }
-        private global::System.String _Username;
-        partial void OnUsernameChanging(global::System.String value);
-        partial void OnUsernameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Password
-        {
-            get
-            {
-                return _Password;
-            }
-            set
-            {
-                if (_Password != value)
-                {
-                    OnPasswordChanging(value);
-                    ReportPropertyChanging("Password");
-                    _Password = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("Password");
-                    OnPasswordChanged();
-                }
-            }
-        }
-        private global::System.String _Password;
-        partial void OnPasswordChanging(global::System.String value);
-        partial void OnPasswordChanged();
 
         #endregion
     

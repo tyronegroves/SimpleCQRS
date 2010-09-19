@@ -26,31 +26,14 @@ namespace NerdDinner
             }
         }
 
-        protected override IEnumerable<SearchResult> GetResults(string q)
+        protected override IEnumerable<SearchResult> GetResults(string term)
         {
-            var dinners = new DinnerRepository().FindDinnersByText(q).ToArray();
-
-            return from dinner in dinners
-                   select new
-                       SearchResult
-                       {
-                           Description = dinner.Description,
-                           Title = dinner.Title + " with " + dinner.HostedBy,
-                           Path = "/" + dinner.DinnerID
-                       };
+            throw new NotImplementedException();
         }
 
         protected override IEnumerable<SearchSuggestion> GetSuggestions(string term)
         {
-            var dinners = new DinnerRepository().FindDinnersByText(term).ToArray();
-
-            return from dinner in dinners
-                   select new
-                       SearchSuggestion
-                   {
-                       Description = dinner.Description,
-                       Term = dinner.Title + " with " + dinner.HostedBy,
-                   };
+            throw new NotImplementedException();
         }
 
         protected override bool SupportsSuggestions

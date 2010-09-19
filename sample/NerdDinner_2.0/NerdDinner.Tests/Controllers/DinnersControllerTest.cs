@@ -7,6 +7,7 @@ using Moq;
 using NerdDinner.Controllers;
 using NerdDinner.Helpers;
 using NerdDinner.Models;
+using NerdDinner.Services;
 using NerdDinner.Tests.Fakes;
 using System.Web.Routing;
 using System.Web.Security;
@@ -21,7 +22,7 @@ namespace NerdDinner.Tests.Controllers {
             var testData = FakeDinnerData.CreateTestDinners();
             var repository = new FakeDinnerRepository(testData);
 
-            return new DinnersController(repository);
+            return new DinnersController(repository, new CommandServiceClient(), new DinnerReadModel());
         }
 
         DinnersController CreateDinnersControllerAs(string userName) {
@@ -218,7 +219,7 @@ namespace NerdDinner.Tests.Controllers {
 			testData.Add(dinner);
 			var repository = new FakeDinnerRepository(testData);
 
-			var controller = new DinnersController(repository);
+			var controller = new DinnersController(repository, new CommandServiceClient(), new DinnerReadModel());
 
 			// Act
 			// Get first page
@@ -241,7 +242,7 @@ namespace NerdDinner.Tests.Controllers {
             testData.Add(dinner);
             var repository = new FakeDinnerRepository(testData);
 
-            var controller = new DinnersController(repository);
+            var controller = new DinnersController(repository, new CommandServiceClient(), new DinnerReadModel());
 
             // Act
             // Get first page
@@ -409,7 +410,7 @@ namespace NerdDinner.Tests.Controllers {
             var nerdIdentity = FakeIdentity.CreateIdentity("SomeUser");
             var testData = FakeDinnerData.CreateTestDinners();
             var repository = new FakeDinnerRepository(testData);
-            var controller = new DinnersController(repository);
+            var controller = new DinnersController(repository, new CommandServiceClient(), new DinnerReadModel());
             controller.ControllerContext = mock.Object;
             mock.SetupGet(p => p.HttpContext.User.Identity).Returns(nerdIdentity);
 

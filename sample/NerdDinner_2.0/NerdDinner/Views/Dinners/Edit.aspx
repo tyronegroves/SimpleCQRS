@@ -20,7 +20,7 @@
             </p>
         </div>
         <div id="mapDiv">
-            <%: Html.EditorFor(m => m.Location) %>
+            <%: Html.Partial("LocationDetail")%>
         </div>
     </fieldset>
     <% } %>
@@ -39,7 +39,7 @@
                     return;
                 NerdDinner.FindAddressOnMap(address);
             });
-            NerdDinner.FindAddressOnMap("<%: Model.Location.Address %>");
+            NerdDinner.FindAddressOnMap("<%: Model.Address %>");
         });
 //]]>
     </script>

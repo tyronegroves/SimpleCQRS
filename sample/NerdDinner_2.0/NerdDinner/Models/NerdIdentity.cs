@@ -9,10 +9,17 @@ namespace NerdDinner
     public class NerdIdentity : IIdentity
     {
         private System.Web.Security.FormsAuthenticationTicket ticket;
+        private readonly string friendlyName;
+        private readonly Guid userId;
 
         public NerdIdentity(System.Web.Security.FormsAuthenticationTicket ticket)
         {
             this.ticket = ticket;
+            var userData = ticket.UserData.Split('|');
+            
+            if(userData.Length != 2) return;
+            friendlyName = userData[0];
+            userId = new Guid(userData[1]);
         }
 
         public string AuthenticationType
@@ -32,8 +39,12 @@ namespace NerdDinner
 
         public string FriendlyName
         {
-            get { return ticket.UserData; }
+            get { return friendlyName; }
         }
 
+        public Guid UserId
+        {
+            get { return userId; }
+        }
     }
 }

@@ -14,19 +14,12 @@ namespace NerdDinner.Controllers
     [HandleErrorWithELMAH]
     public class ServicesController : Controller
     {
-        IDinnerRepository dinnerRepository;
-
-        public ServicesController() : this(new DinnerRepository()){}
-
-        public ServicesController(IDinnerRepository repository)
-        {
-            dinnerRepository = repository;
-        }
+        private readonly DinnerReadModel dinnerReadModel = new DinnerReadModel();
 
         [OutputCache(VaryByParam = "none", Duration = 300)]
         public ActionResult RSS()
         {
-            var dinners = dinnerRepository.FindUpcomingDinners();
+            var dinners = dinnerReadModel.FindUpcomingDinners();
 
             if (dinners == null)
                 return View("NotFound");
@@ -37,17 +30,17 @@ namespace NerdDinner.Controllers
         [OutputCache(VaryByParam = "none", Duration = 300)]
         public ActionResult iCalFeed()
         {
-            var dinners = dinnerRepository.FindUpcomingDinners();
+            var dinners = dinnerReadModel.FindUpcomingDinners();
 
             if (dinners == null)
                 return View("NotFound");
 
             return new iCalResult(dinners.ToList(), "NerdDinners.ics");
         }
-        
-        public ActionResult iCal(int id)
+
+        public ActionResult iCal(Guid id)
         {
-            Dinner dinner = dinnerRepository.GetDinner(id);
+            Dinner dinner = dinnerReadModel.GetDinnerById(id);
 
             if (dinner == null)
                 return View("NotFound");
@@ -62,8 +55,8 @@ namespace NerdDinner.Controllers
                 Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
 
             var location = GeolocationService.HostIpToPlaceName(SourceIP);
-            var dinners = dinnerRepository.
-                FindByLocation(location.Position.Lat, location.Position.Long).
+            var dinners = dinnerReadModel.
+                FindDinnerByLocation(location.Position.Lat, location.Position.Long).
                 OrderByDescending(p => p.EventDate).Take(3);
 
             // Select the view we'll return. Using a switch because we'll add in JSON and other formats later.
@@ -81,10 +74,10 @@ namespace NerdDinner.Controllers
 
             return View(
                 view,
-                new FlairViewModel 
+                new FlairViewModel
                 {
                     Dinners = dinners.ToList(),
-                    LocationName = string.IsNullOrEmpty(location.City) ? "you" :  String.Format("{0}, {1}", location.City, location.RegionName)
+                    LocationName = string.IsNullOrEmpty(location.City) ? "you" : String.Format("{0}, {1}", location.City, location.RegionName)
                 }
             );
         }

@@ -1,4 +1,4 @@
-<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<NerdDinner.Models.DinnerFormViewModel>" MasterPageFile="~/Views/Shared/Site.Master"  %>
+<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<NerdDinner.Models.Dinner>" MasterPageFile="~/Views/Shared/Site.Master"  %>
 
 <asp:Content ID="Title" ContentPlaceHolderID="TitleContent" runat="server">
     Host a Nerd Dinner

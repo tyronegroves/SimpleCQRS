@@ -1,53 +1,42 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace NerdDinner.Models
 {
     [Bind(Include = "Title,Description,EventDate,Address,Country,ContactPhone,Latitude,Longitude")]
-    [MetadataType(typeof(Dinner_Validation))]
-    public partial class Dinner
+    [MetadataType(typeof(DinnerValidation))]
+    partial class Dinner
     {
-        public bool IsHostedBy(string userName)
+        public bool IsHostedBy(string name)
         {
-            return String.Equals(HostedById ?? HostedBy, userName, StringComparison.Ordinal);
+            return HostedBy == name;
         }
 
-        public bool IsUserRegistered(string userName)
+        public bool IsUserRegistered(string name)
         {
-            return RSVPs.Any(r => r.AttendeeNameId == userName || (r.AttendeeNameId == null && r.AttendeeName == userName));
+            var rsvpReadModel = new RsvpReadModel();
+            return rsvpReadModel.IsUserRegistered(DinnerId, name);
         }
 
-        [UIHint("LocationDetail")]
-        public LocationDetail Location
+        public int GetRsvpCount()
         {
-            get
-            {
-                return new LocationDetail() { Latitude = this.Latitude, Longitude = this.Longitude, Title = this.Title, Address = this.Address };
-            }
-            set
-            {
-                this.Latitude = value.Latitude;
-                this.Longitude = value.Longitude;
-                this.Title = value.Title;
-                this.Address = value.Address;
-            }
+            var rsvpReadModel = new RsvpReadModel();
+            return rsvpReadModel.GetNumberOfRsvpsForDinner(DinnerId);
+        }
+
+        public IEnumerable<Rsvp> GetRsvps()
+        {
+            var rsvpReadModel = new RsvpReadModel();
+            return rsvpReadModel.GetRsvpsForDinner(DinnerId);
         }
     }
 
-    public class LocationDetail
-    {
-        public double Latitude;
-        public double Longitude;
-        public string Title;
-        public string Address;
-    }
-
-    public class Dinner_Validation
+    public class DinnerValidation
     {
         [HiddenInput(DisplayValue = false)]
-        public int DinnerID { get; set; }
+        public Guid DinnerId { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
         [StringLength(50, ErrorMessage = "Title may not be longer than 50 characters")]

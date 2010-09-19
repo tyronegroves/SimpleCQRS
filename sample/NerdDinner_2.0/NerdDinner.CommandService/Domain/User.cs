@@ -7,15 +7,20 @@ namespace NerdDinner.CommandService.Domain
     public class User : AggregateRoot
     {
         public User()
-        {   
+        {    
         }
 
-        public User(Guid aggregateRootId)
+        public User(Guid userId, string userName, string password, string email)
         {
-            Apply(new UserCreatedEvent {AggregateRootId = aggregateRootId});
+            Apply(new UserCreatedEvent {UserId = userId, UserName = userName, Password = password, Email = email});
         }
 
-        private void OnUserCreated(UserCreatedEvent domainEvent)
+        public void ChangePassword(string newPassword)
+        {
+            Apply(new UserPasswordChangedEvent {NewPassword = newPassword});
+        }
+
+        protected void OnUserCreated(UserCreatedEvent domainEvent)
         {
             Id = domainEvent.AggregateRootId;
         }

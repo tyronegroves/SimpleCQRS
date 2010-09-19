@@ -22,7 +22,7 @@ namespace SimpleCqrs.Domain
 
         public void LoadFromHistoricalEvents(params DomainEvent[] domainEvents)
         {
-            if (domainEvents.Length == 0) return;
+            if(domainEvents.Length == 0) return;
 
             domainEvents = domainEvents.OrderBy(domainEvent => domainEvent.Sequence).ToArray();
             LastEventSequence = domainEvents.Last().Sequence;
@@ -36,6 +36,7 @@ namespace SimpleCqrs.Domain
             domainEvent.Sequence = ++LastEventSequence;
             ApplyEventToInternalState(domainEvent);
             domainEvent.AggregateRootId = Id;
+            domainEvent.EventDate = DateTime.Now;
             uncommittedEvents.Enqueue(domainEvent);
         }
 
@@ -51,11 +52,12 @@ namespace SimpleCqrs.Domain
             var aggregateRootType = GetType();
 
             var methodInfo = aggregateRootType.GetMethod(GetEventHandlerMethodName(domainEventTypeName),
-                                                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { domainEventType }, null);
+                                                         BindingFlags.Instance | BindingFlags.Public |
+                                                         BindingFlags.NonPublic, null, new[] {domainEventType}, null);
 
-            if (methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
+            if(methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
 
-            methodInfo.Invoke(this, new[] { domainEvent });
+            methodInfo.Invoke(this, new[] {domainEvent});
         }
 
         private static string GetEventHandlerMethodName(string domainEventTypeName)
@@ -64,7 +66,8 @@ namespace SimpleCqrs.Domain
             return "On" + domainEventTypeName.Remove(eventIndex, 5);
         }
 
-        private static bool EventHandlerMethodInfoHasCorrectParameter(MethodInfo eventHandlerMethodInfo, Type domainEventType)
+        private static bool EventHandlerMethodInfoHasCorrectParameter(MethodInfo eventHandlerMethodInfo,
+                                                                      Type domainEventType)
         {
             var parameters = eventHandlerMethodInfo.GetParameters();
             return parameters.Length == 1 && parameters[0].ParameterType == domainEventType;

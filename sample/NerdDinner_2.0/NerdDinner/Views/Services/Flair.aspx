@@ -22,7 +22,7 @@
                 <ul>
                     <% foreach (var item in Model.Dinners) { %>
                     <li>
-                        <%: Html.ActionLink(String.Format("{0} with {1} on {2}", item.Title.Truncate(20), item.HostedBy, item.EventDate.ToShortDateString()), "Details", "Dinners", new { id = item.DinnerID }, new { target = "_blank" })%></li>
+                        <%: Html.ActionLink(String.Format("{0} with {1} on {2}", item.Title.Truncate(20), item.HostedBy, item.EventDate.ToShortDateString()), "Details", "Dinners", new { id = item.DinnerId }, new { target = "_blank" })%></li>
                     <% } %>
                 </ul>
                 <% } %>

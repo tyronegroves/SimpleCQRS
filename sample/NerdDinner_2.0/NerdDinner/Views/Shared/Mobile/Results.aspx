@@ -12,7 +12,7 @@
         <li>     
             <ul>
             <li>
-	            <a href="<%: Url.RouteUrl("PrettyDetails", new { Id = dinner.DinnerID }) %>"><%:dinner.Title %></a>
+	            <a href="<%: Url.RouteUrl("PrettyDetails", new { Id = dinner.DinnerId }) %>"><%:dinner.Title %></a>
             </li>
             <li>
 		          <%:dinner.EventDate.ToString("yyyy-MMM-dd")%> 

@@ -5,8 +5,9 @@
       <xsd:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NerdDinner.Commands" />
-      <xsd:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/SimpleCqrs.Commanding" />
-      <xsd:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System.Web.Security" />
+      <xsd:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System.Web.Security" />
+      <xsd:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/SimpleCqrs.Commanding" />
+      <xsd:import schemaLocation="http://localhost:51233/CommandService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/NerdDinner.CommandService.CommandHandlers" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ICommandService_RegisterUser_InputMessage">
@@ -21,6 +22,24 @@
   <wsdl:message name="ICommandService_ChangePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:ChangePasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="ICommandService_CreateDinner_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateDinner" />
+  </wsdl:message>
+  <wsdl:message name="ICommandService_CreateDinner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateDinnerResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICommandService_CancelDinner_InputMessage">
+    <wsdl:part name="parameters" element="tns:CancelDinner" />
+  </wsdl:message>
+  <wsdl:message name="ICommandService_CancelDinner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CancelDinnerResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICommandService_EditDinner_InputMessage">
+    <wsdl:part name="parameters" element="tns:EditDinner" />
+  </wsdl:message>
+  <wsdl:message name="ICommandService_RsvpForDinner_InputMessage">
+    <wsdl:part name="parameters" element="tns:RsvpForDinner" />
+  </wsdl:message>
   <wsdl:portType name="ICommandService">
     <wsdl:operation name="RegisterUser">
       <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/RegisterUser" message="tns:ICommandService_RegisterUser_InputMessage" />
@@ -29,6 +48,20 @@
     <wsdl:operation name="ChangePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/ChangePassword" message="tns:ICommandService_ChangePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICommandService/ChangePasswordResponse" message="tns:ICommandService_ChangePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateDinner">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/CreateDinner" message="tns:ICommandService_CreateDinner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICommandService/CreateDinnerResponse" message="tns:ICommandService_CreateDinner_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelDinner">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/CancelDinner" message="tns:ICommandService_CancelDinner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICommandService/CancelDinnerResponse" message="tns:ICommandService_CancelDinner_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EditDinner">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/EditDinner" message="tns:ICommandService_EditDinner_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RsvpForDinner">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICommandService/RsvpForDinner" message="tns:ICommandService_RsvpForDinner_InputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICommandService" type="tns:ICommandService">
@@ -50,6 +83,36 @@
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateDinner">
+      <soap:operation soapAction="http://tempuri.org/ICommandService/CreateDinner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelDinner">
+      <soap:operation soapAction="http://tempuri.org/ICommandService/CancelDinner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditDinner">
+      <soap:operation soapAction="http://tempuri.org/ICommandService/EditDinner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="RsvpForDinner">
+      <soap:operation soapAction="http://tempuri.org/ICommandService/RsvpForDinner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="CommandService">

@@ -9,7 +9,35 @@
 //------------------------------------------------------------------------------
 
 namespace NerdDinner.Services {
+    using System.Runtime.Serialization;
     
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CreateDinnerStatus", Namespace="http://schemas.datacontract.org/2004/07/NerdDinner.CommandService.CommandHandlers" +
+        "")]
+    public enum CreateDinnerStatus : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        HostUserIdDoesNotExists = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Successful = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LocationNotProvided = 2,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CancelDinnerStatus", Namespace="http://schemas.datacontract.org/2004/07/NerdDinner.CommandService.CommandHandlers" +
+        "")]
+    public enum CancelDinnerStatus : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DinnerDoesNotExists = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Successful = 1,
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Services.ICommandService")]
@@ -20,6 +48,18 @@ namespace NerdDinner.Services {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommandService/ChangePassword", ReplyAction="http://tempuri.org/ICommandService/ChangePasswordResponse")]
         bool ChangePassword(NerdDinner.Commands.ChangePasswordCommand changePasswordCommand);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommandService/CreateDinner", ReplyAction="http://tempuri.org/ICommandService/CreateDinnerResponse")]
+        NerdDinner.Services.CreateDinnerStatus CreateDinner(NerdDinner.Commands.CreateDinnerCommand createDinnerCommand);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommandService/CancelDinner", ReplyAction="http://tempuri.org/ICommandService/CancelDinnerResponse")]
+        NerdDinner.Services.CancelDinnerStatus CancelDinner(NerdDinner.Commands.CancelDinnerCommand cancelDinnerCommand);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICommandService/EditDinner")]
+        void EditDinner(NerdDinner.Commands.EditDinnerCommand editDinnerCommand);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICommandService/RsvpForDinner")]
+        void RsvpForDinner(NerdDinner.Commands.RsvpForDinnerCommand rsvpForDinnerCommand);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -55,6 +95,22 @@ namespace NerdDinner.Services {
         
         public bool ChangePassword(NerdDinner.Commands.ChangePasswordCommand changePasswordCommand) {
             return base.Channel.ChangePassword(changePasswordCommand);
+        }
+        
+        public NerdDinner.Services.CreateDinnerStatus CreateDinner(NerdDinner.Commands.CreateDinnerCommand createDinnerCommand) {
+            return base.Channel.CreateDinner(createDinnerCommand);
+        }
+        
+        public NerdDinner.Services.CancelDinnerStatus CancelDinner(NerdDinner.Commands.CancelDinnerCommand cancelDinnerCommand) {
+            return base.Channel.CancelDinner(cancelDinnerCommand);
+        }
+        
+        public void EditDinner(NerdDinner.Commands.EditDinnerCommand editDinnerCommand) {
+            base.Channel.EditDinner(editDinnerCommand);
+        }
+        
+        public void RsvpForDinner(NerdDinner.Commands.RsvpForDinnerCommand rsvpForDinnerCommand) {
+            base.Channel.RsvpForDinner(rsvpForDinnerCommand);
         }
     }
 }

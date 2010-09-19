@@ -1,8 +1,7 @@
-﻿using System.Web.Security;
-using NerdDinner.Commands;
+﻿using NerdDinner.Commands;
 using NerdDinner.CommandService.Domain;
 using SimpleCqrs.Commanding;
-using SimpleCqrs.Eventing;
+using SimpleCqrs.Domain;
 
 namespace NerdDinner.CommandService.CommandHandlers
 {
@@ -17,8 +16,7 @@ namespace NerdDinner.CommandService.CommandHandlers
 
         protected override void Handle(RegisterUserCommand command)
         {
-            Return((int) MembershipCreateStatus.Success);
-            var user = new User(command.AggregateRootId);
+            var user = new User(command.UserId, command.UserName, command.Password, command.Email);
             domainRepository.Save(user);
         }
     }

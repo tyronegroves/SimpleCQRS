@@ -1,11 +1,16 @@
-﻿using SimpleCqrs.Commanding;
+﻿using System;
+using SimpleCqrs.Commanding;
 
 namespace NerdDinner.Commands
 {
     public class ChangePasswordCommand : CommandWithAggregateRootId
     {
-        public string Name { get; set; }
-        public string CurrentPassword { get; set; }
+        public Guid UserId
+        {
+            get { return AggregateRootId; }
+            set { AggregateRootId = value; }
+        }
+
         public string NewPassword { get; set; }
     }
 }

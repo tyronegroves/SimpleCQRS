@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using SimpleCqrs.Commanding;
+using SimpleCqrs.Domain;
 using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs

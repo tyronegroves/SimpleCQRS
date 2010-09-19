@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using NerdDinner.Models;
+
 namespace MvcRelyingParty.Controllers {
 	using System;
 	using System.Collections.Generic;
@@ -114,14 +116,14 @@ namespace MvcRelyingParty.Controllers {
                         if (sreg != null && !string.IsNullOrEmpty(sreg.FullName)) {
                             alias = sreg.FullName;
                         }
-
+				        var userId = new MembershipReadModel().GetUserIdByUserName(alias);
                         FormsAuthenticationTicket authTicket = new
                             FormsAuthenticationTicket(1, //version
                             response.ClaimedIdentifier, // user name
                             DateTime.Now,             //creation
                             DateTime.Now.AddMinutes(30), //Expiration
                             false, //Persistent
-                            alias); 					
+                            string.Join("|", alias, userId));			
                            
                         string encTicket = FormsAuthentication.Encrypt(authTicket);
 

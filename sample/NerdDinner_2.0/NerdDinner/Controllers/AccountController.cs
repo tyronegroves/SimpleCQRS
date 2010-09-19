@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Security.Principal;
 using System.Web;
@@ -14,29 +13,9 @@ namespace NerdDinner.Controllers
     [HandleErrorWithELMAH]
     public class AccountController : Controller
     {
-        // This constructor is used by the MVC framework to instantiate the controller using
-        // the default forms authentication and membership providers.
-
-        public AccountController()
-            : this(null, null, null)
-        {
-        }
-
-        // This constructor is not used by the MVC framework but is instead provided for ease
-        // of unit testing this type. See the comments at the end of this file for more
-        // information.
-        public AccountController(IFormsAuthentication formsAuthentication, CommandServiceClient commandService, MembershipReadModel membershipReadModel)
-        {
-            FormsAuth = formsAuthentication ?? new FormsAuthenticationService();
-            CommandService = commandService ?? new CommandServiceClient();
-            MembershipReadModel = membershipReadModel ?? new MembershipReadModel();
-        }
-
-        public IFormsAuthentication FormsAuth { get; private set; }
-
-        public CommandServiceClient CommandService { get; private set; }
-
-        public MembershipReadModel MembershipReadModel { get; private set; }
+        private readonly CommandServiceClient commandService = new CommandServiceClient();
+        private readonly IFormsAuthentication formsAuthentication = new FormsAuthenticationService();
+        private readonly MembershipReadModel membershipReadModel = new MembershipReadModel();
 
         public ActionResult LogOn()
         {
@@ -44,95 +23,70 @@ namespace NerdDinner.Controllers
         }
 
         [HttpPost]
-        [SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings",
-            Justification = "Needs to take same parameter type as Controller.Redirect()")]
         public ActionResult LogOn(string userName, string password, bool rememberMe, string returnUrl)
         {
-            if (!ValidateLogOn(userName, password))
+            if(!ValidateLogOn(userName, password))
             {
                 ViewData["rememberMe"] = rememberMe;
                 return View();
             }
 
-            // Make sure we have the username with the right capitalization
-            // since we do case sensitive checks for OpenID Claimed Identifiers later.
-            userName = MembershipReadModel.GetCanonicalUsername(userName);
+            var canonicalUsername = membershipReadModel.GetCanonicalUsername(userName);
+            var userId = membershipReadModel.GetUserIdByUserName(userName);
+            AddAuthenticationTicketToCookie(userId, userName, rememberMe, canonicalUsername);
 
-            var authTicket = new
-                FormsAuthenticationTicket(1, //version
-                                          userName, // user name
-                                          DateTime.Now, //creation
-                                          DateTime.Now.AddMinutes(30), //Expiration
-                                          rememberMe, //Persistent
-                                          userName); //since Classic logins don't have a "Friendly Name"
-
-            var encTicket = FormsAuthentication.Encrypt(authTicket);
-            Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
-
-            if (!String.IsNullOrEmpty(returnUrl))
-            {
+            if(!string.IsNullOrEmpty(returnUrl))
                 return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult LogOff()
         {
-            FormsAuth.SignOut();
-
+            formsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Register()
         {
-            ViewData["PasswordLength"] = MembershipReadModel.GetMinPasswordLength();
-
+            ViewData["PasswordLength"] = membershipReadModel.MinPasswordLength;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Register(RegisterUserCommand registerUserCommand)
+        public ActionResult Register(RegisterUserCommand registerUserCommand, string confirmPassword)
         {
-            ViewData["PasswordLength"] = MembershipReadModel.GetMinPasswordLength();
+            ViewData["PasswordLength"] = membershipReadModel.MinPasswordLength;
 
-            if (ValidateRegistration(registerUserCommand.UserName, registerUserCommand.Email, registerUserCommand.Password, registerUserCommand.ConfirmPassword))
+            if(ValidateRegisterUserCommand(registerUserCommand, confirmPassword))
             {
-                // Attempt to register the user
-                var createStatus = CommandService.RegisterUser(registerUserCommand);
-
+                var userName = registerUserCommand.UserName;
+                var userId = registerUserCommand.UserId;
+                var createStatus = commandService.RegisterUser(registerUserCommand);
                 if (createStatus == MembershipCreateStatus.Success)
                 {
-                    FormsAuth.SignIn(registerUserCommand.UserName, false /* createPersistentCookie */);
+                    AddAuthenticationTicketToCookie(userId, userName, false, userName);
                     return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    ModelState.AddModelError("_FORM", ErrorCodeToString(createStatus));
-                }
+
+                ModelState.AddModelError("_FORM", ErrorCodeToString(createStatus));
             }
 
-            // If we got this far, something failed, redisplay form
             return View();
         }
 
         [Authorize]
         public ActionResult ChangePassword()
         {
-            ViewData["PasswordLength"] = MembershipReadModel.GetMinPasswordLength();
-
+            ViewData["PasswordLength"] = membershipReadModel.MinPasswordLength;
             return View();
         }
 
         [Authorize]
         [HttpPost]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
-            Justification = "Exceptions result in password not being changed.")]
-        public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        public ActionResult ChangePassword(string newPassword, string currentPassword, string confirmPassword)
         {
-            ViewData["PasswordLength"] = MembershipReadModel.GetMinPasswordLength();
+            ViewData["PasswordLength"] = membershipReadModel.MinPasswordLength;
 
             if (!ValidateChangePassword(currentPassword, newPassword, confirmPassword))
             {
@@ -141,23 +95,13 @@ namespace NerdDinner.Controllers
 
             try
             {
-                var changePasswordCommand = new ChangePasswordCommand
-                                                {
-                                                    Name = User.Identity.Name,
-                                                    CurrentPassword = currentPassword,
-                                                    NewPassword = newPassword
-                                                };
-
-                if (CommandService.ChangePassword(changePasswordCommand))
-                {
+                var userId = ((NerdIdentity)User.Identity).UserId;
+                var changePasswordCommand = new ChangePasswordCommand{NewPassword = newPassword, UserId = userId};
+                if(commandService.ChangePassword(changePasswordCommand))
                     return RedirectToAction("ChangePasswordSuccess");
-                }
-                else
-                {
-                    ModelState.AddModelError("_FORM",
-                                             "The current password is incorrect or the new password is invalid.");
-                    return View();
-                }
+
+                ModelState.AddModelError("_FORM", "The current password is incorrect or the new password is invalid.");
+                return View();
             }
             catch
             {
@@ -179,23 +123,30 @@ namespace NerdDinner.Controllers
             }
         }
 
-        #region Validation Methods
+        private void AddAuthenticationTicketToCookie(Guid userId, string userName, bool rememberMe, string canonicalUsername)
+        {
+            var authTicket = new FormsAuthenticationTicket(1, canonicalUsername, DateTime.Now, DateTime.Now.AddMinutes(30),
+                                                           rememberMe, string.Join("|", userName, userId));
+
+            var encTicket = FormsAuthentication.Encrypt(authTicket);
+            Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+        }
 
         private bool ValidateChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
-            if (String.IsNullOrEmpty(currentPassword))
+            if (string.IsNullOrEmpty(currentPassword))
             {
                 ModelState.AddModelError("currentPassword", "You must specify a current password.");
             }
-            if (newPassword == null || newPassword.Length < MembershipReadModel.GetMinPasswordLength())
+            if (newPassword == null || newPassword.Length < membershipReadModel.MinPasswordLength)
             {
                 ModelState.AddModelError("newPassword",
-                                         String.Format(CultureInfo.CurrentCulture,
-                                                       "You must specify a new password of {0} or more characters.",
-                                                       MembershipReadModel.GetMinPasswordLength()));
+                    string.Format(CultureInfo.CurrentCulture,
+                         "You must specify a new password of {0} or more characters.",
+                         membershipReadModel.MinPasswordLength));
             }
 
-            if (!String.Equals(newPassword, confirmPassword, StringComparison.Ordinal))
+            if (!string.Equals(newPassword, confirmPassword, StringComparison.Ordinal))
             {
                 ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
             }
@@ -203,26 +154,12 @@ namespace NerdDinner.Controllers
             return ModelState.IsValid;
         }
 
-        private bool ValidateLogOn(string userName, string password)
+        private bool ValidateRegisterUserCommand(RegisterUserCommand registerUserCommand, string confirmPassword)
         {
-            if (String.IsNullOrEmpty(userName))
-            {
-                ModelState.AddModelError("username", "You must specify a username.");
-            }
-            if (String.IsNullOrEmpty(password))
-            {
-                ModelState.AddModelError("password", "You must specify a password.");
-            }
-            if (!MembershipReadModel.ValidateUser(userName, password))
-            {
-                ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
-            }
+            var userName = registerUserCommand.UserName;
+            var password = registerUserCommand.Password;
+            var email = registerUserCommand.Email;
 
-            return ModelState.IsValid;
-        }
-
-        private bool ValidateRegistration(string userName, string email, string password, string confirmPassword)
-        {
             if (String.IsNullOrEmpty(userName))
             {
                 ModelState.AddModelError("username", "You must specify a username.");
@@ -231,17 +168,35 @@ namespace NerdDinner.Controllers
             {
                 ModelState.AddModelError("email", "You must specify an email address.");
             }
-            if (password == null || password.Length < MembershipReadModel.GetMinPasswordLength())
+            if (password == null || password.Length < membershipReadModel.MinPasswordLength)
             {
                 ModelState.AddModelError("password",
-                                         String.Format(CultureInfo.CurrentCulture,
-                                                       "You must specify a password of {0} or more characters.",
-                                                       MembershipReadModel.GetMinPasswordLength()));
+                    String.Format(CultureInfo.CurrentCulture,
+                         "You must specify a password of {0} or more characters.",
+                         membershipReadModel.MinPasswordLength));
             }
             if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
             {
                 ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
             }
+            return ModelState.IsValid;
+        }
+
+        private bool ValidateLogOn(string userName, string password)
+        {
+            if(String.IsNullOrEmpty(userName))
+            {
+                ModelState.AddModelError("username", "You must specify a username.");
+            }
+            if(String.IsNullOrEmpty(password))
+            {
+                ModelState.AddModelError("password", "You must specify a password.");
+            }
+            if(!membershipReadModel.ValidateUser(userName, password))
+            {
+                ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
+            }
+
             return ModelState.IsValid;
         }
 
@@ -273,102 +228,14 @@ namespace NerdDinner.Controllers
                     return "The user name provided is invalid. Please check the value and try again.";
 
                 case MembershipCreateStatus.ProviderError:
-                    return
-                        "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
 
                 case MembershipCreateStatus.UserRejected:
-                    return
-                        "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
 
                 default:
-                    return
-                        "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
-        }
-
-        #endregion
-    }
-
-    // The FormsAuthentication type is sealed and contains static members, so it is difficult to
-    // unit test code that calls its members. The interface and helper class below demonstrate
-    // how to create an abstract wrapper around such a type in order to make the AccountController
-    // code unit testable.
-
-    public interface IFormsAuthentication
-    {
-        void SignIn(string userName, bool createPersistentCookie);
-        void SignOut();
-    }
-
-    public class FormsAuthenticationService : IFormsAuthentication
-    {
-        public void SignIn(string userName, bool createPersistentCookie)
-        {
-            FormsAuthentication.SetAuthCookie(userName, createPersistentCookie);
-        }
-
-        public void SignOut()
-        {
-            FormsAuthentication.SignOut();
-        }
-    }
-
-    public interface IMembershipService
-    {
-        int MinPasswordLength { get; }
-
-        bool ValidateUser(string userName, string password);
-        string GetCanonicalUsername(string userName);
-        MembershipCreateStatus CreateUser(string userName, string password, string email);
-        bool ChangePassword(string userName, string oldPassword, string newPassword);
-    }
-
-    public class AccountMembershipService : IMembershipService
-    {
-        private readonly MembershipProvider _provider;
-
-        public AccountMembershipService()
-            : this(null)
-        {
-        }
-
-        public AccountMembershipService(MembershipProvider provider)
-        {
-            _provider = provider ?? Membership.Provider;
-        }
-
-        public int MinPasswordLength
-        {
-            get { return _provider.MinRequiredPasswordLength; }
-        }
-
-        public bool ValidateUser(string userName, string password)
-        {
-            return _provider.ValidateUser(userName, password);
-        }
-
-        public string GetCanonicalUsername(string userName)
-        {
-            var user = _provider.GetUser(userName, true);
-            if (user != null)
-            {
-                return user.UserName;
-            }
-
-            return null;
-        }
-
-        public MembershipCreateStatus CreateUser(string userName, string password, string email)
-        {
-            MembershipCreateStatus status;
-            _provider.CreateUser(userName, password, email, null, null, true, null, out status);
-            return status;
-        }
-
-        public bool ChangePassword(string userName, string oldPassword, string newPassword)
-        {
-            var currentUser = _provider.GetUser(userName, true /* userIsOnline */);
-            return currentUser.ChangePassword(oldPassword, newPassword);
         }
     }
 }

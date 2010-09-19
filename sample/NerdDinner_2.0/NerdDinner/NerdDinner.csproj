@@ -49,6 +49,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="OpenSearchToolkit">
       <HintPath>lib\OpenSearchToolkit.dll</HintPath>
     </Reference>
@@ -95,8 +96,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Models\Dinner.cs" />
+    <Compile Include="Models\DinnerReadModel.cs" />
+    <Compile Include="Models\RsvpReadModel.cs" />
+    <Compile Include="Services\AccountMembershipService.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\DinnersController.cs" />
+    <Compile Include="Services\FormsAuthenticationService.cs" />
+    <Compile Include="Services\IMembershipService.cs" />
+    <Compile Include="Services\IFormsAuthentication.cs" />
     <Compile Include="Models\FlairViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -112,6 +120,11 @@
     <Compile Include="Helpers\iCalResult.cs" />
     <Compile Include="Helpers\InMemoryTokenManager.cs" />
     <Compile Include="Models\MembershipReadModel.cs" />
+    <Compile Include="Models\NerdDinner.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NerdDinner.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Service References\Services\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -123,14 +136,6 @@
     <Compile Include="Helpers\RSSResult.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\TwitterConsumer.cs" />
-    <Compile Include="Models\Dinner.cs" />
-    <Compile Include="Models\DinnerRepository.cs" />
-    <Compile Include="Models\IDinnerRepository.cs" />
-    <Compile Include="Models\NerdDinner.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NerdDinner.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\NerdIdentity.cs" />
     <Compile Include="Models\RuleViolation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -197,9 +202,22 @@
     <Content Include="Scripts\smothness\jquery_ui_datepicker.css" />
     <Content Include="Scripts\timepicker_plug\css\style.css" />
     <Content Include="Scripts\timepicker_plug\timepicker.js" />
+    <EntityDeploy Include="Models\NerdDinner.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>NerdDinner.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="Service References\Services\CommandService.disco" />
+    <None Include="Service References\Services\CommandService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\Services\configuration91.svcinfo" />
     <None Include="Service References\Services\configuration.svcinfo" />
+    <None Include="Service References\Services\NerdDinner.Services.CancelDinnerStatus.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Services\NerdDinner.Services.CreateDinnerStatus.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\Services\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -210,7 +228,7 @@
     <Content Include="Views\Services\Flair.aspx" />
     <Content Include="Views\Services\JavascriptFlair.aspx" />
     <Content Include="Views\Shared\EditorTemplates\CountryDropDown.ascx" />
-    <Content Include="Views\Shared\EditorTemplates\LocationDetail.ascx" />
+    <Content Include="Views\Shared\LocationDetail.ascx" />
     <Content Include="Views\Shared\LogOn.aspx" />
     <Content Include="Views\Shared\LogOnContent.ascx" />
     <Content Include="Views\Dinners\Create.aspx" />
@@ -275,7 +293,6 @@
     <Compile Include="Helpers\HandleErrorWithELMAHAttribute.cs" />
     <Compile Include="Helpers\MobileCapableWebFormViewEngine.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
-    <Compile Include="Models\DinnerFormViewModel.cs" />
     <Content Include="Content\Img\bkg.jpg" />
     <Content Include="Content\Img\btn-go.png" />
     <Content Include="Content\Img\btn-login.png" />
@@ -339,12 +356,6 @@
     <Content Include="Views\Shared\Mobile\Results.aspx" />
     <Content Include="Views\Shared\Mobile\Site.Master" />
     <Content Include="Views\Shared\Mobile\iPhone\Site.Master" />
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="Models\NerdDinner.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>NerdDinner.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Services\OpenSearch.ashx" />
