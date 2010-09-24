@@ -1,13 +1,27 @@
-﻿namespace SimpleCqrs.Commanding
+﻿using System;
+
+namespace SimpleCqrs.Commanding
 {
     public abstract class CommandHandler<TCommand> : IHandleCommands<TCommand> where TCommand : ICommand
     {
+        private ICommandHandlingContext<TCommand> context;
+
         void IHandleCommands<TCommand>.Handle(ICommandHandlingContext<TCommand> handlingContext)
         {
-            handlingContext.Return(0);
+            context = handlingContext;
             Handle(handlingContext.Command);
         }
 
         protected abstract void Handle(TCommand command);
+
+        protected void Return(int value)
+        {
+            context.Return(value);
+        }
+
+        protected void Return(Enum value)
+        {
+            context.Return(Convert.ToInt32(value));
+        }
     }
 }

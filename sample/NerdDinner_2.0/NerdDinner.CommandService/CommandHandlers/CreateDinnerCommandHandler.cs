@@ -13,7 +13,7 @@ namespace NerdDinner.CommandService.CommandHandlers
         LocationNotProvided,
     }
 
-    public class CreateDinnerCommandHandler : ValidatingCommandHandler<CreateDinnerCommand>
+    public class CreateDinnerCommandHandler : CommandHandler<CreateDinnerCommand>
     {
         private readonly IDomainRepository domainRepository;
         private readonly IUserService membershipReadModel;
@@ -24,23 +24,25 @@ namespace NerdDinner.CommandService.CommandHandlers
             this.membershipReadModel = membershipReadModel;
         }
 
-        protected override int ValidateCommand(CreateDinnerCommand command)
-        {
-            if(command.Host == null || !membershipReadModel.UserIdExists(command.Host.HostedById))
-                return (int)CreateDinnerStatus.HostUserIdDoesNotExists;
-
-            if (command.Location == null)
-                return (int)CreateDinnerStatus.LocationNotProvided;
-
-            return (int)CreateDinnerStatus.Successful;
-        }
-
         protected override void Handle(CreateDinnerCommand command)
         {
+            Return(ValidateCommand(command));
+
             var dinner = new Dinner(command.DinnerId, command.EventDate, command.Title,
                                     command.Description, command.ContactPhone, command.Host, command.Location);
-
+            
             domainRepository.Save(dinner);
+        }
+
+        private CreateDinnerStatus ValidateCommand(CreateDinnerCommand command)
+        {
+            if(command.Host == null || !membershipReadModel.UserIdExists(command.Host.HostedById))
+                return CreateDinnerStatus.HostUserIdDoesNotExists;
+
+            if(command.Location == null)
+                return CreateDinnerStatus.LocationNotProvided;
+
+            return CreateDinnerStatus.Successful;
         }
     }
 }

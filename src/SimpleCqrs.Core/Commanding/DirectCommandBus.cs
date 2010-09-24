@@ -9,17 +9,19 @@ namespace SimpleCqrs.Commanding
     {
         private readonly IServiceLocator serviceLocator;
         private IDictionary<Type, CommandInvoker> commandInvokers;
+        private IEnumerable<ICommandErrorHandler<ICommand>> commandErrorHandlers;
 
         public DirectCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
             this.serviceLocator = serviceLocator;
             BuildCommandInvokers(typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)));
+            GetCommandErrorHandlers(typeCatalog.GetGenericInterfaceImplementations(typeof(ICommandErrorHandler<>)));
         }
 
         public int Execute(ICommand command)
         {
             CommandInvoker commandInvoker;
-            if (!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
+            if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
                 throw new CommandHandlerNotFoundException(command.GetType());
 
             return commandInvoker.Execute(command);
@@ -28,17 +30,24 @@ namespace SimpleCqrs.Commanding
         private void BuildCommandInvokers(IEnumerable<Type> commandHandlerTypes)
         {
             commandInvokers = new Dictionary<Type, CommandInvoker>();
-            foreach (var commandHandlerType in commandHandlerTypes)
+            foreach(var commandHandlerType in commandHandlerTypes)
             {
                 var commandTypes = GetCommadTypesForCommandHandler(commandHandlerType);
-                foreach (var commandType in commandTypes)
+                foreach(var commandType in commandTypes)
                 {
-                    if (commandInvokers.ContainsKey(commandType))
+                    if(commandInvokers.ContainsKey(commandType))
                         throw new DuplicateCommandHandlersException(commandType);
 
                     commandInvokers.Add(commandType, new CommandInvoker(serviceLocator, commandType, commandHandlerType));
                 }
             }
+        }
+
+        private void GetCommandErrorHandlers(IEnumerable<Type> commandErrorHandlerTypes)
+        {
+            commandErrorHandlers =
+                commandErrorHandlerTypes.Select(commandErrorHandlerType => (ICommandErrorHandler<ICommand>)serviceLocator.Resolve(commandErrorHandlerType)).
+                    ToList();
         }
 
         private static IEnumerable<Type> GetCommadTypesForCommandHandler(Type commandHandlerType)

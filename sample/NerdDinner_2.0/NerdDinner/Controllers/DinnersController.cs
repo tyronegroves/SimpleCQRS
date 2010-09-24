@@ -40,9 +40,6 @@ namespace NerdDinner.Controllers
             var dinner = dinnerReadModel.GetDinnerById(id.Value);
 
             if(dinner == null)
-                dinner = TempData["Dinner"] as Dinner;
-
-            if(dinner == null)
                 return new FileNotFoundResult {Message = "No Dinner found for that id"};
 
             return View(dinner);
@@ -94,23 +91,30 @@ namespace NerdDinner.Controllers
         }
 
         [HttpPost, Authorize]
-        public ActionResult Create(CreateDinnerCommand createDinnerCommand, Dinner dinner)
+        public ActionResult Create(Dinner dinner)
         {
             if (ModelState.IsValid)
             {
-                var nerd = (NerdIdentity)User.Identity;
-                var dinnerId = Guid.NewGuid();
-
-                createDinnerCommand.Host = new DinnerHost {HostedById = nerd.UserId, HostedBy = nerd.FriendlyName};
-                createDinnerCommand.Location = new Location {Address = dinner.Address, Country = dinner.Country, Latitude = dinner.Latitude, Longitude = dinner.Longitude};
-                createDinnerCommand.DinnerId = dinnerId;
-
+                var createDinnerCommand = GetCreateDinnerCommand(dinner);
                 commandService.CreateDinner(createDinnerCommand);
 
-                return RedirectToAction("Details", new { id = dinnerId });
+                return View("Details", dinner);
             }
 
             return View(dinner);
+        }
+
+        private CreateDinnerCommand GetCreateDinnerCommand(Dinner dinner)
+        {
+            var createDinnerCommand = new CreateDinnerCommand();
+            UpdateModel(createDinnerCommand);
+            var nerd = (NerdIdentity)User.Identity;
+            var dinnerId = Guid.NewGuid();
+
+            createDinnerCommand.Host = new DinnerHost {HostedById = nerd.UserId, HostedBy = nerd.FriendlyName};
+            createDinnerCommand.Location = new Location {Address = dinner.Address, Country = dinner.Country, Latitude = dinner.Latitude, Longitude = dinner.Longitude};
+            createDinnerCommand.DinnerId = dinnerId;
+            return createDinnerCommand;
         }
 
         [Authorize]
