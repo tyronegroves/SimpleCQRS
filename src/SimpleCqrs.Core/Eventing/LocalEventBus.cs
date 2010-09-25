@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace SimpleCqrs.Eventing
 {
-    public class DirectEventBus : IEventBus
+    public class LocalEventBus : IEventBus
     {
         private readonly IServiceLocator serviceLocator;
         private IDictionary<Type, EventHandlerInvoker> eventHandlerInvokers;
 
-        public DirectEventBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
+        public LocalEventBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
             this.serviceLocator = serviceLocator;
             BuildEventInvokers(typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>)));

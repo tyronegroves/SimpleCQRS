@@ -48,11 +48,11 @@
     <Compile Include="Commanding\IHandleCommands.cs" />
     <Compile Include="Domain\IDomainRepository.cs" />
     <Compile Include="TypeCatalog.cs" />
-    <Compile Include="Commanding\DirectCommandBus.cs" />
+    <Compile Include="Commanding\LocalCommandBus.cs" />
     <Compile Include="Domain\AggregateRoot.cs" />
     <Compile Include="Domain\ISnapshotOriginator.cs" />
     <Compile Include="Domain\Snapshot.cs" />
-    <Compile Include="Eventing\DirectEventBus.cs" />
+    <Compile Include="Eventing\LocalEventBus.cs" />
     <Compile Include="Domain\DomainRepository.cs" />
     <Compile Include="Eventing\IEventBus.cs" />
     <Compile Include="Eventing\IEventStore.cs" />

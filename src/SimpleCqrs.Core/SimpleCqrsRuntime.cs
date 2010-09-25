@@ -32,12 +32,12 @@ namespace SimpleCqrs
 
         protected virtual ICommandBus GetCommandBus(IServiceLocator serviceLocator)
         {
-            return serviceLocator.Resolve<DirectCommandBus>();
+            return serviceLocator.Resolve<LocalCommandBus>();
         }
 
         protected virtual IEventBus GetEventBus(IServiceLocator serviceLocator)
         {
-            return serviceLocator.Resolve<DirectEventBus>();
+            return serviceLocator.Resolve<LocalEventBus>();
         }
 
         protected virtual ISnapshotStore GetSnapshotStore(IServiceLocator serviceLocator)

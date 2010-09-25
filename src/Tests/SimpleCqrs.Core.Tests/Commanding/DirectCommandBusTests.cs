@@ -63,7 +63,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
         private ICommandBus CreateCommandBus(IServiceLocator serviceLocator)
         {
             var typeCatalog = mocker.Resolve<ITypeCatalog>();
-            return new DirectCommandBus(typeCatalog, serviceLocator);
+            return new LocalCommandBus(typeCatalog, serviceLocator);
         }
     }
 

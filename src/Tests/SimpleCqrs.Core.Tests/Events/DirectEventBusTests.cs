@@ -72,7 +72,7 @@ namespace SimpleCqrs.Core.Tests.Events
         private IEventBus CreateEventBus(IServiceLocator serviceLocator)
         {
             var typeCatalog = mocker.Resolve<ITypeCatalog>();
-            return new DirectEventBus(typeCatalog, serviceLocator);
+            return new LocalEventBus(typeCatalog, serviceLocator);
         }
     }
 

@@ -4,6 +4,6 @@ namespace SimpleCqrs.Commanding
 {
     public interface ICommandErrorHandler<in TCommand> where TCommand : ICommand
     {
-        void Handle(TCommand command, Exception exception);
+        void Handle(ICommandHandlingContext<TCommand> handlingContext, Exception exception);
     }
 }

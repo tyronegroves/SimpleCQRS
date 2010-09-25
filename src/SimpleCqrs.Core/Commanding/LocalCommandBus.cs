@@ -5,22 +5,20 @@ using System.Threading;
 
 namespace SimpleCqrs.Commanding
 {
-    internal class DirectCommandBus : ICommandBus
+    internal class LocalCommandBus : ICommandBus
     {
         private readonly IServiceLocator serviceLocator;
-        private IDictionary<Type, CommandInvoker> commandInvokers;
-        private IEnumerable<ICommandErrorHandler<ICommand>> commandErrorHandlers;
+        private IDictionary<Type, CommandHandlerInvoker> commandInvokers;
 
-        public DirectCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
+        public LocalCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
             this.serviceLocator = serviceLocator;
             BuildCommandInvokers(typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)));
-            GetCommandErrorHandlers(typeCatalog.GetGenericInterfaceImplementations(typeof(ICommandErrorHandler<>)));
         }
 
         public int Execute(ICommand command)
         {
-            CommandInvoker commandInvoker;
+            CommandHandlerInvoker commandInvoker;
             if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
                 throw new CommandHandlerNotFoundException(command.GetType());
 
@@ -29,7 +27,7 @@ namespace SimpleCqrs.Commanding
 
         private void BuildCommandInvokers(IEnumerable<Type> commandHandlerTypes)
         {
-            commandInvokers = new Dictionary<Type, CommandInvoker>();
+            commandInvokers = new Dictionary<Type, CommandHandlerInvoker>();
             foreach(var commandHandlerType in commandHandlerTypes)
             {
                 var commandTypes = GetCommadTypesForCommandHandler(commandHandlerType);
@@ -38,16 +36,9 @@ namespace SimpleCqrs.Commanding
                     if(commandInvokers.ContainsKey(commandType))
                         throw new DuplicateCommandHandlersException(commandType);
 
-                    commandInvokers.Add(commandType, new CommandInvoker(serviceLocator, commandType, commandHandlerType));
+                    commandInvokers.Add(commandType, new CommandHandlerInvoker(serviceLocator, commandType, commandHandlerType));
                 }
             }
-        }
-
-        private void GetCommandErrorHandlers(IEnumerable<Type> commandErrorHandlerTypes)
-        {
-            commandErrorHandlers =
-                commandErrorHandlerTypes.Select(commandErrorHandlerType => (ICommandErrorHandler<ICommand>)serviceLocator.Resolve(commandErrorHandlerType)).
-                    ToList();
         }
 
         private static IEnumerable<Type> GetCommadTypesForCommandHandler(Type commandHandlerType)
@@ -57,17 +48,30 @@ namespace SimpleCqrs.Commanding
                     select interfaceType.GetGenericArguments()[0]).ToArray();
         }
 
-        private class CommandInvoker
+        private class CommandHandlerInvoker
         {
             private readonly Type commandHandlerType;
             private readonly Type commandType;
             private readonly IServiceLocator serviceLocator;
+            private readonly IEnumerable<ICommandErrorHandler<ICommand>> errorHandlers;
 
-            public CommandInvoker(IServiceLocator serviceLocator, Type commandType, Type commandHandlerType)
+            public CommandHandlerInvoker(IServiceLocator serviceLocator, Type commandType, Type commandHandlerType)
             {
                 this.serviceLocator = serviceLocator;
                 this.commandType = commandType;
                 this.commandHandlerType = commandHandlerType;
+                errorHandlers = GetCommandErrorHandlersForCommandType(serviceLocator, commandType);
+            }
+
+            private static IEnumerable<ICommandErrorHandler<ICommand>> GetCommandErrorHandlersForCommandType(IServiceLocator serviceLocator, Type commandType)
+            {
+                var typeCatalog = serviceLocator.Resolve<ITypeCatalog>();
+                var errorHandlerTypes = typeCatalog.GetGenericInterfaceImplementations(typeof(ICommandErrorHandler<>));
+
+                return (from errorHandlerType in errorHandlerTypes
+                        let errorHandlerCommandType = errorHandlerType.GetGenericArguments()[0]
+                        where commandType.IsAssignableFrom(errorHandlerCommandType)
+                        select (ICommandErrorHandler<ICommand>)serviceLocator.Resolve(errorHandlerType)).ToList();
             }
 
             public int Execute(ICommand command)
@@ -76,16 +80,26 @@ namespace SimpleCqrs.Commanding
                 var commandHandler = serviceLocator.Resolve(commandHandlerType);
 
                 var handlingContextType = typeof(CommandHandlingContext<>).MakeGenericType(commandType);
-                var handlingContext = (ICommandHandlingContext)Activator.CreateInstance(handlingContextType, command);
+                var handlingContext = (ICommandHandlingContext<ICommand>)Activator.CreateInstance(handlingContextType, command);
 
                 ThreadPool.QueueUserWorkItem(delegate
                                                  {
-                                                     handleMethod.Invoke(commandHandler, new object[] {handlingContext});
-                                                     handlingContext.WaitHandle.Set();
+                                                     try
+                                                     {
+                                                         handleMethod.Invoke(commandHandler, new object[] { handlingContext });
+                                                     }
+                                                     catch (Exception exception)
+                                                     {
+                                                         errorHandlers.ForEach(handler => handler.Handle(handlingContext, exception));
+                                                     }
+                                                     finally
+                                                     {
+                                                         ((ICommandHandlingContext)handlingContext).WaitHandle.Set();
+                                                     }
                                                  });
-                handlingContext.WaitHandle.WaitOne();
+                ((ICommandHandlingContext)handlingContext).WaitHandle.WaitOne();
 
-                return handlingContext.ReturnValue;
+                return ((ICommandHandlingContext)handlingContext).ReturnValue;
             }
         }
 
