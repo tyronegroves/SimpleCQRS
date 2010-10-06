@@ -13,32 +13,46 @@ namespace SimpleCqrs.Commanding
         public LocalCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
             this.serviceLocator = serviceLocator;
-            BuildCommandInvokers(typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)));
+
+            var types = GetAllCommandHandlerTypes(typeCatalog);
+            commandInvokers = CreateCommandInvokersForTheseTypes(types);
+        }
+
+        private static IEnumerable<Type> GetAllCommandHandlerTypes(ITypeCatalog typeCatalog)
+        {
+            return typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>));
         }
 
         public int Execute(ICommand command)
         {
+            var commandHandler = GetTheCommandHandler(command);
+
+            return commandHandler.Execute(command);
+        }
+
+        private CommandHandlerInvoker GetTheCommandHandler(ICommand command)
+        {
             CommandHandlerInvoker commandInvoker;
             if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
                 throw new CommandHandlerNotFoundException(command.GetType());
-
-            return commandInvoker.Execute(command);
+            return commandInvoker;
         }
 
-        private void BuildCommandInvokers(IEnumerable<Type> commandHandlerTypes)
+        private IDictionary<Type, CommandHandlerInvoker> CreateCommandInvokersForTheseTypes(IEnumerable<Type> commandHandlerTypes)
         {
-            commandInvokers = new Dictionary<Type, CommandHandlerInvoker>();
+            var commandInvokerDictionary = new Dictionary<Type, CommandHandlerInvoker>();
             foreach(var commandHandlerType in commandHandlerTypes)
             {
                 var commandTypes = GetCommandTypesForCommandHandler(commandHandlerType);
                 foreach(var commandType in commandTypes)
                 {
-                    if(commandInvokers.ContainsKey(commandType))
+                    if(commandInvokerDictionary.ContainsKey(commandType))
                         throw new DuplicateCommandHandlersException(commandType);
 
-                    commandInvokers.Add(commandType, new CommandHandlerInvoker(serviceLocator, commandType, commandHandlerType));
+                    commandInvokerDictionary.Add(commandType, new CommandHandlerInvoker(serviceLocator, commandType, commandHandlerType));
                 }
             }
+            return commandInvokerDictionary;
         }
 
         private static IEnumerable<Type> GetCommandTypesForCommandHandler(Type commandHandlerType)
