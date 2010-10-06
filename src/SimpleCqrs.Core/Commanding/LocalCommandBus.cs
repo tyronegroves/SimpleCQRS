@@ -67,11 +67,27 @@ namespace SimpleCqrs.Commanding
             {
                 var typeCatalog = serviceLocator.Resolve<ITypeCatalog>();
                 var errorHandlerTypes = typeCatalog.GetGenericInterfaceImplementations(typeof(ICommandErrorHandler<>));
+                var commandErrorHandlers = new List<ICommandErrorHandler<ICommand>>();
 
-                return (from errorHandlerType in errorHandlerTypes
-                        let errorHandlerCommandType = errorHandlerType.GetGenericArguments()[0]
-                        where commandType.IsAssignableFrom(errorHandlerCommandType)
-                        select (ICommandErrorHandler<ICommand>)serviceLocator.Resolve(errorHandlerType)).ToList();
+                foreach(var errorHandlerType in errorHandlerTypes)
+                {
+                    var errorHandlerCommandTypes = GetCommadTypesForCommandErrorHandler(errorHandlerType);
+                    foreach(var errorHandlerCommandType in errorHandlerCommandTypes)
+                    {
+                        if(commandType.IsAssignableFrom(errorHandlerCommandType))
+                        {
+                            commandErrorHandlers.Add((ICommandErrorHandler<ICommand>)serviceLocator.Resolve(errorHandlerType));
+                        }
+                    }
+                }
+                return commandErrorHandlers;
+            }
+
+            private static IEnumerable<Type> GetCommadTypesForCommandErrorHandler(Type commandErrorHandlerType)
+            {
+                return (from interfaceType in commandErrorHandlerType.GetInterfaces()
+                        where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(ICommandErrorHandler<>)
+                        select interfaceType.GetGenericArguments()[0]).ToArray();
             }
 
             public int Execute(ICommand command)

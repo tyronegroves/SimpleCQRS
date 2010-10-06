@@ -69,6 +69,7 @@
     <Compile Include="CommandHandlers\ChangePasswordCommandHandler.cs" />
     <Compile Include="CommandHandlers\CreateDinnerCommandHandler.cs" />
     <Compile Include="CommandHandlers\EditDinnerCommandHandler.cs" />
+    <Compile Include="CommandHandlers\RegisterUserCommandErrorHandler.cs" />
     <Compile Include="CommandHandlers\RsvpForDinnerCommandHandler.cs" />
     <Compile Include="EventHandlers\UserMemberStatusNotifyHandler.cs" />
     <Compile Include="Events\UserMemberStatusChangedEvent.cs" />
