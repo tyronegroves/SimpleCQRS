@@ -30,7 +30,7 @@ namespace SimpleCqrs.Commanding
             commandInvokers = new Dictionary<Type, CommandHandlerInvoker>();
             foreach(var commandHandlerType in commandHandlerTypes)
             {
-                var commandTypes = GetCommadTypesForCommandHandler(commandHandlerType);
+                var commandTypes = GetCommandTypesForCommandHandler(commandHandlerType);
                 foreach(var commandType in commandTypes)
                 {
                     if(commandInvokers.ContainsKey(commandType))
@@ -41,7 +41,7 @@ namespace SimpleCqrs.Commanding
             }
         }
 
-        private static IEnumerable<Type> GetCommadTypesForCommandHandler(Type commandHandlerType)
+        private static IEnumerable<Type> GetCommandTypesForCommandHandler(Type commandHandlerType)
         {
             return (from interfaceType in commandHandlerType.GetInterfaces()
                     where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandleCommands<>)
