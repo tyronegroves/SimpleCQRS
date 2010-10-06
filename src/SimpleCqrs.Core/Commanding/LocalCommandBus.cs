@@ -60,27 +60,6 @@ namespace SimpleCqrs.Commanding
                 this.serviceLocator = serviceLocator;
                 this.commandType = commandType;
                 this.commandHandlerType = commandHandlerType;
-                errorHandlers = GetCommandErrorHandlersForCommandType(serviceLocator, commandType);
-            }
-
-            private static IEnumerable<ICommandErrorHandler<ICommand>> GetCommandErrorHandlersForCommandType(IServiceLocator serviceLocator, Type commandType)
-            {
-                var typeCatalog = serviceLocator.Resolve<ITypeCatalog>();
-                var errorHandlerTypes = typeCatalog.GetGenericInterfaceImplementations(typeof(ICommandErrorHandler<>));
-                var commandErrorHandlers = new List<ICommandErrorHandler<ICommand>>();
-
-                foreach(var errorHandlerType in errorHandlerTypes)
-                {
-                    var errorHandlerCommandTypes = GetCommadTypesForCommandErrorHandler(errorHandlerType);
-                    foreach(var errorHandlerCommandType in errorHandlerCommandTypes)
-                    {
-                        if(commandType.IsAssignableFrom(errorHandlerCommandType))
-                        {
-                            commandErrorHandlers.Add((ICommandErrorHandler<ICommand>)serviceLocator.Resolve(errorHandlerType));
-                        }
-                    }
-                }
-                return commandErrorHandlers;
             }
 
             private static IEnumerable<Type> GetCommadTypesForCommandErrorHandler(Type commandErrorHandlerType)
