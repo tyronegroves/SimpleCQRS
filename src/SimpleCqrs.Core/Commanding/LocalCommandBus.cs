@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace SimpleCqrs.Commanding
@@ -77,20 +78,54 @@ namespace SimpleCqrs.Commanding
 
             public int Execute(ICommand command)
             {
-                var handleMethod = typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
-                var commandHandler = serviceLocator.Resolve(commandHandlerType);
-
-                var handlingContextType = typeof(CommandHandlingContext<>).MakeGenericType(commandType);
-                var handlingContext = (ICommandHandlingContext<ICommand>)Activator.CreateInstance(handlingContextType, command);
+                var handlingContext = CreateTheCommandHandlingContext(command);
 
                 ThreadPool.QueueUserWorkItem(delegate
                                                  {
-                                                     handleMethod.Invoke(commandHandler, new object[] { handlingContext });
-                                                     ((ICommandHandlingContext)handlingContext).WaitHandle.Set();
+                                                     ExecuteTheCommandHandler(handlingContext);
+                                                     SignalThatTheTreadIsComplete(handlingContext);
                                                  });
-                ((ICommandHandlingContext)handlingContext).WaitHandle.WaitOne();
+                WaitForTheThreadToComplete(handlingContext);
 
                 return ((ICommandHandlingContext)handlingContext).ReturnValue;
+            }
+
+            private void ExecuteTheCommandHandler(ICommandHandlingContext<ICommand> handlingContext)
+            {
+                var handleMethod = GetTheHandleMethod();
+                var commandHandler = CreateTheCommandHandler();
+                handleMethod.Invoke(commandHandler, new object[] { handlingContext });
+            }
+
+            private void SignalThatTheTreadIsComplete(ICommandHandlingContext<ICommand> handlingContext)
+            {
+                ((ICommandHandlingContext)handlingContext).WaitHandle.Set();
+            }
+
+            private void WaitForTheThreadToComplete(ICommandHandlingContext<ICommand> handlingContext)
+            {
+                ((ICommandHandlingContext)handlingContext).WaitHandle.WaitOne();
+            }
+
+            private ICommandHandlingContext<ICommand> CreateTheCommandHandlingContext(ICommand command)
+            {
+                var handlingContextType = GetTheHandlingContextType();
+                return (ICommandHandlingContext<ICommand>)Activator.CreateInstance(handlingContextType, command);
+            }
+
+            private Type GetTheHandlingContextType()
+            {
+                return typeof(CommandHandlingContext<>).MakeGenericType(commandType);
+            }
+
+            private object CreateTheCommandHandler()
+            {
+                return serviceLocator.Resolve(commandHandlerType);
+            }
+
+            private MethodInfo GetTheHandleMethod()
+            {
+                return typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
             }
         }
 
