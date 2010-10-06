@@ -7,7 +7,7 @@ using SimpleCqrs.Commanding;
 namespace SimpleCqrs.Core.Tests.Commanding
 {
     [TestClass]
-    public class DirectCommandBusTests
+    public class LocalCommandBusTests
     {
         private AutoMoqer mocker;
 
