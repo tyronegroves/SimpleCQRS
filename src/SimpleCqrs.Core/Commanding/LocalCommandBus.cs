@@ -53,20 +53,12 @@ namespace SimpleCqrs.Commanding
             private readonly Type commandHandlerType;
             private readonly Type commandType;
             private readonly IServiceLocator serviceLocator;
-            private readonly IEnumerable<ICommandErrorHandler<ICommand>> errorHandlers;
 
             public CommandHandlerInvoker(IServiceLocator serviceLocator, Type commandType, Type commandHandlerType)
             {
                 this.serviceLocator = serviceLocator;
                 this.commandType = commandType;
                 this.commandHandlerType = commandHandlerType;
-            }
-
-            private static IEnumerable<Type> GetCommadTypesForCommandErrorHandler(Type commandErrorHandlerType)
-            {
-                return (from interfaceType in commandErrorHandlerType.GetInterfaces()
-                        where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(ICommandErrorHandler<>)
-                        select interfaceType.GetGenericArguments()[0]).ToArray();
             }
 
             public int Execute(ICommand command)
@@ -79,18 +71,8 @@ namespace SimpleCqrs.Commanding
 
                 ThreadPool.QueueUserWorkItem(delegate
                                                  {
-                                                     try
-                                                     {
-                                                         handleMethod.Invoke(commandHandler, new object[] { handlingContext });
-                                                     }
-                                                     catch (Exception exception)
-                                                     {
-                                                         errorHandlers.ForEach(handler => handler.Handle(handlingContext, exception));
-                                                     }
-                                                     finally
-                                                     {
-                                                         ((ICommandHandlingContext)handlingContext).WaitHandle.Set();
-                                                     }
+                                                     handleMethod.Invoke(commandHandler, new object[] { handlingContext });
+                                                     ((ICommandHandlingContext)handlingContext).WaitHandle.Set();
                                                  });
                 ((ICommandHandlingContext)handlingContext).WaitHandle.WaitOne();
 
