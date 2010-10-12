@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="CommandWithAggregateRootId.cs" />
     <Compile Include="ICommand.cs" />
+    <Compile Include="ICommandBus.cs" />
     <Compile Include="ICommandWithAggregateRootId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

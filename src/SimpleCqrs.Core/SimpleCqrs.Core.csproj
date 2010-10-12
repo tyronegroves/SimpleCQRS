@@ -44,7 +44,6 @@
     <Compile Include="Commanding\CommandHandlerNotFoundException.cs" />
     <Compile Include="Commanding\ICommandHandlingContext.cs" />
     <Compile Include="Commanding\DuplicateCommandHandlersException.cs" />
-    <Compile Include="Commanding\ICommandBus.cs" />
     <Compile Include="Commanding\IHandleCommands.cs" />
     <Compile Include="Domain\IDomainRepository.cs" />
     <Compile Include="TypeCatalog.cs" />
