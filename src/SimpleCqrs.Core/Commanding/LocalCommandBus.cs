@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +10,11 @@ namespace SimpleCqrs.Commanding
     internal class LocalCommandBus : ICommandBus
     {
         private readonly IServiceLocator serviceLocator;
-        private readonly ConcurrentQueue<ICommand> commandQueue;
         private readonly IDictionary<Type, CommandHandlerInvoker> commandInvokers;
 
         public LocalCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
             this.serviceLocator = serviceLocator;
-            commandQueue = new ConcurrentQueue<ICommand>();
 
             var types = GetAllCommandHandlerTypes(typeCatalog);
             commandInvokers = CreateCommandInvokersForTheseTypes(types);
@@ -28,15 +25,10 @@ namespace SimpleCqrs.Commanding
             return typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>));
         }
 
-        public int ExecuteWithReturnValue(ICommand command)
+        public int Execute(ICommand command)
         {
             var commandHandler = GetTheCommandHandler(command);
             return commandHandler.Execute(command);
-        }
-
-        public void Execute(ICommand command)
-        {
-            ExecuteWithReturnValue(command);
         }
 
         private CommandHandlerInvoker GetTheCommandHandler(ICommand command)
@@ -102,7 +94,7 @@ namespace SimpleCqrs.Commanding
             {
                 var handleMethod = GetTheHandleMethod();
                 var commandHandler = CreateTheCommandHandler();
-                handleMethod.Invoke(commandHandler, new object[] { handlingContext });
+                handleMethod.Invoke(commandHandler, new object[] {handlingContext});
             }
 
             private static void SignalThatTheTreadIsComplete(ICommandHandlingContext<ICommand> handlingContext)
