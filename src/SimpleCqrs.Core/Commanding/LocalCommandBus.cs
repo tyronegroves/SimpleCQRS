@@ -28,10 +28,15 @@ namespace SimpleCqrs.Commanding
             return typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>));
         }
 
-        public int Execute(ICommand command)
+        public int ExecuteWithReturnValue(ICommand command)
         {
             var commandHandler = GetTheCommandHandler(command);
             return commandHandler.Execute(command);
+        }
+
+        public void Execute(ICommand command)
+        {
+            ExecuteWithReturnValue(command);
         }
 
         private CommandHandlerInvoker GetTheCommandHandler(ICommand command)

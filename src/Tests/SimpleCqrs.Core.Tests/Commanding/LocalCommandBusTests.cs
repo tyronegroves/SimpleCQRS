@@ -26,7 +26,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
                 .Returns(new[] {typeof(MyTestCommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
-            var result = commandBus.Execute(new MyTestCommand());
+            var result = commandBus.ExecuteWithReturnValue(new MyTestCommand());
 
             Assert.AreEqual(101, result);
         }
@@ -41,7 +41,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
                 .Returns(new[] {typeof(MyTestCommandHandler), typeof(MyTestCommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
-            commandBus.Execute(new MyTestCommand());
+            commandBus.ExecuteWithReturnValue(new MyTestCommand());
         }
 
         [TestMethod]
@@ -53,8 +53,8 @@ namespace SimpleCqrs.Core.Tests.Commanding
                 .Returns(new[] {typeof(MyTest2CommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
-            var result = commandBus.Execute(new MyTestCommand());
-            var result2 = commandBus.Execute(new MyTest2Command());
+            var result = commandBus.ExecuteWithReturnValue(new MyTestCommand());
+            var result2 = commandBus.ExecuteWithReturnValue(new MyTest2Command());
 
             Assert.AreEqual(102, result);
             Assert.AreEqual(45, result2);
