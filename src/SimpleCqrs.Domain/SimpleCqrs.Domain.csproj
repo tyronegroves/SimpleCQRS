@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</ProjectGuid>
+    <ProjectGuid>{2CF7F99A-4C52-4B48-B1A9-CECBC512D7F6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleCqrs.Eventing</RootNamespace>
-    <AssemblyName>SimpleCqrs.Eventing</AssemblyName>
+    <RootNamespace>SimpleCqrs.Domain</RootNamespace>
+    <AssemblyName>SimpleCqrs.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -36,9 +36,16 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DomainEvent.cs" />
-    <Compile Include="IHandleDomainEvents.cs" />
+    <Compile Include="AggregateRoot.cs" />
+    <Compile Include="ISnapshotOriginator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Snapshot.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
+      <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
+      <Name>SimpleCqrs.Eventing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -79,7 +79,6 @@ namespace SimpleCqrs.Eventing
                     handleMethod.Invoke(eventHandler, new object[] { domainEvent });
                 }
             }
-
         }
     }
 }

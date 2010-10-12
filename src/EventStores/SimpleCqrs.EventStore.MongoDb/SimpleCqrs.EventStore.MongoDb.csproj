@@ -53,6 +53,10 @@
       <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
       <Name>SimpleCqrs.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SimpleCqrs.Domain\SimpleCqrs.Domain.csproj">
+      <Project>{2CF7F99A-4C52-4B48-B1A9-CECBC512D7F6}</Project>
+      <Name>SimpleCqrs.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
       <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
       <Name>SimpleCqrs.Eventing</Name>

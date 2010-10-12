@@ -48,9 +48,6 @@
     <Compile Include="Domain\IDomainRepository.cs" />
     <Compile Include="TypeCatalog.cs" />
     <Compile Include="Commanding\LocalCommandBus.cs" />
-    <Compile Include="Domain\AggregateRoot.cs" />
-    <Compile Include="Domain\ISnapshotOriginator.cs" />
-    <Compile Include="Domain\Snapshot.cs" />
     <Compile Include="Eventing\LocalEventBus.cs" />
     <Compile Include="Domain\DomainRepository.cs" />
     <Compile Include="Eventing\IEventBus.cs" />
@@ -67,6 +64,10 @@
     <ProjectReference Include="..\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
       <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
       <Name>SimpleCqrs.Commanding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleCqrs.Domain\SimpleCqrs.Domain.csproj">
+      <Project>{2CF7F99A-4C52-4B48-B1A9-CECBC512D7F6}</Project>
+      <Name>SimpleCqrs.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
       <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
