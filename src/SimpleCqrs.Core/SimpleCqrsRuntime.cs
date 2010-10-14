@@ -12,7 +12,7 @@ namespace SimpleCqrs
         public void Start()
         {
             var serviceLocator = GetServiceLocator();
-            serviceLocator.Register<IServiceLocator>(serviceLocator);
+            serviceLocator.Register<IServiceLocator>(() => serviceLocator);
             var assembliesToScan = GetAssembliesToScan(serviceLocator);
             var typeCatalog = GetTypeCatalog(assembliesToScan);
             serviceLocator.Register(typeCatalog);
