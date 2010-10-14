@@ -13,16 +13,22 @@ namespace SimpleCqrs
         public void Start()
         {
             var serviceLocator = GetServiceLocator();
+
             serviceLocator.Register<IServiceLocator>(serviceLocator);
-            var assembliesToScan = GetAssembliesToScan(serviceLocator);
-            var typeCatalog = GetTypeCatalog(assembliesToScan);
-            serviceLocator.Register(typeCatalog);
+            serviceLocator.Register(BuildTheTypeCatalog(serviceLocator));
             serviceLocator.Register(GetCommandBus(serviceLocator));
             serviceLocator.Register(GetEventBus(serviceLocator));
             serviceLocator.Register(GetSnapshotStore(serviceLocator));
             serviceLocator.Register(GetEventStore(serviceLocator));
             serviceLocator.Register<IDomainRepository, DomainRepository>();
+
             ServiceLocator.SetCurrent(serviceLocator);
+        }
+
+        private ITypeCatalog BuildTheTypeCatalog(TServiceLocator serviceLocator)
+        {
+            var assembliesToScan = GetAssembliesToScan(serviceLocator);
+            return GetTypeCatalog(assembliesToScan);
         }
 
         public void Shutdown()
