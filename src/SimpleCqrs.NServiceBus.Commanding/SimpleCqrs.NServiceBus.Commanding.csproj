@@ -42,8 +42,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandBus.cs" />
+    <Compile Include="CommandWithReturnValueMessage.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="CommandMessage.cs" />
-    <Compile Include="NServiceBusCommandBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

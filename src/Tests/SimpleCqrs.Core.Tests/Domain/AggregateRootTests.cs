@@ -6,7 +6,7 @@ using Moq;
 using SimpleCqrs.Domain;
 using SimpleCqrs.Eventing;
 
-namespace SimpleCqrs.Core.Tests
+namespace SimpleCqrs.Core.Tests.Domain
 {
     [TestClass]
     public class AggregateRootTests

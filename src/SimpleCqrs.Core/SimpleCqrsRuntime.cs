@@ -7,7 +7,8 @@ using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs
 {
-    public abstract class SimpleCqrsRuntime<TServiceLocator> where TServiceLocator : class, IServiceLocator
+    public abstract class SimpleCqrsRuntime<TServiceLocator> : IDisposable
+        where TServiceLocator : class, IServiceLocator
     {
         public void Start()
         {
@@ -37,7 +38,11 @@ namespace SimpleCqrs
 
         protected virtual IEventBus GetEventBus(IServiceLocator serviceLocator)
         {
-            return serviceLocator.Resolve<LocalEventBus>();
+            var typeCatalog = serviceLocator.Resolve<ITypeCatalog>();
+            var eventHandlerTypes = typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>));
+            var domainEventHandlerFactory = serviceLocator.Resolve<DomainEventHandlerFactory>();
+
+            return new LocalEventBus(eventHandlerTypes, domainEventHandlerFactory);
         }
 
         protected virtual ISnapshotStore GetSnapshotStore(IServiceLocator serviceLocator)
@@ -49,7 +54,7 @@ namespace SimpleCqrs
 
         protected virtual ITypeCatalog GetTypeCatalog(IEnumerable<Assembly> assembliesToScan)
         {
-            return new TypeCatalog(assembliesToScan);
+            return new AssemblyTypeCatalog(assembliesToScan);
         }
 
         protected virtual TServiceLocator GetServiceLocator()
@@ -60,6 +65,11 @@ namespace SimpleCqrs
         protected virtual IEnumerable<Assembly> GetAssembliesToScan(IServiceLocator serviceLocator)
         {
             return AppDomain.CurrentDomain.GetAssemblies();
+        }
+
+        public void Dispose()
+        {
+            Shutdown();
         }
     }
 }

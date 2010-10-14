@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -29,6 +28,12 @@ namespace SimpleCqrs.Commanding
         {
             var commandHandler = GetTheCommandHandler(command);
             return commandHandler.Execute(command);
+        }
+
+        public void Send(ICommand command)
+        {
+            var commandHandler = GetTheCommandHandler(command);
+            commandHandler.Send(command);
         }
 
         private CommandHandlerInvoker GetTheCommandHandler(ICommand command)
@@ -88,6 +93,12 @@ namespace SimpleCqrs.Commanding
                 WaitForTheThreadToComplete(handlingContext);
 
                 return ((ICommandHandlingContext)handlingContext).ReturnValue;
+            }
+
+            public void Send(ICommand command)
+            {
+                var handlingContext = CreateTheCommandHandlingContext(command);
+                ThreadPool.QueueUserWorkItem(state => ExecuteTheCommandHandler((ICommandHandlingContext<ICommand>)state), handlingContext);
             }
 
             private void ExecuteTheCommandHandler(ICommandHandlingContext<ICommand> handlingContext)

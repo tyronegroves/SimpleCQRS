@@ -51,7 +51,7 @@
     <Compile Include="Commanding\LocalCommandBusTests.cs" />
     <Compile Include="Domain\AggregateRootTests.cs" />
     <Compile Include="Events\DirectEventBusTests.cs" />
-    <Compile Include="Events\DomainRepositoryTests.cs" />
+    <Compile Include="Domain\DomainRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,9 +5,8 @@ using SimpleCqrs.Commanding;
 namespace SimpleCqrs.NServiceBus.Commanding
 {
     [Serializable]
-    public class CommandMessage : IMessage
+    public class CommandWithReturnValueMessage : IMessage
     {
         public ICommand Command { get; set; }
-        public bool ReturnValue { get; set; }
     }
 }

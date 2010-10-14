@@ -21,12 +21,15 @@ namespace SimpleCqrs.Core.Tests.Events
         [TestMethod]
         public void DomainEventHandlerForMyTestEventIsCalledWhenHandlerTypeIsInTypeCatalog()
         {
-            var serviceLocator = new MockServiceLocator { ResolveFunc = (t) => new MyTestEventHandler() };
+            mocker.GetMock<IDomainEventHandlerFactory>()
+                .Setup(factory => factory.Create(It.IsAny<Type>()))
+                .Returns((Type type) => Activator.CreateInstance(type));
+
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>)))
-                .Returns(new[] { typeof(MyTestEventHandler) });
+                .Returns(new[] {typeof(MyTestEventHandler)});
 
-            var eventBus = CreateEventBus(serviceLocator);
+            var eventBus = CreateLocalEventBus();
             var myTestEvent = new MyTestEvent();
 
             eventBus.PublishEvent(myTestEvent);
@@ -37,16 +40,19 @@ namespace SimpleCqrs.Core.Tests.Events
         [TestMethod]
         public void DomainEventHandlerThatImplementsTwoHandlersAreCalledWhenHandlerTypeIsInTypeCatalog()
         {
-            var serviceLocator = new MockServiceLocator { ResolveFunc = (t) => new MyTest2EventHandler() };
+            mocker.GetMock<IDomainEventHandlerFactory>()
+                .Setup(factory => factory.Create(It.IsAny<Type>()))
+                .Returns((Type type) => Activator.CreateInstance(type));
+
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>)))
-                .Returns(new[] { typeof(MyTest2EventHandler) });
+                .Returns(new[] {typeof(MyTest2EventHandler)});
 
-            var eventBus = CreateEventBus(serviceLocator);
+            var eventBus = CreateLocalEventBus();
             var myTestEvent = new MyTestEvent();
             var myTest2Event = new MyTest2Event();
 
-            eventBus.PublishEvents(new DomainEvent[]{myTestEvent, myTest2Event});
+            eventBus.PublishEvents(new DomainEvent[] {myTestEvent, myTest2Event});
 
             Assert.AreEqual(102, myTestEvent.Result);
             Assert.AreEqual(45, myTest2Event.Result);
@@ -55,12 +61,15 @@ namespace SimpleCqrs.Core.Tests.Events
         [TestMethod]
         public void AllEventHandlersAreCalledWhenHandlerTypesAreInTheTypeCatalog()
         {
-            var serviceLocator = new MockServiceLocator { ResolveFunc = t => Activator.CreateInstance(t) };
+            mocker.GetMock<IDomainEventHandlerFactory>()
+                .Setup(factory => factory.Create(It.IsAny<Type>()))
+                .Returns((Type type) => Activator.CreateInstance(type));
+
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>)))
-                .Returns(new[] {typeof(MyTestEventHandler), typeof(MyTest2EventHandler) });
+                .Returns(new[] {typeof(MyTestEventHandler), typeof(MyTest2EventHandler)});
 
-            var eventBus = CreateEventBus(serviceLocator);
+            var eventBus = CreateLocalEventBus();
             var myTestEvent = new MyTestEvent();
 
             eventBus.PublishEvent(myTestEvent);
@@ -69,10 +78,13 @@ namespace SimpleCqrs.Core.Tests.Events
             Assert.IsTrue(myTestEvent.MyTest2EventHandlerWasCalled);
         }
 
-        private IEventBus CreateEventBus(IServiceLocator serviceLocator)
+        private LocalEventBus CreateLocalEventBus()
         {
             var typeCatalog = mocker.Resolve<ITypeCatalog>();
-            return new LocalEventBus(typeCatalog, serviceLocator);
+            var factory = mocker.Resolve<IDomainEventHandlerFactory>();
+            var eventHandlerTypes = typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>));
+
+            return new LocalEventBus(eventHandlerTypes, factory);
         }
     }
 
