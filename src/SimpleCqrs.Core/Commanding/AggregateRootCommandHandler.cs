@@ -10,14 +10,24 @@ namespace SimpleCqrs.Commanding
         {
             var command = handlingContext.Command;
 
-            ValidationResult = ValidateCommand(command);
-            handlingContext.Return(ValidationResult);
+            ValidateTheCommand(handlingContext, command);
 
-            var domainRepository = ServiceLocator.Current.Resolve<IDomainRepository>();
+            var domainRepository = GetTheDomainRepository();
             var aggregateRoot = domainRepository.GetById<TAggregateRoot>(command.AggregateRootId);
 
             Handle(command, aggregateRoot);
             domainRepository.Save(aggregateRoot);
+        }
+
+        private static IDomainRepository GetTheDomainRepository()
+        {
+            return ServiceLocator.Current.Resolve<IDomainRepository>();
+        }
+
+        private void ValidateTheCommand(ICommandHandlingContext<TCommand> handlingContext, TCommand command)
+        {
+            ValidationResult = ValidateCommand(command);
+            handlingContext.Return(ValidationResult);
         }
 
         protected int ValidationResult { get; private set; }
