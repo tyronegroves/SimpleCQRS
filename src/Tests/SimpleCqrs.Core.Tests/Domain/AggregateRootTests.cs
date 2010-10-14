@@ -111,10 +111,11 @@ namespace SimpleCqrs.Core.Tests
             aggregateRoot.Apply(domainEvent2);
             aggregateRoot.Apply(domainEvent3);
 
-            Assert.AreEqual(3, aggregateRoot.UncommittedEvents.Count);
-            Assert.AreSame(domainEvent1, aggregateRoot.UncommittedEvents.ElementAt(0));
-            Assert.AreSame(domainEvent2, aggregateRoot.UncommittedEvents.ElementAt(1));
-            Assert.AreSame(domainEvent3, aggregateRoot.UncommittedEvents.ElementAt(2));
+            var uncommittedEvents = aggregateRoot.UncommittedEvents;
+            Assert.AreEqual(3, uncommittedEvents.Count());
+            Assert.AreSame(domainEvent1, uncommittedEvents[0]);
+            Assert.AreSame(domainEvent2, uncommittedEvents[1]);
+            Assert.AreSame(domainEvent3, uncommittedEvents[2]);
         }
 
         [TestMethod]
@@ -176,7 +177,9 @@ namespace SimpleCqrs.Core.Tests
             aggregateRoot.Apply(new HandlerThatMeetsConventionEvent());
             aggregateRoot.Apply(new HandlerThatMeetsConventionEvent());
 
-            Assert.IsTrue(aggregateRoot.UncommittedEvents.All(domainEvent => domainEvent.AggregateRootId == aggregateRootId));
+            var allAggregateRootIdsMatch = aggregateRoot.UncommittedEvents
+                                                .All(domainEvent => domainEvent.AggregateRootId == aggregateRootId);
+            Assert.IsTrue(allAggregateRootIdsMatch);
         }
     }
 
