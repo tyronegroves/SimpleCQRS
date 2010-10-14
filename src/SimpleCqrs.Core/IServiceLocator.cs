@@ -40,5 +40,6 @@ namespace SimpleCqrs
         void Reset();
         TService Inject<TService>(TService instance) where TService : class;
         void TearDown<TService>(TService instance) where TService : class;
+        void Register<Interface>(Func<Interface> factoryMethod) where Interface : class;
     }
 }

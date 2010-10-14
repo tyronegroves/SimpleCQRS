@@ -133,6 +133,13 @@ namespace SimpleCqrs.Unity
             Container.RegisterInstance(instance);
         }
 
+        public void Register<Interface>(Func<Interface> factoryMethod) where Interface : class
+        {
+            var container = Container;
+            Func<IUnityContainer, object> factoryFunc = c => factoryMethod.Invoke();
+            container.RegisterType<Interface>(new InjectionFactory(factoryFunc));
+        }
+
         public void Release(object instance)
         {
             if (instance == null) return;
@@ -158,9 +165,7 @@ namespace SimpleCqrs.Unity
 
         public void Dispose()
         {
-            // Cannot call Dispose on the Unity container.
-            // If Unity is registered with itself (which includes registering an instance of the IServiceLocator),
-            // it will get caught in an endless loop trying to dispose of itself.
+            Container.Dispose();
         }
     }
 }
