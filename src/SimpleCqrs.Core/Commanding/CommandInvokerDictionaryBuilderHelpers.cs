@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SimpleCqrs.Commanding
 {
-    internal static class CommandInvokerDictionaryBuilder
+    internal static class CommandInvokerDictionaryBuilderHelpers
     {
         public static IDictionary<Type, LocalCommandBus.CommandHandlerInvoker> CreateADictionaryOfCommandInvokers(
             ITypeCatalog typeCatalog, IServiceLocator serviceLocator)

@@ -12,7 +12,7 @@ namespace SimpleCqrs.Commanding
         public LocalCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
             commandInvokers =
-                CommandInvokerDictionaryBuilder.CreateADictionaryOfCommandInvokers(typeCatalog, serviceLocator);
+                CommandInvokerDictionaryBuilderHelpers.CreateADictionaryOfCommandInvokers(typeCatalog, serviceLocator);
         }
 
         public int Execute(ICommand command)
