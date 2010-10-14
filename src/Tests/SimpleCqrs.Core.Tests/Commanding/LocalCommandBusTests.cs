@@ -190,5 +190,10 @@ namespace SimpleCqrs.Core.Tests.Commanding
         {
             throw new NotImplementedException();
         }
+
+        public void Register<Interface>(Func<Interface> factoryMethod) where Interface : class
+        {
+            throw new NotImplementedException();
+        }
     }
 }
