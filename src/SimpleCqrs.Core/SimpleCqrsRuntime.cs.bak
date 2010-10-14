@@ -13,9 +13,16 @@ namespace SimpleCqrs
         public void Start()
         {
             var serviceLocator = GetServiceLocator();
+<<<<<<< HEAD
+            serviceLocator.Register<IServiceLocator>(() => serviceLocator);
+            var assembliesToScan = GetAssembliesToScan(serviceLocator);
+            var typeCatalog = GetTypeCatalog(assembliesToScan);
+            serviceLocator.Register(typeCatalog);
+=======
 
             serviceLocator.Register<IServiceLocator>(serviceLocator);
             serviceLocator.Register(BuildTheTypeCatalog(serviceLocator));
+>>>>>>> darrencauthon-check_tests
             serviceLocator.Register(GetCommandBus(serviceLocator));
             serviceLocator.Register(GetEventBus(serviceLocator));
             serviceLocator.Register(GetSnapshotStore(serviceLocator));

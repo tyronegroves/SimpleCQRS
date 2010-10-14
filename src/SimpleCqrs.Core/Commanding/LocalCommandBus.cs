@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 
@@ -8,20 +7,12 @@ namespace SimpleCqrs.Commanding
 {
     internal class LocalCommandBus : ICommandBus
     {
-        private readonly IServiceLocator serviceLocator;
         private readonly IDictionary<Type, CommandHandlerInvoker> commandInvokers;
 
         public LocalCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
-            this.serviceLocator = serviceLocator;
-
-            var types = GetAllCommandHandlerTypes(typeCatalog);
-            commandInvokers = CreateCommandInvokersForTheseTypes(types);
-        }
-
-        private static IEnumerable<Type> GetAllCommandHandlerTypes(ITypeCatalog typeCatalog)
-        {
-            return typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>));
+            commandInvokers =
+                CommandInvokerDictionaryBuilderHelpers.CreateADictionaryOfCommandInvokers(typeCatalog, serviceLocator);
         }
 
         public int Execute(ICommand command)
@@ -39,36 +30,12 @@ namespace SimpleCqrs.Commanding
         private CommandHandlerInvoker GetTheCommandHandler(ICommand command)
         {
             CommandHandlerInvoker commandInvoker;
-            if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
+            if (!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
                 throw new CommandHandlerNotFoundException(command.GetType());
             return commandInvoker;
         }
 
-        private IDictionary<Type, CommandHandlerInvoker> CreateCommandInvokersForTheseTypes(IEnumerable<Type> commandHandlerTypes)
-        {
-            var commandInvokerDictionary = new Dictionary<Type, CommandHandlerInvoker>();
-            foreach(var commandHandlerType in commandHandlerTypes)
-            {
-                var commandTypes = GetCommandTypesForCommandHandler(commandHandlerType);
-                foreach(var commandType in commandTypes)
-                {
-                    if(commandInvokerDictionary.ContainsKey(commandType))
-                        throw new DuplicateCommandHandlersException(commandType);
-
-                    commandInvokerDictionary.Add(commandType, new CommandHandlerInvoker(serviceLocator, commandType, commandHandlerType));
-                }
-            }
-            return commandInvokerDictionary;
-        }
-
-        private static IEnumerable<Type> GetCommandTypesForCommandHandler(Type commandHandlerType)
-        {
-            return (from interfaceType in commandHandlerType.GetInterfaces()
-                    where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandleCommands<>)
-                    select interfaceType.GetGenericArguments()[0]).ToArray();
-        }
-
-        private class CommandHandlerInvoker
+        public class CommandHandlerInvoker
         {
             private readonly Type commandHandlerType;
             private readonly Type commandType;
@@ -92,7 +59,7 @@ namespace SimpleCqrs.Commanding
                                                  });
                 WaitForTheThreadToComplete(handlingContext);
 
-                return ((ICommandHandlingContext)handlingContext).ReturnValue;
+                return ((ICommandHandlingContext) handlingContext).ReturnValue;
             }
 
             public void Send(ICommand command)
@@ -110,18 +77,18 @@ namespace SimpleCqrs.Commanding
 
             private static void SignalThatTheTreadIsComplete(ICommandHandlingContext<ICommand> handlingContext)
             {
-                ((ICommandHandlingContext)handlingContext).WaitHandle.Set();
+                ((ICommandHandlingContext) handlingContext).WaitHandle.Set();
             }
 
             private static void WaitForTheThreadToComplete(ICommandHandlingContext<ICommand> handlingContext)
             {
-                ((ICommandHandlingContext)handlingContext).WaitHandle.WaitOne();
+                ((ICommandHandlingContext) handlingContext).WaitHandle.WaitOne();
             }
 
             private ICommandHandlingContext<ICommand> CreateTheCommandHandlingContext(ICommand command)
             {
-                var handlingContextType = typeof(CommandHandlingContext<>).MakeGenericType(commandType);
-                return (ICommandHandlingContext<ICommand>)Activator.CreateInstance(handlingContextType, command);
+                var handlingContextType = typeof (CommandHandlingContext<>).MakeGenericType(commandType);
+                return (ICommandHandlingContext<ICommand>) Activator.CreateInstance(handlingContextType, command);
             }
 
             private object CreateTheCommandHandler()
@@ -131,7 +98,7 @@ namespace SimpleCqrs.Commanding
 
             private MethodInfo GetTheHandleMethod()
             {
-                return typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
+                return typeof (IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
             }
         }
 
@@ -142,7 +109,8 @@ namespace SimpleCqrs.Commanding
             ManualResetEvent WaitHandle { get; }
         }
 
-        private class CommandHandlingContext<TCommand> : ICommandHandlingContext, ICommandHandlingContext<TCommand> where TCommand : ICommand
+        private class CommandHandlingContext<TCommand> : ICommandHandlingContext, ICommandHandlingContext<TCommand>
+            where TCommand : ICommand
         {
             private readonly ManualResetEvent waitHandle;
 
