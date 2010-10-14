@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commanding\AggregateRootCommandHandler.cs" />
+    <Compile Include="Commanding\CommandInvokerDictionaryBuilder.cs" />
     <Compile Include="Commanding\ICommandErrorHandler.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="SimpleCqrsRuntime.cs" />
