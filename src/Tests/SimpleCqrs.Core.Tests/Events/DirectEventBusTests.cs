@@ -201,5 +201,10 @@ namespace SimpleCqrs.Core.Tests.Events
         {
             throw new NotImplementedException();
         }
+
+        public void Register<Interface>(Func<Interface> factoryMethod) where Interface : class
+        {
+            throw new NotImplementedException();
+        }
     }
 }
