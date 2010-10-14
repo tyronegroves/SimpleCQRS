@@ -20,10 +20,9 @@ namespace SimpleCqrs.Core.Tests.Commanding
         [TestMethod]
         public void CommandHandlerForMyCommandIsCalledWhenHandlerTypeIsInTypeCatalog()
         {
+            ReturnTheseHandlersForThisType(typeof(IHandleCommands<>), new Type[] { typeof(MyTestCommandHandler) });
+
             var serviceLocator = new MockServiceLocator {ResolveFunc = t => new MyTestCommandHandler()};
-            mocker.GetMock<ITypeCatalog>()
-                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] {typeof(MyTestCommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
             var result = commandBus.Execute(new MyTestCommand());
@@ -35,10 +34,10 @@ namespace SimpleCqrs.Core.Tests.Commanding
         [ExpectedException(typeof(DuplicateCommandHandlersException))]
         public void DuplicateCommandHandlersExceptionIsThrowWhenTwoCommand()
         {
-            var serviceLocator = new MockServiceLocator {ResolveFunc = t => new MyTestCommandHandler()};
-            mocker.GetMock<ITypeCatalog>()
-                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] {typeof(MyTestCommandHandler), typeof(MyTestCommandHandler)});
+            ReturnTheseHandlersForThisType(typeof(IHandleCommands<>), new[] {typeof(MyTestCommandHandler), 
+                typeof(MyTestCommandHandler)});
+
+            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
 
             var commandBus = CreateCommandBus(serviceLocator);
             commandBus.Execute(new MyTestCommand());
@@ -47,10 +46,9 @@ namespace SimpleCqrs.Core.Tests.Commanding
         [TestMethod]
         public void CommandHandlerThatImplementsTwoHandlersAreCalledWhenHandlerTypeIsInTypeCatalog()
         {
+            ReturnTheseHandlersForThisType(typeof(IHandleCommands<>), new[] { typeof(MyTest2CommandHandler) });
+
             var serviceLocator = new MockServiceLocator {ResolveFunc = t => new MyTest2CommandHandler()};
-            mocker.GetMock<ITypeCatalog>()
-                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] {typeof(MyTest2CommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
             var result = commandBus.Execute(new MyTestCommand());
@@ -58,6 +56,13 @@ namespace SimpleCqrs.Core.Tests.Commanding
 
             Assert.AreEqual(102, result);
             Assert.AreEqual(45, result2);
+        }
+
+        private void ReturnTheseHandlersForThisType(Type genericHandlerType, Type[] handlers)
+        {
+            mocker.GetMock<ITypeCatalog>()
+                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(genericHandlerType))
+                .Returns(handlers);
         }
 
         private ICommandBus CreateCommandBus(IServiceLocator serviceLocator)
