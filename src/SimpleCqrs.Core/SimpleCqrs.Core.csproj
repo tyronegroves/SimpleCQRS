@@ -48,7 +48,7 @@
     <Compile Include="Commanding\DuplicateCommandHandlersException.cs" />
     <Compile Include="Commanding\IHandleCommands.cs" />
     <Compile Include="Domain\IDomainRepository.cs" />
-    <Compile Include="TypeCatalog.cs" />
+    <Compile Include="AssemblyTypeCatalog.cs" />
     <Compile Include="Commanding\LocalCommandBus.cs" />
     <Compile Include="Domain\DomainRepository.cs" />
     <Compile Include="Eventing\IEventStore.cs" />
