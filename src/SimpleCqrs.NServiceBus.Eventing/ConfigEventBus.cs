@@ -10,11 +10,11 @@ namespace SimpleCqrs.NServiceBus.Eventing
     {
         public void Configure(Configure config)
         {
-            var configurer = config.Configurer;
-            var eventHandlerTypes = GetDomainEventHandlerTypes();
-            var eventBus = new LocalEventBus(eventHandlerTypes, new DomainEventHandlerFactory());
+            Configurer = config.Configurer;
+            Builder = config.Builder;
 
-            configurer.RegisterSingleton<IHandleMessages<DomainEventMessage>>(new DomainEventMessageHandler(eventBus));
+            var eventHandlerTypes = GetDomainEventHandlerTypes();
+            Configurer.RegisterSingleton<IEventBus>(new LocalEventBus(eventHandlerTypes, new DomainEventHandlerFactory()));
         }
 
         private static IEnumerable<Type> GetDomainEventHandlerTypes()
