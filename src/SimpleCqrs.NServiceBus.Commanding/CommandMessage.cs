@@ -8,6 +8,5 @@ namespace SimpleCqrs.NServiceBus.Commanding
     public class CommandMessage : IMessage
     {
         public ICommand Command { get; set; }
-        public bool ReturnValue { get; set; }
     }
 }

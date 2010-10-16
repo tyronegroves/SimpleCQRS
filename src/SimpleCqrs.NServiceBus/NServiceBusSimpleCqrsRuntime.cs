@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using SimpleCqrs.Commanding;
 using SimpleCqrs.Eventing;
@@ -10,17 +11,17 @@ namespace SimpleCqrs.NServiceBus
     {
         protected override IEventStore GetEventStore(IServiceLocator serviceLocator)
         {
-            return EventStore;
+            return EventStoreFactoryMethod(serviceLocator);
         }
 
         protected override IEventBus GetEventBus(IServiceLocator serviceLocator)
         {
-            return EventBus ?? serviceLocator.Resolve<LocalEventBus>();
+            return EventBusFactoryMethod != null ? EventBusFactoryMethod(serviceLocator) : serviceLocator.Resolve<LocalEventBus>();
         }
 
         protected override ISnapshotStore GetSnapshotStore(IServiceLocator serviceLocator)
         {
-            return SnapshotStore;
+            return SnapshotStore ?? base.GetSnapshotStore(serviceLocator);
         }
 
         protected override ITypeCatalog GetTypeCatalog(IEnumerable<Assembly> assembliesToScan)
@@ -39,9 +40,9 @@ namespace SimpleCqrs.NServiceBus
         }
 
         public ISnapshotStore SnapshotStore { get; set; }
-        public IEventBus EventBus { get; set; }
-        public IEventStore EventStore { get; set; }
         public TServiceLocator ServiceLocator { get; set; }
         public CommandBus CommandBus { get; set; }
+        public Func<IServiceLocator, IEventBus> EventBusFactoryMethod { get; set; }
+        public Func<IServiceLocator, IEventStore> EventStoreFactoryMethod { get; set; }
     }
 }

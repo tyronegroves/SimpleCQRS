@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\..\lib\NServiceBus.dll</HintPath>
     </Reference>
@@ -38,12 +42,18 @@
       <HintPath>..\..\lib\NServiceBus.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandBus.cs" />
     <Compile Include="CommandWithReturnValueMessage.cs" />
+    <Compile Include="ConfigCommandBus.cs" />
+    <Compile Include="ConfigureCommandBus.cs" />
+    <Compile Include="Config\CommandBusConfig.cs" />
+    <Compile Include="Config\CommandEndpointMapping.cs" />
+    <Compile Include="Config\CommandEndpointMappingCollection.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="CommandMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

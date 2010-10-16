@@ -1,8 +1,9 @@
-﻿using NServiceBus;
+﻿using System;
+using NServiceBus;
 using NServiceBus.ObjectBuilder;
+using NServiceBus.Unicast;
 using SimpleCqrs.Commanding;
 using SimpleCqrs.Eventing;
-using SimpleCqrs.NServiceBus.Commanding;
 
 namespace SimpleCqrs.NServiceBus
 {
@@ -17,30 +18,29 @@ namespace SimpleCqrs.NServiceBus
 
         public void Configure(Configure config)
         {
-            runtime.CommandBus = new CommandBus();
+            Configurer = config.Configurer;
+            Builder = config.Builder;
+
             Configurer.RegisterSingleton<SimpleCqrsRuntime<TServiceLocator>>(runtime);
-            Configurer.RegisterSingleton<ICommandBus>(runtime.CommandBus);
-            Configurer.ConfigureComponent(typeof(CommandMessageHandler), ComponentCallModelEnum.Singleton);
         }
 
-        public ConfigSimpleCqrs<TServiceLocator> EventStore(IEventStore eventStore)
+        public ConfigSimpleCqrs<TServiceLocator> EventStore(Func<IServiceLocator,IEventStore> eventStoreFactoryMethod)
         {
-            runtime.EventStore = eventStore;
-            Configurer.RegisterSingleton<IEventStore>(eventStore);
+            runtime.EventStoreFactoryMethod = eventStoreFactoryMethod;
             return this;
         }
 
         public ConfigSimpleCqrs<TServiceLocator> EventBus()
         {
-            runtime.EventBus = new EventBus();
-            Configurer.RegisterSingleton<IEventBus>(runtime.EventBus);
+            var eventBus = new EventBus();
+            runtime.EventBusFactoryMethod = serviceLocator => eventBus;
+            Configurer.RegisterSingleton<IEventBus>(eventBus);
             return this;
         }
 
-        public ConfigSimpleCqrs<TServiceLocator> EventBus(IEventBus eventBus)
+        public ConfigSimpleCqrs<TServiceLocator> EventBus(Func<IServiceLocator, IEventBus> eventBusFactoryMethod)
         {
-            runtime.EventBus = eventBus;
-            Configurer.RegisterSingleton<IEventBus>(eventBus);
+            runtime.EventBusFactoryMethod = eventBusFactoryMethod;
             return this;
         }
 
@@ -54,6 +54,13 @@ namespace SimpleCqrs.NServiceBus
         public ConfigSimpleCqrs<TServiceLocator> StartSimpleCqrs()
         {
             runtime.Start();
+            
+            var commandBus = ServiceLocator.Current.Resolve<ICommandBus>();
+            var eventBus = ServiceLocator.Current.Resolve<IEventBus>();
+
+            Configurer.RegisterSingleton<ICommandBus>(commandBus);
+            Configurer.RegisterSingleton<IEventStore>(eventBus);
+
             return this;
         }
     }

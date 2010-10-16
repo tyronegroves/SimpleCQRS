@@ -5,17 +5,20 @@ namespace SimpleCqrs.NServiceBus.Commanding
 {
     public static class ExtensionMethods
     {
-        public static ICallback ExecuteWithCallback(this ICommandBus commandBus, ICommand command)
+        public static ICallback ExecuteWithCallback<TCommand>(this ICommandBus commandBus, TCommand command) where TCommand : ICommand
         {
             var bus = (CommandBus)commandBus;
-            return bus.InnerBus.Send<CommandWithReturnValueMessage>(message => message.Command = command);
+            var destination = bus.GetDestinationForCommandType<TCommand>();
+            return bus.InnerBus.Send<CommandWithReturnValueMessage>(destination, message => message.Command = command);
         }
 
-        public static int ExecuteWeb(this ICommandBus commandBus, ICommand command)
+        public static int ExecuteWeb<TCommand>(this ICommandBus commandBus, TCommand command) where TCommand : ICommand
         {
             var bus = (CommandBus)commandBus;
+            var destination = bus.GetDestinationForCommandType<TCommand>();
             var returnValue = 0;
-            bus.InnerBus.Send<CommandWithReturnValueMessage>(message => message.Command = command)
+
+            bus.InnerBus.Send<CommandWithReturnValueMessage>(destination, message => message.Command = command)
                 .RegisterWebCallback(errorCode => returnValue = errorCode, null);
 
             return returnValue;

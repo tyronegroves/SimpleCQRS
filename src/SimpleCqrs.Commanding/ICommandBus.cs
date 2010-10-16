@@ -2,7 +2,7 @@
 {
     public interface ICommandBus
     {
-        int Execute(ICommand command);
-        void Send(ICommand command);
+        int Execute<TCommand>(TCommand command) where TCommand : ICommand;
+        void Send<TCommand>(TCommand command) where TCommand : ICommand;
     }
 }

@@ -1,30 +1,44 @@
-﻿using NServiceBus;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using NServiceBus;
 using SimpleCqrs.Commanding;
 
 namespace SimpleCqrs.NServiceBus.Commanding
 {
     public class CommandBus : ICommandBus
     {
-        private IBus bus;
+        private readonly IDictionary<Type, string> commandTypeToDestinationLookup;
 
-        public IBus InnerBus
+        public CommandBus(IBus bus, IDictionary<Type, string> commandTypeToDestinationLookup)
         {
-            get { return bus ?? (bus = Configure.Instance.Builder.Build<IBus>()); }
+            this.commandTypeToDestinationLookup = commandTypeToDestinationLookup;
+            InnerBus = bus;
         }
 
-        public int Execute(ICommand command)
+        public IBus InnerBus { get; private set; }
+
+        public string GetDestinationForCommandType<TCommand>()
         {
-            var returnValue = 0;
+            return commandTypeToDestinationLookup[typeof(TCommand)];
+        }
+
+        public int Execute<TCommand>(TCommand command) where TCommand : ICommand
+        {
+            var destination = GetDestinationForCommandType<TCommand>();
+            var asyncResult = InnerBus
+                .Send<CommandWithReturnValueMessage>(destination, message => message.Command = command)
+                .Register(state => {}, null);
+
+            asyncResult.AsyncWaitHandle.WaitOne();
             
-            InnerBus.Send<CommandWithReturnValueMessage>(message => message.Command = command)
-                .Register(errorCode => returnValue = errorCode);
-
-            return returnValue;
+            return ((CompletionResult)asyncResult.AsyncState).ErrorCode;
         }
 
-        public void Send(ICommand command)
+        public void Send<TCommand>(TCommand command) where TCommand : ICommand
         {
-            InnerBus.Send<CommandMessage>(message => message.Command = command);
+            var destination = commandTypeToDestinationLookup[typeof(TCommand)];
+            InnerBus.Send<CommandMessage>(destination, message => message.Command = command);
         }
     }
 }

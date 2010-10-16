@@ -15,13 +15,13 @@ namespace SimpleCqrs.Commanding
                 CommandInvokerDictionaryBuilderHelpers.CreateADictionaryOfCommandInvokers(typeCatalog, serviceLocator);
         }
 
-        public int Execute(ICommand command)
+        public int Execute<TCommand>(TCommand command) where TCommand : ICommand
         {
             var commandHandler = GetTheCommandHandler(command);
             return commandHandler.Execute(command);
         }
 
-        public void Send(ICommand command)
+        public void Send<TCommand>(TCommand command) where TCommand : ICommand
         {
             var commandHandler = GetTheCommandHandler(command);
             commandHandler.Send(command);
