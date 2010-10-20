@@ -12,7 +12,7 @@ namespace SimpleCqrs.Commanding
             Handle(handlingContext.Command);
         }
 
-        protected abstract void Handle(TCommand command);
+        public abstract void Handle(TCommand command);
 
         protected void Return(int value)
         {

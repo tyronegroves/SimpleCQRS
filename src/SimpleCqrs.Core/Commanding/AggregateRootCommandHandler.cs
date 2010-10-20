@@ -32,11 +32,11 @@ namespace SimpleCqrs.Commanding
 
         protected int ValidationResult { get; private set; }
 
-        protected virtual int ValidateCommand(TCommand command)
+        public virtual int ValidateCommand(TCommand command)
         {
             return 0;
         }
 
-        protected abstract void Handle(TCommand command, TAggregateRoot aggregateRoot);
+        public abstract void Handle(TCommand command, TAggregateRoot aggregateRoot);
     }
 }
