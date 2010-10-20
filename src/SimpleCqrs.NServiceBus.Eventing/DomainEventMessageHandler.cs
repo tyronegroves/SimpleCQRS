@@ -3,7 +3,7 @@ using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs.NServiceBus.Eventing
 {
-    public class DomainEventMessageHandler : IHandleMessages<DomainEventMessage>
+    public class DomainEventMessageHandler : IHandleMessages<IDomainEventMessage>
     {
         private readonly IEventBus eventBus;
 
@@ -12,9 +12,10 @@ namespace SimpleCqrs.NServiceBus.Eventing
             this.eventBus = eventBus;
         }
 
-        public void Handle(DomainEventMessage message)
+        public void Handle(IDomainEventMessage message)
         {
-            eventBus.PublishEvent(message.DomainEvent);
+            var domainEvent = message.DomainEvent;
+            eventBus.PublishEvent(domainEvent);
         }
     }
 }

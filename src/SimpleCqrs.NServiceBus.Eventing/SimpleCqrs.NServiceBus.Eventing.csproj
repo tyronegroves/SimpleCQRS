@@ -42,15 +42,20 @@
       <HintPath>..\..\lib\NServiceBus.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigEventBus.cs" />
     <Compile Include="ConfigureEventBus.cs" />
+    <Compile Include="Config\DomainEventBusConfig.cs" />
+    <Compile Include="Config\DomainEventEndpointMapping.cs" />
+    <Compile Include="Config\DomainEventEndpointMappingCollection.cs" />
     <Compile Include="DomainEventHandlerFactory.cs" />
     <Compile Include="DomainEventMessage.cs" />
     <Compile Include="DomainEventMessageHandler.cs" />
+    <Compile Include="IDomainEventMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

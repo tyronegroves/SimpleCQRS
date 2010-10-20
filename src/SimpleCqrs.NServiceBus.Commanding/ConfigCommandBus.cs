@@ -18,6 +18,9 @@ namespace SimpleCqrs.NServiceBus.Commanding
 
         public void Configure(Configure config)
         {
+            Configurer = config.Configurer;
+            Builder = config.Builder;
+
             var commandBusConfig = GetConfigSection<CommandBusConfig>();
             var commandTypes = TypesToScan
                 .Where(type => typeof(ICommand).IsAssignableFrom(type))
