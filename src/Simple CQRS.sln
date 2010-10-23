@@ -36,11 +36,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Domain", "Simple
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{51C20E77-8726-49E8-9061-161DF28973E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.NServiceBus.Commanding", "SimpleCqrs.NServiceBus.Commanding\SimpleCqrs.NServiceBus.Commanding.csproj", "{D91BEC84-D5A4-4319-B8E2-C98DF7C1E498}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.NServiceBus.Commanding", "Extensions\SimpleCqrs.NServiceBus.Commanding\SimpleCqrs.NServiceBus.Commanding.csproj", "{D91BEC84-D5A4-4319-B8E2-C98DF7C1E498}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.NServiceBus", "SimpleCqrs.NServiceBus\SimpleCqrs.NServiceBus.csproj", "{07C2BF77-9646-4C39-BDB2-852B76AA6C75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.NServiceBus", "Extensions\SimpleCqrs.NServiceBus\SimpleCqrs.NServiceBus.csproj", "{07C2BF77-9646-4C39-BDB2-852B76AA6C75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.NServiceBus.Eventing", "SimpleCqrs.NServiceBus.Eventing\SimpleCqrs.NServiceBus.Eventing.csproj", "{D12D4CB2-4703-4DC7-A0F2-1D3FFC657230}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.NServiceBus.Eventing", "Extensions\SimpleCqrs.NServiceBus.Eventing\SimpleCqrs.NServiceBus.Eventing.csproj", "{D12D4CB2-4703-4DC7-A0F2-1D3FFC657230}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs", "SimpleCqrs\SimpleCqrs.csproj", "{E04C12B5-A6D3-4D64-9F38-896BEE68162E}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -99,6 +101,10 @@ Global
 		{D12D4CB2-4703-4DC7-A0F2-1D3FFC657230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D12D4CB2-4703-4DC7-A0F2-1D3FFC657230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D12D4CB2-4703-4DC7-A0F2-1D3FFC657230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E04C12B5-A6D3-4D64-9F38-896BEE68162E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04C12B5-A6D3-4D64-9F38-896BEE68162E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04C12B5-A6D3-4D64-9F38-896BEE68162E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04C12B5-A6D3-4D64-9F38-896BEE68162E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\binaries\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -40,7 +40,6 @@
     <Compile Include="Commanding\CommandInvokerDictionaryBuilderHelpers.cs" />
     <Compile Include="Commanding\ICommandErrorHandler.cs" />
     <Compile Include="Eventing\DomainEventHandlerFactory.cs" />
-    <Compile Include="ServiceLocator.cs" />
     <Compile Include="SimpleCqrsRuntime.cs" />
     <Compile Include="Commanding\CommandHandler.cs" />
     <Compile Include="Commanding\CommandHandlerNotFoundException.cs" />
@@ -54,24 +53,28 @@
     <Compile Include="Eventing\IEventStore.cs" />
     <Compile Include="Eventing\ISnapshotStore.cs" />
     <Compile Include="Eventing\NullSnapshotStore.cs" />
-    <Compile Include="IServiceLocator.cs" />
-    <Compile Include="ITypeCatalog.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceResolutionException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
       <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
       <Name>SimpleCqrs.Commanding</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\SimpleCqrs.Domain\SimpleCqrs.Domain.csproj">
       <Project>{2CF7F99A-4C52-4B48-B1A9-CECBC512D7F6}</Project>
       <Name>SimpleCqrs.Domain</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
       <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
       <Name>SimpleCqrs.Eventing</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleCqrs\SimpleCqrs.csproj">
+      <Project>{E04C12B5-A6D3-4D64-9F38-896BEE68162E}</Project>
+      <Name>SimpleCqrs</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
