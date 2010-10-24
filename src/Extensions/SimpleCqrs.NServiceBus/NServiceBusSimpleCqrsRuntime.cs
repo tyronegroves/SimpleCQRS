@@ -41,7 +41,7 @@ namespace SimpleCqrs.NServiceBus
 
         public ISnapshotStore SnapshotStore { get; set; }
         public TServiceLocator ServiceLocator { get; set; }
-        public CommandBus CommandBus { get; set; }
+        public NsbCommandBus CommandBus { get; set; }
         public Func<IServiceLocator, IEventBus> EventBusFactoryMethod { get; set; }
         public Func<IServiceLocator, IEventStore> EventStoreFactoryMethod { get; set; }
     }

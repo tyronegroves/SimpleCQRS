@@ -49,14 +49,14 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandBus.cs" />
+    <Compile Include="NsbCommandBus.cs" />
     <Compile Include="CommandWithReturnValueMessage.cs" />
     <Compile Include="ConfigCommandBus.cs" />
     <Compile Include="ConfigureCommandBus.cs" />
     <Compile Include="Config\CommandBusConfig.cs" />
     <Compile Include="Config\CommandEndpointMapping.cs" />
     <Compile Include="Config\CommandEndpointMappingCollection.cs" />
-    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="CommandBusExtensionMethods.cs" />
     <Compile Include="CommandMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

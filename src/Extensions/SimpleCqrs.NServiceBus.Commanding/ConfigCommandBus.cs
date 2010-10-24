@@ -31,14 +31,16 @@ namespace SimpleCqrs.NServiceBus.Commanding
                 foreach(var commandType in commandTypes)
                 {
                     if(CommandsIsTypeNameOrAssemblieNameForCommandType(commandType, mapping.Commands))
+                    {
                         commandTypeToDestinationLookup.Add(commandType, mapping.Endpoint);
+                    }
                 }
             }
         }
 
         private static bool CommandsIsTypeNameOrAssemblieNameForCommandType(Type commandType, string commands)
         {
-            return commandType.AssemblyQualifiedName == commands || commandType.Assembly.GetName().Name == commands;
+            return commandType.AssemblyQualifiedName.ToLower() == commands.ToLower() || commandType.Assembly.GetName().Name.ToLower() == commands.ToLower();
         }
     }
 }

@@ -5,11 +5,11 @@ using SimpleCqrs.Commanding;
 
 namespace SimpleCqrs.NServiceBus.Commanding
 {
-    public class CommandBus : ICommandBus
+    public class NsbCommandBus : ICommandBus
     {
         private readonly IDictionary<Type, string> commandTypeToDestinationLookup;
 
-        public CommandBus(IBus bus, IDictionary<Type, string> commandTypeToDestinationLookup)
+        public NsbCommandBus(IBus bus, IDictionary<Type, string> commandTypeToDestinationLookup)
         {
             this.commandTypeToDestinationLookup = commandTypeToDestinationLookup;
             InnerBus = bus;
