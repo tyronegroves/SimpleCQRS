@@ -40,6 +40,7 @@
     <Compile Include="Commanding\CommandInvokerDictionaryBuilderHelpers.cs" />
     <Compile Include="Commanding\ICommandErrorHandler.cs" />
     <Compile Include="Eventing\DomainEventHandlerFactory.cs" />
+    <Compile Include="Eventing\MemoryEventStore.cs" />
     <Compile Include="SimpleCqrsRuntime.cs" />
     <Compile Include="Commanding\CommandHandler.cs" />
     <Compile Include="Commanding\CommandHandlerNotFoundException.cs" />

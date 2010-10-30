@@ -56,7 +56,10 @@ namespace SimpleCqrs
             return new NullSnapshotStore();
         }
 
-        protected abstract IEventStore GetEventStore(IServiceLocator serviceLocator);
+        protected virtual IEventStore GetEventStore(IServiceLocator serviceLocator)
+        {
+            return new MemoryEventStore();
+        }
 
         protected virtual ITypeCatalog GetTypeCatalog(IEnumerable<Assembly> assembliesToScan)
         {

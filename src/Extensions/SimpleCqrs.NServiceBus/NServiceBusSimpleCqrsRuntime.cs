@@ -9,14 +9,20 @@ namespace SimpleCqrs.NServiceBus
 {
     public class NServiceBusSimpleCqrsRuntime<TServiceLocator> : SimpleCqrsRuntime<TServiceLocator> where TServiceLocator : class, IServiceLocator
     {
+        public ISnapshotStore SnapshotStore { get; set; }
+        public TServiceLocator ServiceLocator { get; set; }
+        public NsbCommandBus CommandBus { get; set; }
+        public Func<IServiceLocator, IEventBus> EventBusFactoryMethod { get; set; }
+        public Func<IServiceLocator, IEventStore> EventStoreFactoryMethod { get; set; }
+
         protected override IEventStore GetEventStore(IServiceLocator serviceLocator)
         {
-            return EventStoreFactoryMethod(serviceLocator);
+            return EventStoreFactoryMethod != null ? EventStoreFactoryMethod(serviceLocator) : base.GetEventStore(serviceLocator);
         }
 
         protected override IEventBus GetEventBus(IServiceLocator serviceLocator)
         {
-            return EventBusFactoryMethod != null ? EventBusFactoryMethod(serviceLocator) : serviceLocator.Resolve<LocalEventBus>();
+            return EventBusFactoryMethod != null ? EventBusFactoryMethod(serviceLocator) : BuildLocalEventBus(serviceLocator);
         }
 
         protected override ISnapshotStore GetSnapshotStore(IServiceLocator serviceLocator)
@@ -39,10 +45,14 @@ namespace SimpleCqrs.NServiceBus
             return CommandBus ?? base.GetCommandBus(serviceLocator);
         }
 
-        public ISnapshotStore SnapshotStore { get; set; }
-        public TServiceLocator ServiceLocator { get; set; }
-        public NsbCommandBus CommandBus { get; set; }
-        public Func<IServiceLocator, IEventBus> EventBusFactoryMethod { get; set; }
-        public Func<IServiceLocator, IEventStore> EventStoreFactoryMethod { get; set; }
+        private static IEventBus BuildLocalEventBus(IServiceLocator serviceLocator)
+        {
+            var typeCatalog = serviceLocator.Resolve<ITypeCatalog>();
+            var eventHandlerTypes = typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>));
+            var domainEventHandlerFactory = serviceLocator.Resolve<DomainEventHandlerFactory>();
+
+            return new LocalEventBus(eventHandlerTypes, domainEventHandlerFactory);
+        }
+
     }
 }
