@@ -16,11 +16,12 @@ namespace SimpleCqrs.EventStore.MongoDb
 
         public MongoEventStore(string connectionString, ITypeCatalog typeCatalog)
         {
+            var connectionStringBuilder = new MongoConnectionStringBuilder(connectionString);
             var configuration = BuildMongoConfiguration(typeCatalog, connectionString);
             var mongo = new Mongo(configuration);
             mongo.Connect();
 
-            database = mongo.GetDatabase("eventstore");
+            database = mongo.GetDatabase(connectionStringBuilder.Database);
         }
 
         private static MongoConfiguration BuildMongoConfiguration(ITypeCatalog domainEventTypeCatalog, string connectionString)

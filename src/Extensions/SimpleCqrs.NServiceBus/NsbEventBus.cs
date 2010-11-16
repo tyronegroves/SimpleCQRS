@@ -18,8 +18,8 @@ namespace SimpleCqrs.NServiceBus
 
         public void PublishEvents(IEnumerable<DomainEvent> domainEvents)
         {
-            var domainEventMessages = domainEvents.Select(CreateDomainEventMessage).ToArray();
-            Bus.Publish(domainEventMessages);
+            var domainEventMessages = domainEvents.Select(CreateDomainEventMessage).ToList();
+            domainEventMessages.ForEach(message => Bus.Publish(message));
         }
 
         private IBus Bus

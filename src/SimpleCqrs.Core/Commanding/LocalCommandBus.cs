@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading;
 
 namespace SimpleCqrs.Commanding
 {
@@ -30,7 +29,7 @@ namespace SimpleCqrs.Commanding
         private CommandHandlerInvoker GetTheCommandHandler(ICommand command)
         {
             CommandHandlerInvoker commandInvoker;
-            if (!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
+            if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
                 throw new CommandHandlerNotFoundException(command.GetType());
             return commandInvoker;
         }
@@ -51,21 +50,14 @@ namespace SimpleCqrs.Commanding
             public int Execute(ICommand command)
             {
                 var handlingContext = CreateTheCommandHandlingContext(command);
-
-                ThreadPool.QueueUserWorkItem(delegate
-                                                 {
-                                                     ExecuteTheCommandHandler(handlingContext);
-                                                     SignalThatTheTreadIsComplete(handlingContext);
-                                                 });
-                WaitForTheThreadToComplete(handlingContext);
-
-                return ((ICommandHandlingContext) handlingContext).ReturnValue;
+                ExecuteTheCommandHandler(handlingContext);
+                return ((ICommandHandlingContext)handlingContext).ReturnValue;
             }
 
             public void Send(ICommand command)
             {
                 var handlingContext = CreateTheCommandHandlingContext(command);
-                ThreadPool.QueueUserWorkItem(state => ExecuteTheCommandHandler((ICommandHandlingContext<ICommand>)state), handlingContext);
+                ExecuteTheCommandHandler(handlingContext);
             }
 
             private void ExecuteTheCommandHandler(ICommandHandlingContext<ICommand> handlingContext)
@@ -75,20 +67,10 @@ namespace SimpleCqrs.Commanding
                 handleMethod.Invoke(commandHandler, new object[] {handlingContext});
             }
 
-            private static void SignalThatTheTreadIsComplete(ICommandHandlingContext<ICommand> handlingContext)
-            {
-                ((ICommandHandlingContext) handlingContext).WaitHandle.Set();
-            }
-
-            private static void WaitForTheThreadToComplete(ICommandHandlingContext<ICommand> handlingContext)
-            {
-                ((ICommandHandlingContext) handlingContext).WaitHandle.WaitOne();
-            }
-
             private ICommandHandlingContext<ICommand> CreateTheCommandHandlingContext(ICommand command)
             {
-                var handlingContextType = typeof (CommandHandlingContext<>).MakeGenericType(commandType);
-                return (ICommandHandlingContext<ICommand>) Activator.CreateInstance(handlingContextType, command);
+                var handlingContextType = typeof(CommandHandlingContext<>).MakeGenericType(commandType);
+                return (ICommandHandlingContext<ICommand>)Activator.CreateInstance(handlingContextType, command);
             }
 
             private object CreateTheCommandHandler()
@@ -98,7 +80,7 @@ namespace SimpleCqrs.Commanding
 
             private MethodInfo GetTheHandleMethod()
             {
-                return typeof (IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
+                return typeof(IHandleCommands<>).MakeGenericType(commandType).GetMethod("Handle");
             }
         }
 
@@ -106,17 +88,13 @@ namespace SimpleCqrs.Commanding
         {
             ICommand Command { get; }
             int ReturnValue { get; }
-            ManualResetEvent WaitHandle { get; }
         }
 
         private class CommandHandlingContext<TCommand> : ICommandHandlingContext, ICommandHandlingContext<TCommand>
             where TCommand : ICommand
         {
-            private readonly ManualResetEvent waitHandle;
-
             public CommandHandlingContext(TCommand command)
             {
-                waitHandle = new ManualResetEvent(false);
                 Command = command;
             }
 
@@ -127,17 +105,11 @@ namespace SimpleCqrs.Commanding
                 get { return Command; }
             }
 
-            ManualResetEvent ICommandHandlingContext.WaitHandle
-            {
-                get { return waitHandle; }
-            }
-
             public int ReturnValue { get; private set; }
 
             public void Return(int value)
             {
                 ReturnValue = value;
-                waitHandle.Set();
             }
         }
     }

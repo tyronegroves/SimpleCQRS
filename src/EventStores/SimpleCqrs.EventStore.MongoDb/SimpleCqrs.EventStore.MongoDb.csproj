@@ -31,13 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB">
+    <Reference Include="MongoDB, Version=0.90.0.1, Culture=neutral, PublicKeyToken=f61bd00ba2535278, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\MongoDB.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="MongoDB.GridFS">
+    <Reference Include="MongoDB.GridFS, Version=0.90.0.1, Culture=neutral, PublicKeyToken=f61bd00ba2535278, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\MongoDB.GridFS.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
