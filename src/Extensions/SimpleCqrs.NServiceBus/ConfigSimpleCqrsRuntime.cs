@@ -8,7 +8,7 @@ namespace SimpleCqrs.NServiceBus
     public class ConfigSimpleCqrs<TServiceLocator> : Configure where TServiceLocator : class, IServiceLocator
     {
         private readonly NServiceBusSimpleCqrsRuntime<TServiceLocator> runtime;
-
+        
         public ConfigSimpleCqrs(NServiceBusSimpleCqrsRuntime<TServiceLocator> runtime)
         {
             this.runtime = runtime;
