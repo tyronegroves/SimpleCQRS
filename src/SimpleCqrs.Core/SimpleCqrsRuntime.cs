@@ -22,8 +22,10 @@ namespace SimpleCqrs
             serviceLocator.Register(GetEventStore(serviceLocator));
             serviceLocator.Register<IDomainRepository, DomainRepository>();
 
-            ServiceLocator.SetCurrent(serviceLocator);
+            SimpleCqrs.ServiceLocator.SetCurrent(serviceLocator);
         }
+
+        public IServiceLocator ServiceLocator { get { return SimpleCqrs.ServiceLocator.Current; } }
 
         private ITypeCatalog BuildTheTypeCatalog(TServiceLocator serviceLocator)
         {
@@ -33,7 +35,7 @@ namespace SimpleCqrs
 
         public void Shutdown()
         {
-            var serviceLocator = ServiceLocator.Current;
+            var serviceLocator = ServiceLocator;
             serviceLocator.Dispose();
         }
 
