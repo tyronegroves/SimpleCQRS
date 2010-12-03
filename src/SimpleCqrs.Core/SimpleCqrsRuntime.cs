@@ -14,7 +14,7 @@ namespace SimpleCqrs
         {
             var serviceLocator = GetServiceLocator();
 
-            serviceLocator.Register<IServiceLocator>(serviceLocator);
+            serviceLocator.Register<IServiceLocator>(() => serviceLocator);
             serviceLocator.Register(BuildTheTypeCatalog(serviceLocator));
             serviceLocator.Register(GetCommandBus(serviceLocator));
             serviceLocator.Register(GetEventBus(serviceLocator));
