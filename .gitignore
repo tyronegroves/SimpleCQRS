@@ -4,6 +4,7 @@
 *.cache
 obj
 bin
+binaries
 *.csproj.user
 * Thumbs.db
 *.cache
