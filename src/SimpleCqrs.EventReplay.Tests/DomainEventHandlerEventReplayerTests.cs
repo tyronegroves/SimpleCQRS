@@ -69,19 +69,22 @@ namespace SimpleCqrs.EventReplay.Tests
         {
         }
 
-        public class AppleDomainEventHandler : IHandleDomainEvents<AppleDomainEvent>
+        public class AppleDomainEventHandler : BaseDomainEventHandler, IHandleDomainEvents<AppleDomainEvent>
         {
-            private readonly IList<AppleDomainEvent> list = new List<AppleDomainEvent>();
-
-            public IEnumerable<AppleDomainEvent> HandledEvents
-            {
-                get { return list; }
-            }
-
             public void Handle(AppleDomainEvent domainEvent)
             {
-                list.Add(domainEvent);
+                HandledEvents.Add(domainEvent);
             }
+        }
+
+        public class BaseDomainEventHandler
+        {
+            public BaseDomainEventHandler()
+            {
+                HandledEvents = new List<DomainEvent>();
+            }
+
+            public IList<DomainEvent> HandledEvents { get; set; }
         }
 
         public class TestRuntime : SimpleCqrsRuntime<UnityServiceLocator>
