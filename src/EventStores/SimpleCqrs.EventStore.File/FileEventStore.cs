@@ -54,6 +54,11 @@ namespace SimpleCqrs.EventStore.File
             }
         }
 
+        public IEnumerable<DomainEvent> GetEventsOfTheseTypes(IEnumerable<Type> domainEventTypes)
+        {
+            throw new NotImplementedException();
+        }
+
         private IEnumerable<dynamic> GetEventInfosForAggregateRoot(Guid aggregateRootId, int startSequence)
         {
             var aggregateRootDirectory = Path.Combine(baseDirectory, aggregateRootId.ToString());

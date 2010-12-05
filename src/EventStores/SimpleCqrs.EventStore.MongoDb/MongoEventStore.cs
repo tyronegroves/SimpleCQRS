@@ -54,6 +54,11 @@ namespace SimpleCqrs.EventStore.MongoDb
             eventsCollection.Insert(domainEvents);
         }
 
+        public IEnumerable<DomainEvent> GetEventsOfTheseTypes(IEnumerable<Type> domainEventTypes)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void MapEventType(Type type, MappingStoreBuilder mapping)
         {
             MapMethod.MakeGenericMethod(type)
