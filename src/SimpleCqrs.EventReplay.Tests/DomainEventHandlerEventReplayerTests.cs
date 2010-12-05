@@ -33,7 +33,7 @@ namespace SimpleCqrs.EventReplay.Tests
         }
 
         [TestMethod]
-        public void Replays_events_from_the_event_store()
+        public void Replays_events_when_there_is_one_handler_and_one_event()
         {
             var domainEvent = new AppleDomainEvent();
             var appleDomainEventHandler = new AppleDomainEventHandler();
