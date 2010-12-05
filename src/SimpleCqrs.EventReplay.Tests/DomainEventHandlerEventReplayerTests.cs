@@ -36,12 +36,11 @@ namespace SimpleCqrs.EventReplay.Tests
         public void Replays_events_from_the_event_store()
         {
             var domainEvent = new AppleDomainEvent();
-            var domainEvents = new DomainEvent[] {domainEvent};
-
-            var types = new[] {typeof (AppleDomainEvent)};
-            ReturnTheseEventsForTheseTypes(domainEvents, types);
-
             var appleDomainEventHandler = new AppleDomainEventHandler();
+
+            ReturnTheseEventsForTheseTypes(new[] {domainEvent},
+                                           new[] {typeof (AppleDomainEvent)});
+
             runtime.ServiceLocator.Register(appleDomainEventHandler);
 
             ReplayEventsForThisHandler<AppleDomainEventHandler>();
@@ -55,7 +54,7 @@ namespace SimpleCqrs.EventReplay.Tests
             domainEventHandlerEventReplayer.ReplayEventsForThisHandler<T>();
         }
 
-        private void ReturnTheseEventsForTheseTypes(DomainEvent[] domainEvents, Type[] types)
+        private void ReturnTheseEventsForTheseTypes(IEnumerable<DomainEvent> domainEvents, Type[] types)
         {
             fakeEventStore.Setup(x => x.GetEventsOfTheseTypes(It.IsAny<IEnumerable<Type>>()))
                 .Returns((IEnumerable<Type> t) =>
