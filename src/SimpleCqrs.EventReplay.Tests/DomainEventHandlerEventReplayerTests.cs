@@ -119,14 +119,6 @@ namespace SimpleCqrs.EventReplay.Tests
 
         public class OrangeDomainEvent : DomainEvent { }
 
-        public class OrangeDomainEventHandler : BaseDomainEventHandler, IHandleDomainEvents<OrangeDomainEvent>
-        {
-            public void Handle(OrangeDomainEvent domainEvent)
-            {
-                HandledEvents.Add(domainEvent);
-            }
-        }
-
         public class FruitDomainEventHandler : BaseDomainEventHandler, IHandleDomainEvents<AppleDomainEvent>,
             IHandleDomainEvents<OrangeDomainEvent>
         {
