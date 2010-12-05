@@ -33,7 +33,7 @@ namespace SimpleCqrs.EventReplay.Tests
         }
 
         [TestMethod]
-        public void Replays_events_when_there_is_one_handler_and_one_event()
+        public void Replays_one_event_when_there_is_one_event()
         {
             var domainEvent = new AppleDomainEvent();
             var appleDomainEventHandler = new AppleDomainEventHandler();
@@ -46,6 +46,26 @@ namespace SimpleCqrs.EventReplay.Tests
             ReplayEventsForThisHandler<AppleDomainEventHandler>();
 
             appleDomainEventHandler.HandledEvents.Single().ShouldBeSameAs(domainEvent);
+        }
+
+        [TestMethod]
+        public void Replays_two_events_when_there_are_two_events()
+        {
+            var eventToBeHandled = new AppleDomainEvent();
+            var anotherEventToBeHandled = new AppleDomainEvent();
+            
+            ReturnTheseEventsForTheseTypes(new DomainEvent[] { anotherEventToBeHandled, eventToBeHandled },
+                                           new[] { typeof(AppleDomainEvent) });
+
+            var appleDomainEventHandler = new AppleDomainEventHandler();
+            runtime.ServiceLocator.Register(appleDomainEventHandler);
+
+            ReplayEventsForThisHandler<AppleDomainEventHandler>();
+
+            var handledEvents = appleDomainEventHandler.HandledEvents;
+            handledEvents.Count.ShouldEqual(2);
+            handledEvents.Contains(eventToBeHandled).ShouldBeTrue();
+            handledEvents.Contains(anotherEventToBeHandled).ShouldBeTrue();
         }
 
         private void ReplayEventsForThisHandler<T>() where T : class
@@ -72,6 +92,16 @@ namespace SimpleCqrs.EventReplay.Tests
         public class AppleDomainEventHandler : BaseDomainEventHandler, IHandleDomainEvents<AppleDomainEvent>
         {
             public void Handle(AppleDomainEvent domainEvent)
+            {
+                HandledEvents.Add(domainEvent);
+            }
+        }
+
+        public class OrangeDomainEvent : DomainEvent { }
+
+        public class OrangeDomainEventHandler : BaseDomainEventHandler, IHandleDomainEvents<OrangeDomainEvent>
+        {
+            public void Handle(OrangeDomainEvent domainEvent)
             {
                 HandledEvents.Add(domainEvent);
             }
