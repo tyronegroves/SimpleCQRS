@@ -68,6 +68,26 @@ namespace SimpleCqrs.EventReplay.Tests
             handledEvents.Contains(anotherEventToBeHandled).ShouldBeTrue();
         }
 
+        [TestMethod]
+        public void Replays_two_different_events_when_the_handler_handles_both_events()
+        {
+            var eventToBeHandled = new AppleDomainEvent();
+            var anotherEventToBeHandled = new OrangeDomainEvent();
+
+            ReturnTheseEventsForTheseTypes(new DomainEvent[] { anotherEventToBeHandled, eventToBeHandled },
+                                           new[] { typeof(AppleDomainEvent), typeof(OrangeDomainEvent) });
+
+            var fruitDomainEventHandler = new FruitDomainEventHandler();
+            runtime.ServiceLocator.Register(fruitDomainEventHandler);
+
+            ReplayEventsForThisHandler<FruitDomainEventHandler>();
+
+            var handledEvents = fruitDomainEventHandler.HandledEvents;
+            handledEvents.Count.ShouldEqual(2);
+            handledEvents.Contains(eventToBeHandled).ShouldBeTrue();
+            handledEvents.Contains(anotherEventToBeHandled).ShouldBeTrue();
+        }
+
         private void ReplayEventsForThisHandler<T>() where T : class
         {
             var domainEventHandlerEventReplayer = new DomainEventHandlerEventReplayer(fakeEventStore.Object, runtime.ServiceLocator);
@@ -101,6 +121,20 @@ namespace SimpleCqrs.EventReplay.Tests
 
         public class OrangeDomainEventHandler : BaseDomainEventHandler, IHandleDomainEvents<OrangeDomainEvent>
         {
+            public void Handle(OrangeDomainEvent domainEvent)
+            {
+                HandledEvents.Add(domainEvent);
+            }
+        }
+
+        public class FruitDomainEventHandler : BaseDomainEventHandler, IHandleDomainEvents<AppleDomainEvent>,
+            IHandleDomainEvents<OrangeDomainEvent>
+        {
+            public void Handle(AppleDomainEvent domainEvent)
+            {
+                HandledEvents.Add(domainEvent);
+            }
+
             public void Handle(OrangeDomainEvent domainEvent)
             {
                 HandledEvents.Add(domainEvent);

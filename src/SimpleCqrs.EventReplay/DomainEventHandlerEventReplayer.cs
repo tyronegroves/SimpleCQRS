@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using SimpleCqrs.Eventing;
 
@@ -18,16 +19,31 @@ namespace SimpleCqrs.EventReplay
 
         public void ReplayEventsForThisHandler<T>() where T : class
         {
-            var handlerType = typeof (T);
+            var events = GetTheEventsToReplay<T>();
 
-            var eventType = handlerType.GetInterfaces().First().GetGenericArguments().First();
-
-            var events = eventStore.GetEventsOfTheseTypes(new[] {eventType});
-
-            var handler = serviceLocator.Resolve(handlerType);
+            var handler = GetTheHandler<T>();
 
             foreach (var @event in events)
-                handlerType.InvokeMember("Handle", BindingFlags.Default | BindingFlags.InvokeMethod, null, handler, new object[] {@event}, null);
+                HandleTheEvent<T>(handler, @event);
+        }
+
+        private static void HandleTheEvent<T>(object handler, DomainEvent @event)
+        {
+            typeof (T).InvokeMember("Handle", BindingFlags.Default | BindingFlags.InvokeMethod, null, handler, new object[] {@event}, null);
+        }
+
+        private IEnumerable<DomainEvent> GetTheEventsToReplay<T>()
+        {
+            var eventTypes = typeof (T).GetInterfaces()
+                .Where(x => x.FullName.StartsWith("SimpleCqrs.Eventing.IHandleDomainEvents`1"))
+                .Select(z => z.GetGenericArguments().First());
+
+            return eventStore.GetEventsOfTheseTypes(eventTypes);
+        }
+
+        private object GetTheHandler<T>()
+        {
+            return serviceLocator.Resolve(typeof (T));
         }
     }
 }
