@@ -105,6 +105,7 @@ namespace SimpleCqrs.EventReplay.Tests
                              });
         }
 
+        #region testing domain events and handlers
         public class AppleDomainEvent : DomainEvent
         {
         }
@@ -142,7 +143,9 @@ namespace SimpleCqrs.EventReplay.Tests
 
             public IList<DomainEvent> HandledEvents { get; set; }
         }
+        #endregion
 
+        #region test runtime
         public class TestRuntime : SimpleCqrsRuntime<UnityServiceLocator>
         {
             private readonly IEventStore eventStore;
@@ -157,5 +160,6 @@ namespace SimpleCqrs.EventReplay.Tests
                 return eventStore;
             }
         }
+        #endregion
     }
 }
