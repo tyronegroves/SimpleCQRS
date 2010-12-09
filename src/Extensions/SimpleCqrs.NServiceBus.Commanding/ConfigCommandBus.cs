@@ -40,7 +40,10 @@ namespace SimpleCqrs.NServiceBus.Commanding
 
         private static bool CommandsIsTypeNameOrAssemblieNameForCommandType(Type commandType, string commands)
         {
-            return commandType.AssemblyQualifiedName.ToLower() == commands.ToLower() || commandType.Assembly.GetName().Name.ToLower() == commands.ToLower();
+            commands = commands.ToLower();
+            return commandType.AssemblyQualifiedName.ToLower() == commands
+                || commandType.Assembly.GetName().Name.ToLower() == commands
+                || commandType.FullName == commands;
         }
     }
 }
