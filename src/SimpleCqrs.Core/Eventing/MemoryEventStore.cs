@@ -21,7 +21,7 @@ namespace SimpleCqrs.Eventing
             storedDomainEvents.AddRange(domainEvents);
         }
 
-        public IEnumerable<DomainEvent> GetEventsOfTheseTypes(IEnumerable<Type> domainEventTypes)
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
         {
             throw new NotImplementedException();
         }

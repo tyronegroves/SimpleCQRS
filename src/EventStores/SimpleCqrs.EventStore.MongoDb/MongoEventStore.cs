@@ -54,9 +54,12 @@ namespace SimpleCqrs.EventStore.MongoDb
             eventsCollection.Insert(domainEvents);
         }
 
-        public IEnumerable<DomainEvent> GetEventsOfTheseTypes(IEnumerable<Type> domainEventTypes)
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
         {
-            throw new NotImplementedException();
+            var document = new Document{{"_t", new Document{{"$in", domainEventTypes.Select(t => t.Name).ToArray()}}}};
+            var cursor = database.GetCollection<DomainEvent>("events").Find(document);
+            
+            return cursor.Documents;
         }
 
         private static void MapEventType(Type type, MappingStoreBuilder mapping)

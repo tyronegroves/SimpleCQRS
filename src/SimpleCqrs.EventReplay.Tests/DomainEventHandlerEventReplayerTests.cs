@@ -6,6 +6,7 @@ using Moq;
 using Should;
 using SimpleCqrs.Eventing;
 using SimpleCqrs.Unity;
+using SimpleCqrs.Utilites;
 
 namespace SimpleCqrs.EventReplay.Tests
 {
@@ -90,13 +91,13 @@ namespace SimpleCqrs.EventReplay.Tests
 
         private void ReplayEventsForThisHandler<T>() where T : class
         {
-            var domainEventHandlerEventReplayer = new DomainEventHandlerEventReplayer(fakeEventStore.Object, runtime.ServiceLocator);
-            domainEventHandlerEventReplayer.ReplayEventsForThisHandler<T>();
+            //var domainEventHandlerEventReplayer = new DomainEventReplayer(fakeEventStore.Object, runtime.ServiceLocator);
+            //domainEventHandlerEventReplayer.ReplayEventsForHandlerType(typeof(T));
         }
 
         private void ReturnTheseEventsForTheseTypes(IEnumerable<DomainEvent> domainEvents, Type[] types)
         {
-            fakeEventStore.Setup(x => x.GetEventsOfTheseTypes(It.IsAny<IEnumerable<Type>>()))
+            fakeEventStore.Setup(x => x.GetEventsByEventTypes(It.IsAny<IEnumerable<Type>>()))
                 .Returns((IEnumerable<Type> t) =>
                              {
                                  if (t.Count() == types.Count() && t.Any(x => types.Contains(x) == false) == false)

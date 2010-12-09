@@ -54,7 +54,7 @@ namespace SimpleCqrs.EventStore.File
             }
         }
 
-        public IEnumerable<DomainEvent> GetEventsOfTheseTypes(IEnumerable<Type> domainEventTypes)
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
         {
             throw new NotImplementedException();
         }

@@ -46,7 +46,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs", "SimpleCqrs\Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventReplay.Tests", "SimpleCqrs.EventReplay.Tests\SimpleCqrs.EventReplay.Tests.csproj", "{231EBB3C-A38C-4276-BD31-7675BB7D0E35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventReplay", "SimpleCqrs.EventReplay\SimpleCqrs.EventReplay.csproj", "{266DAB4E-3EAD-46A5-88D5-0D9B6EC73A86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Utilites", "SimpleCqrs.EventReplay\SimpleCqrs.Utilites.csproj", "{266DAB4E-3EAD-46A5-88D5-0D9B6EC73A86}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
