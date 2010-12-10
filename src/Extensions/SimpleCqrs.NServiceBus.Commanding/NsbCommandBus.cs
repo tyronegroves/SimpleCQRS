@@ -8,10 +8,12 @@ namespace SimpleCqrs.NServiceBus.Commanding
     public class NsbCommandBus : ICommandBus
     {
         private readonly IDictionary<Type, string> commandTypeToDestinationLookup;
+        private readonly TimeSpan executeTimeout;
 
-        public NsbCommandBus(IBus bus, IDictionary<Type, string> commandTypeToDestinationLookup)
+        public NsbCommandBus(IBus bus, IDictionary<Type, string> commandTypeToDestinationLookup, TimeSpan executeTimeout)
         {
             this.commandTypeToDestinationLookup = commandTypeToDestinationLookup;
+            this.executeTimeout = executeTimeout;
             InnerBus = bus;
         }
 
@@ -29,7 +31,8 @@ namespace SimpleCqrs.NServiceBus.Commanding
                 .Send<CommandWithReturnValueMessage>(destination, message => message.Command = command)
                 .Register(state => { }, null);
 
-            asyncResult.AsyncWaitHandle.WaitOne();
+            if(!asyncResult.AsyncWaitHandle.WaitOne(executeTimeout))
+                throw new ExecuteTimeoutException();
 
             return ((CompletionResult)asyncResult.AsyncState).ErrorCode;
         }

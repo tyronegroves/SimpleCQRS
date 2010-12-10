@@ -14,7 +14,7 @@ namespace SimpleCqrs.NServiceBus.Commanding.Config
             set { base[EndpointPropertyName] = value; }
         }
 
-        [ConfigurationProperty(CommandsPropertyName, IsRequired = true, IsKey = true)]
+        [ConfigurationProperty(CommandsPropertyName, IsRequired = false)]
         public string Commands
         {
             get { return (string)base[CommandsPropertyName]; }

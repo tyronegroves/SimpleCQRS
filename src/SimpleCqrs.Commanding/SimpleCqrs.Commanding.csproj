@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandWithAggregateRootId.cs" />
+    <Compile Include="ExecuteTimeoutException.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="ICommandBus.cs" />
     <Compile Include="ICommandWithAggregateRootId.cs" />
