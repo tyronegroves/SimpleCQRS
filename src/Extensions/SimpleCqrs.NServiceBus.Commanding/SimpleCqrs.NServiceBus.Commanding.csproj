@@ -49,22 +49,15 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NsbCommandBus.cs" />
-    <Compile Include="CommandWithReturnValueMessage.cs" />
-    <Compile Include="ConfigCommandBus.cs" />
-    <Compile Include="ConfigureCommandBus.cs" />
     <Compile Include="Config\CommandBusConfig.cs" />
     <Compile Include="Config\CommandEndpointMapping.cs" />
     <Compile Include="Config\CommandEndpointMappingCollection.cs" />
-    <Compile Include="CommandBusExtensionMethods.cs" />
-    <Compile Include="CommandMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
-      <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
-      <Name>SimpleCqrs.Commanding</Name>
-      <Private>False</Private>
+    <ProjectReference Include="..\..\SimpleCqrs\SimpleCqrs.csproj">
+      <Project>{E04C12B5-A6D3-4D64-9F38-896BEE68162E}</Project>
+      <Name>SimpleCqrs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

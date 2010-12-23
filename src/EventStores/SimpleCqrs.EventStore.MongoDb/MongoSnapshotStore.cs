@@ -46,6 +46,7 @@ namespace SimpleCqrs.EventStore.MongoDb
                                                  mapping.DefaultProfile(profile => profile.SubClassesAre(type => type.IsSubclassOf(typeof(Snapshot))));
                                                  snapshotTypeCatalog
                                                      .GetDerivedTypes(typeof(Snapshot))
+                                                     .ToList()
                                                      .ForEach(type => MapEventType(type, mapping));
                                              });
 

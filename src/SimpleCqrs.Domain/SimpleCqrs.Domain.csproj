@@ -36,16 +36,12 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateRoot.cs" />
-    <Compile Include="ISnapshotOriginator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Snapshot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
-      <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
-      <Name>SimpleCqrs.Eventing</Name>
-      <Private>False</Private>
+    <ProjectReference Include="..\SimpleCqrs\SimpleCqrs.csproj">
+      <Project>{E04C12B5-A6D3-4D64-9F38-896BEE68162E}</Project>
+      <Name>SimpleCqrs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

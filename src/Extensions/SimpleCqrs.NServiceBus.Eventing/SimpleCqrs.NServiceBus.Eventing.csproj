@@ -37,33 +37,19 @@
     <Reference Include="NServiceBus">
       <HintPath>..\..\..\lib\NServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="NServiceBus.Core">
-      <HintPath>..\..\..\lib\NServiceBus.Core.dll</HintPath>
-    </Reference>
+    <Reference Include="NServiceBus.Core, Version=2.0.0.1219, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigEventBus.cs" />
-    <Compile Include="ConfigureEventBus.cs" />
     <Compile Include="Config\DomainEventBusConfig.cs" />
     <Compile Include="Config\DomainEventEndpointMapping.cs" />
     <Compile Include="Config\DomainEventEndpointMappingCollection.cs" />
-    <Compile Include="DomainEventHandlerFactory.cs" />
-    <Compile Include="DomainEventMessage.cs" />
-    <Compile Include="DomainEventMessageHandler.cs" />
-    <Compile Include="IDomainEventMessage.cs" />
-    <Compile Include="NsbServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
-      <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
-      <Name>SimpleCqrs.Eventing</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\SimpleCqrs\SimpleCqrs.csproj">
       <Project>{E04C12B5-A6D3-4D64-9F38-896BEE68162E}</Project>
       <Name>SimpleCqrs</Name>

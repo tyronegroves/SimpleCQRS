@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using AutoMoq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,7 +27,7 @@ namespace SimpleCqrs.Core.Tests.Events
 
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>)))
-                .Returns(new[] {typeof(MyTestEventHandler)});
+                .Returns(new[] { typeof(MyTestEventHandler) });
 
             var eventBus = CreateLocalEventBus();
             var myTestEvent = new MyTestEvent();
@@ -46,13 +46,13 @@ namespace SimpleCqrs.Core.Tests.Events
 
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>)))
-                .Returns(new[] {typeof(MyTest2EventHandler)});
+                .Returns(new[] { typeof(MyTest2EventHandler) });
 
             var eventBus = CreateLocalEventBus();
             var myTestEvent = new MyTestEvent();
             var myTest2Event = new MyTest2Event();
 
-            eventBus.PublishEvents(new DomainEvent[] {myTestEvent, myTest2Event});
+            eventBus.PublishEvents(new DomainEvent[] { myTestEvent, myTest2Event });
 
             Assert.AreEqual(102, myTestEvent.Result);
             Assert.AreEqual(45, myTest2Event.Result);
@@ -67,7 +67,7 @@ namespace SimpleCqrs.Core.Tests.Events
 
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleDomainEvents<>)))
-                .Returns(new[] {typeof(MyTestEventHandler), typeof(MyTest2EventHandler)});
+                .Returns(new[] { typeof(MyTestEventHandler), typeof(MyTest2EventHandler) });
 
             var eventBus = CreateLocalEventBus();
             var myTestEvent = new MyTestEvent();

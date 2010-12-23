@@ -36,14 +36,14 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandWithAggregateRootId.cs" />
-    <Compile Include="ExecuteTimeoutException.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="ICommandBus.cs" />
-    <Compile Include="ICommandWithAggregateRootId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleCqrs\SimpleCqrs.csproj">
+      <Project>{E04C12B5-A6D3-4D64-9F38-896BEE68162E}</Project>
+      <Name>SimpleCqrs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -33,6 +33,7 @@ namespace SimpleCqrs.EventStore.MongoDb
                                                  mapping.DefaultProfile(profile => profile.SubClassesAre(type => type.IsSubclassOf(typeof(DomainEvent))));
                                                  domainEventTypeCatalog
                                                      .GetDerivedTypes(typeof(DomainEvent))
+                                                     .ToList()
                                                      .ForEach(type => MapEventType(type, mapping));
                                              });
 

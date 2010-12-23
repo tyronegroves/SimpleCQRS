@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{65B52205-E45D-4D6B-8F48-AFBC4406BEE8}</ProjectGuid>
+    <ProjectGuid>{07C2BF77-9646-4C39-BDB2-852B76AA6C75}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleCqrs.EventStore.File</RootNamespace>
-    <AssemblyName>SimpleCqrs.EventStore.File</AssemblyName>
+    <RootNamespace>SimpleCqrs.NServiceBus</RootNamespace>
+    <AssemblyName>SimpleCqrs.NServiceBus</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\binaries\eventstores\file\</OutputPath>
+    <OutputPath>..\..\..\binaries\extension\nservicebus\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,15 +31,41 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\..\..\lib\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\..\lib\NServiceBus.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileEventStore.cs" />
-    <Compile Include="FileSnapshotStore.cs" />
+    <Compile Include="Commanding\CommandBusExtensionMethods.cs" />
+    <Compile Include="Commanding\CommandMessage.cs" />
+    <Compile Include="Commanding\CommandWithReturnValueMessage.cs" />
+    <Compile Include="Commanding\ConfigCommandBus.cs" />
+    <Compile Include="Commanding\NsbCommandBus.cs" />
+    <Compile Include="Commanding\CommandMessageHandler.cs" />
+    <Compile Include="ConfigSimpleCqrs.cs" />
+    <Compile Include="Eventing\ConfigEventBus.cs" />
+    <Compile Include="ConfigureSimpleCqrs.cs" />
+    <Compile Include="Commanding\CommandWithReturnValueMessageHandler.cs" />
+    <Compile Include="Commanding\Config\CommandBusConfig.cs" />
+    <Compile Include="Commanding\Config\CommandEndpointMapping.cs" />
+    <Compile Include="Commanding\Config\CommandEndpointMappingCollection.cs" />
+    <Compile Include="Eventing\DomainEventMessage.cs" />
+    <Compile Include="Eventing\DomainEventMessageHandler.cs" />
+    <Compile Include="Eventing\Config\DomainEventBusConfig.cs" />
+    <Compile Include="Eventing\Config\DomainEventEndpointMapping.cs" />
+    <Compile Include="Eventing\Config\DomainEventEndpointMappingCollection.cs" />
+    <Compile Include="Eventing\IDomainEventMessage.cs" />
+    <Compile Include="Eventing\NsbEventBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

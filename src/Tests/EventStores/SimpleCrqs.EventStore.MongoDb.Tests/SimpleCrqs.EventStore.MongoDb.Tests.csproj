@@ -59,10 +59,6 @@
       <Project>{00634E6C-A282-404A-B08B-338FD4CA41A9}</Project>
       <Name>SimpleCqrs.Unity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SimpleCqrs.Core\SimpleCqrs.Core.csproj">
-      <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
-      <Name>SimpleCqrs.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
