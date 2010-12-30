@@ -7,12 +7,15 @@ namespace SimpleCqrs.Commanding
     public class LocalCommandBus : ICommandBus
     {
         private readonly IDictionary<Type, CommandHandlerInvoker> commandInvokers;
-
+        
         public LocalCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
+            ThrowIfNoCommandHandlers = true;
             commandInvokers =
                 CommandInvokerDictionaryBuilderHelpers.CreateADictionaryOfCommandInvokers(typeCatalog, serviceLocator);
         }
+
+        public bool ThrowIfNoCommandHandlers { get; set; }
 
         public int Execute<TCommand>(TCommand command) where TCommand : ICommand
         {
@@ -29,7 +32,7 @@ namespace SimpleCqrs.Commanding
         private CommandHandlerInvoker GetTheCommandHandler(ICommand command)
         {
             CommandHandlerInvoker commandInvoker;
-            if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker))
+            if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker) && ThrowIfNoCommandHandlers)
                 throw new CommandHandlerNotFoundException(command.GetType());
             return commandInvoker;
         }
