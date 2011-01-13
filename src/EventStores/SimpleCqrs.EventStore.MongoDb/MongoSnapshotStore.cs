@@ -34,7 +34,7 @@ namespace SimpleCqrs.EventStore.MongoDb
         public void SaveSnapshot<TSnapshot>(TSnapshot snapshot) where TSnapshot : Snapshot
         {
             var snapshotsCollection = database.GetCollection<TSnapshot>("snapshots");
-            snapshotsCollection.Save(snapshot);
+            snapshotsCollection.Update(snapshot, UpdateFlags.Upsert);
         }
 
         private static MongoConfiguration BuildMongoConfiguration(ITypeCatalog snapshotTypeCatalog, string connectionString)

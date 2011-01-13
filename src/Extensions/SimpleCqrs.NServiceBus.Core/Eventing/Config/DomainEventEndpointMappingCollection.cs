@@ -31,7 +31,8 @@ namespace SimpleCqrs.NServiceBus.Eventing.Config
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((DomainEventEndpointMapping)element).DomainEvents;
+            var domainEventEndpointMapping = ((DomainEventEndpointMapping)element);
+            return domainEventEndpointMapping.DomainEvents;
         }
 
         public int IndexOf(DomainEventEndpointMapping mapping)

@@ -30,7 +30,7 @@ namespace SimpleCqrs.EventStore.MongoDb
             configurationBuilder.ConnectionString(connectionString);
             configurationBuilder.Mapping(mapping =>
                                              {
-                                                 mapping.DefaultProfile(profile => profile.SubClassesAre(type => type.IsSubclassOf(typeof(DomainEvent))));
+                                                 mapping.DefaultProfile(profile => profile.SubClassesAre(t => t.IsSubclassOf(typeof(DomainEvent))));
                                                  domainEventTypeCatalog
                                                      .GetDerivedTypes(typeof(DomainEvent))
                                                      .ToList()
