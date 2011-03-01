@@ -9,6 +9,8 @@ namespace SimpleCqrs.NServiceBus.Eventing
     {
         public TDomainEvent DomainEvent { get; set; }
 
+        public string Header { get; set; }
+
         DomainEvent IDomainEventMessage.DomainEvent
         {
             get { return DomainEvent; }

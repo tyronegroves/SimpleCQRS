@@ -12,7 +12,6 @@ namespace SimpleCqrs.Domain
         private readonly Queue<DomainEvent> uncommittedEvents = new Queue<DomainEvent>();
 
         public Guid Id { get; protected set; }
-
         public int LastEventSequence { get; private set; }
 
         public ReadOnlyCollection<DomainEvent> UncommittedEvents
@@ -66,8 +65,7 @@ namespace SimpleCqrs.Domain
             return "On" + domainEventTypeName.Remove(eventIndex, 5);
         }
 
-        private static bool EventHandlerMethodInfoHasCorrectParameter(MethodInfo eventHandlerMethodInfo,
-                                                                      Type domainEventType)
+        private static bool EventHandlerMethodInfoHasCorrectParameter(MethodInfo eventHandlerMethodInfo, Type domainEventType)
         {
             var parameters = eventHandlerMethodInfo.GetParameters();
             return parameters.Length == 1 && parameters[0].ParameterType == domainEventType;

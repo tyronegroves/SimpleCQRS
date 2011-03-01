@@ -63,6 +63,12 @@ namespace SimpleCqrs.EventStore.MongoDb
             return cursor.Documents;
         }
 
+        public IEnumerable<DomainEvent> GetEventsBySelector(Document selector)
+        {
+            var cursor = database.GetCollection<DomainEvent>("events").Find(selector);
+            return cursor.Documents;
+        }
+
         private static void MapEventType(Type type, MappingStoreBuilder mapping)
         {
             MapMethod.MakeGenericMethod(type)

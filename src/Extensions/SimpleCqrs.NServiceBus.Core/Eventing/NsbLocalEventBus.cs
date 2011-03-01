@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
+using SimpleCqrs.Eventing;
 
-namespace SimpleCqrs.Eventing
+namespace SimpleCqrs.NServiceBus.Eventing
 {
-    public class LocalEventBus : IEventBus
+    public class NsbLocalEventBus : IEventBus
     {
         private readonly IDomainEventHandlerFactory eventHandlerBuilder;
         private IDictionary<Type, EventHandlerInvoker> eventHandlerInvokers;
 
-        public LocalEventBus(IEnumerable<Type> eventHandlerTypes, IDomainEventHandlerFactory eventHandlerBuilder)
+        public NsbLocalEventBus(IEnumerable<Type> eventHandlerTypes, IDomainEventHandlerFactory eventHandlerBuilder)
         {
             this.eventHandlerBuilder = eventHandlerBuilder;
             BuildEventInvokers(eventHandlerTypes);
@@ -58,6 +60,7 @@ namespace SimpleCqrs.Eventing
             private readonly IDomainEventHandlerFactory eventHandlerFactory;
             private readonly Type domainEventType;
             private readonly List<Type> eventHandlerTypes;
+            private readonly ILog logger = LogManager.GetLogger(typeof(NsbLocalEventBus));
 
             public EventHandlerInvoker(IDomainEventHandlerFactory eventHandlerFactory, Type domainEventType)
             {
@@ -73,12 +76,25 @@ namespace SimpleCqrs.Eventing
 
             public void Publish(DomainEvent domainEvent)
             {
+                var exceptionList = new List<Exception>();
+
                 var handleMethod = typeof(IHandleDomainEvents<>).MakeGenericType(domainEventType).GetMethod("Handle");
                 foreach(var eventHandlerType in eventHandlerTypes)
                 {
-                    var eventHandler = eventHandlerFactory.Create(eventHandlerType);
-                    handleMethod.Invoke(eventHandler, new object[] {domainEvent});
+                    try
+                    {
+                        var eventHandler = eventHandlerFactory.Create(eventHandlerType);
+                        handleMethod.Invoke(eventHandler, new object[] {domainEvent});
+                    }
+                    catch(Exception exception)
+                    {
+                        logger.Error(string.Format("An exception occured while handling event of type '{0}'\nMessage: {1}", domainEvent.GetType(), exception.Message), exception);
+                        exceptionList.Add(exception);
+                    }
                 }
+
+                if(exceptionList.Count > 0)
+                    throw new AggregateException(exceptionList);
             }
         }
     }
