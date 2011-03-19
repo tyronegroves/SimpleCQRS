@@ -56,7 +56,7 @@ end";
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
             var events = new List<DomainEvent>();
-            var fetchSql = "select * from {0}.{1} where aggregaterootid = '{2}' and sequence >= {3}";
+            var fetchSql = "select eventtype, serialized from {0}.{1} where aggregaterootid = '{2}' and sequence >= {3}";
             using (var connection = new SqlConnection(configuration.ConnectionString)) {
                 connection.Open();
                 var sql = string.Format(fetchSql, configuration.Schema, configuration.TableName, aggregateRootId,
@@ -108,7 +108,7 @@ end";
 
             string eventParameters = domainEventTypes.Select(x => x.GetType().FullName).Join(",");
 
-            var fetchSql = "select * from {0}.{1} where eventtype = '{2}'";
+            var fetchSql = "select eventtype, serialized from {0}.{1} where eventtype = '{2}'";
             using (var connection = new SqlConnection(configuration.ConnectionString)) {
                 connection.Open();
                 var sql = string.Format(fetchSql, configuration.Schema, configuration.TableName, eventParameters);
