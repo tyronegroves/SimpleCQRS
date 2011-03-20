@@ -25,8 +25,12 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
                 };
 
         private It should_execute_the_appropriate_sql_statement =
-            () => GetMock<ISqlStatementRunner>()
-                      .Verify(x => x.RunThisSql(@"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
-Values ('SomethingHappened', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');"), Times.Once());
+            () =>
+                {
+                    var sqlStatement = @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
+Values ('SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');";
+                    GetMock<ISqlStatementRunner>()
+                        .Verify(x => x.RunThisSql(sqlStatement), Times.Once());
+                };
     }
 }

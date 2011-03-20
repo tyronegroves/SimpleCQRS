@@ -23,5 +23,12 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
             var somethingHappenedEvent = table.CreateInstance<SomethingHappenedEvent>();
             eventsToAdd.Add(somethingHappenedEvent);
         }
+
+        [Given(@"I have a SomethingElseHappenedEvent to be added to the store with the following values")]
+        public void y(Table table)
+        {
+            var somethingHappenedEvent = table.CreateInstance<SomethingElseHappenedEvent>();
+            eventsToAdd.Add(somethingHappenedEvent);
+        }
     }
 }

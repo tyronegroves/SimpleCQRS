@@ -80,9 +80,61 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("I add the domain events to the store");
 #line hidden
 #line 19
- testRunner.Then("the following SQL statement should be run", "Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) \nValues" +
-                    " (\'SomethingHappened\', \'8312E92C-DF1C-4970-A9D5-6414120C3CF7\', \'3/20/2010 3:01:0" +
-                    "4 AM\' ,\'2\');", ((TechTalk.SpecFlow.Table)(null)));
+ testRunner.Then("the following SQL statement should be run", @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
+Values ('SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');", ((TechTalk.SpecFlow.Table)(null)));
+#line hidden
+            testRunner.CollectScenarioErrors();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Insert two domain events")]
+        public virtual void InsertTwoDomainEvents()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Insert two domain events", ((string[])(null)));
+#line 24
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table2.AddRow(new string[] {
+                        "EventDate",
+                        "3/20/2010 3:01:04 AM"});
+            table2.AddRow(new string[] {
+                        "AggregateRootId",
+                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7"});
+            table2.AddRow(new string[] {
+                        "Sequence",
+                        "2"});
+#line 25
+ testRunner.Given("I have a SomethingHappenedEvent to be added to the store with the following value" +
+                    "s", ((string)(null)), table2);
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table3.AddRow(new string[] {
+                        "EventDate",
+                        "4/24/2010 3:01:04 AM"});
+            table3.AddRow(new string[] {
+                        "AggregateRootId",
+                        "C3579C12-C29B-4F65-8D83-B79AC5C85718"});
+            table3.AddRow(new string[] {
+                        "Sequence",
+                        "4"});
+#line 30
+ testRunner.Given("I have a SomethingElseHappenedEvent to be added to the store with the following v" +
+                    "alues", ((string)(null)), table3);
+#line 35
+ testRunner.When("I add the domain events to the store");
+#line hidden
+#line 36
+ testRunner.Then("the following SQL statement should be run", @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
+Values ('SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');", ((TechTalk.SpecFlow.Table)(null)));
+#line hidden
+#line 41
+ testRunner.And("the following SQL statement should be run", @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
+Values ('SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null', 'C3579C12-C29B-4F65-8D83-B79AC5C85718', '4/24/2010 3:01:04 AM' ,'4');", ((TechTalk.SpecFlow.Table)(null)));
 #line hidden
             testRunner.CollectScenarioErrors();
         }

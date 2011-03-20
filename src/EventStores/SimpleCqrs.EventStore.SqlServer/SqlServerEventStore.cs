@@ -26,8 +26,16 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
-            sqlStatementRunner.RunThisSql(@"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
-Values ('SomethingHappened', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');");
+            foreach(var domainEvent in domainEvents)
+            {
+                var sqlStatement = @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
+Values ('{0}', '{1}', '{2}' ,'{3}');";
+                sqlStatement = string.Format(sqlStatement, domainEvent.GetType().AssemblyQualifiedName,
+                                             domainEvent.AggregateRootId.ToString().ToUpper(),
+                                             domainEvent.EventDate,
+                                             domainEvent.Sequence);
+                sqlStatementRunner.RunThisSql(sqlStatement);
+            }
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
