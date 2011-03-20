@@ -63,10 +63,19 @@
       <DependentUpon>InsertEvents.feature</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Specs\SomethingHappenedEventSteps.cs" />
+    <Compile Include="SomethingHappenedEvent.cs" />
+    <Compile Include="Specs\DomainEventSteps.cs" />
+    <Compile Include="Specs\RuntimeSteps.cs" />
+    <Compile Include="Specs\SqlServerEventStoreSteps.cs" />
+    <Compile Include="Specs\SqlStatementRunner.cs" />
+    <Compile Include="TestingRuntime.cs" />
     <Compile Include="with_automoqer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\EventStores\SimpleCqrs.EventStore.SqlServer\SimpleCqrs.EventStore.SqlServer.csproj">
+      <Project>{BEEBFC8E-91EC-4E24-8223-395C2302C1B3}</Project>
+      <Name>SimpleCqrs.EventStore.SqlServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\ServiceLocators\SimpleCqrs.Unity\SimpleCqrs.Unity.csproj">
       <Project>{00634E6C-A282-404A-B08B-338FD4CA41A9}</Project>
       <Name>SimpleCqrs.Unity</Name>

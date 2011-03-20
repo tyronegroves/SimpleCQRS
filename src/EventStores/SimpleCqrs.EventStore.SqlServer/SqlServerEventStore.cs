@@ -10,6 +10,24 @@ using ServiceStack.Text;
 
 namespace SimpleCqrs.EventStore.SqlServer
 {
+    public class SqlServerEventStore : IEventStore
+    {
+        public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Insert(IEnumerable<DomainEvent> domainEvents)
+        {
+
+        }
+
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 //    public class SqlServerEventStore : IEventStore
 //    {
 //        private IDomainEventSerializer serializer = null;
