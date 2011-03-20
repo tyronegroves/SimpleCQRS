@@ -6,13 +6,16 @@ namespace SimpleCqrs.EventStore.SqlServer
 {
     public class SqlServerEventStore : IEventStore
     {
-        private const string InsertStatement = @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
-Values ('{0}', '{1}', '{2}' ,'{3}');";
+        private const string InsertStatement = @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence, [Data]) 
+Values ('{0}', '{1}', '{2}' ,'{3}', '{4}');";
         private readonly ISqlStatementRunner sqlStatementRunner;
+        private readonly IDomainEventSerializer domainEventSerializer;
 
-        public SqlServerEventStore(ISqlStatementRunner sqlStatementRunner)
+        public SqlServerEventStore(ISqlStatementRunner sqlStatementRunner,
+            IDomainEventSerializer domainEventSerializer)
         {
             this.sqlStatementRunner = sqlStatementRunner;
+            this.domainEventSerializer = domainEventSerializer;
         }
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
@@ -31,7 +34,8 @@ Values ('{0}', '{1}', '{2}' ,'{3}');";
             return string.Format(InsertStatement, domainEvent.GetType().AssemblyQualifiedName,
                                  domainEvent.AggregateRootId.ToString().ToUpper(),
                                  domainEvent.EventDate,
-                                 domainEvent.Sequence);
+                                 domainEvent.Sequence,
+                                 domainEventSerializer.Serialize(domainEvent));
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)

@@ -15,11 +15,12 @@ Scenario: Insert one domain event
 	| EventDate       | 3/20/2010 3:01:04 AM                 |
 	| AggregateRootId | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 |
 	| Sequence        | 2                                    |
+	And that event will serialize to 'Serialized Object'
 	When I add the domain events to the store
 	Then the following SQL statement should be run
 	"""
-	Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
-	Values ('SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');
+	Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence, [Data]) 
+	Values ('SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2', 'Serialized Object');
 	"""
 Scenario: Insert two domain events
 	Given I have a SomethingHappenedEvent to be added to the store with the following values
