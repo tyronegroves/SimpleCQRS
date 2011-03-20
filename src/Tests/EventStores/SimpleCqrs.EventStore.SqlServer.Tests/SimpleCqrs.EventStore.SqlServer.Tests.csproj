@@ -65,11 +65,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SomethingElseHappenedEvent.cs" />
     <Compile Include="SomethingHappenedEvent.cs" />
-    <Compile Include="Specs\SqlServerEventStoreTests.cs" />
     <Compile Include="Steps\DomainEventSteps.cs" />
     <Compile Include="Steps\RuntimeSteps.cs" />
     <Compile Include="Steps\SqlServerEventStoreSteps.cs" />
-    <Compile Include="Steps\SqlStatementRunner.cs" />
     <Compile Include="TestingRuntime.cs" />
     <Compile Include="with_automoqer.cs" />
   </ItemGroup>
@@ -92,6 +90,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>InsertEvents.feature.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Specs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
