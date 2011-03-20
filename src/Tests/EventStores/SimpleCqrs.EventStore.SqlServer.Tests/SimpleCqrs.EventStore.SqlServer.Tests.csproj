@@ -64,10 +64,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SomethingHappenedEvent.cs" />
-    <Compile Include="Specs\DomainEventSteps.cs" />
-    <Compile Include="Specs\RuntimeSteps.cs" />
-    <Compile Include="Specs\SqlServerEventStoreSteps.cs" />
-    <Compile Include="Specs\SqlStatementRunner.cs" />
+    <Compile Include="Steps\DomainEventSteps.cs" />
+    <Compile Include="Steps\RuntimeSteps.cs" />
+    <Compile Include="Steps\SqlServerEventStoreSteps.cs" />
+    <Compile Include="Steps\SqlStatementRunner.cs" />
     <Compile Include="TestingRuntime.cs" />
     <Compile Include="with_automoqer.cs" />
   </ItemGroup>
