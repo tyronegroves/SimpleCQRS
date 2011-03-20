@@ -19,5 +19,5 @@ Scenario: Insert one domain event
 	Then the following SQL statement should be run
 	"""
 	Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
-	  Values ('SomethingHappened', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');
+	Values ('SomethingHappened', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');
 	"""

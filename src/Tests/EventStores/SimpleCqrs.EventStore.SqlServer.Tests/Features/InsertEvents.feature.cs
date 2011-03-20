@@ -80,9 +80,9 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("I add the domain events to the store");
 #line hidden
 #line 19
- testRunner.Then("the following SQL statement should be run", "Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) \n  Valu" +
-                    "es (\'SomethingHappened\', \'8312E92C-DF1C-4970-A9D5-6414120C3CF7\', \'3/20/2010 3:01" +
-                    ":04 AM\' ,\'2\');", ((TechTalk.SpecFlow.Table)(null)));
+ testRunner.Then("the following SQL statement should be run", "Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) \nValues" +
+                    " (\'SomethingHappened\', \'8312E92C-DF1C-4970-A9D5-6414120C3CF7\', \'3/20/2010 3:01:0" +
+                    "4 AM\' ,\'2\');", ((TechTalk.SpecFlow.Table)(null)));
 #line hidden
             testRunner.CollectScenarioErrors();
         }

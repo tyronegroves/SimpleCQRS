@@ -12,6 +12,13 @@ namespace SimpleCqrs.EventStore.SqlServer
 {
     public class SqlServerEventStore : IEventStore
     {
+        private readonly ISqlStatementRunner sqlStatementRunner;
+
+        public SqlServerEventStore(ISqlStatementRunner sqlStatementRunner)
+        {
+            this.sqlStatementRunner = sqlStatementRunner;
+        }
+
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
             throw new NotImplementedException();
@@ -19,7 +26,8 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
-
+            sqlStatementRunner.RunThisSql(@"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
+Values ('SomethingHappened', '8312E92C-DF1C-4970-A9D5-6414120C3CF7', '3/20/2010 3:01:04 AM' ,'2');");
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
