@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SimpleCqrs.Eventing;
-using System.Reflection;
-using System.Data.SqlClient;
-
-using ServiceStack.Text;
 
 namespace SimpleCqrs.EventStore.SqlServer
 {
     public class SqlServerEventStore : IEventStore
     {
+        private const string InsertStatement = @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
+Values ('{0}', '{1}', '{2}' ,'{3}');";
         private readonly ISqlStatementRunner sqlStatementRunner;
 
         public SqlServerEventStore(ISqlStatementRunner sqlStatementRunner)
@@ -26,16 +22,16 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
-            foreach(var domainEvent in domainEvents)
-            {
-                var sqlStatement = @"Insert into Event_Store (EventType, AggregateRootId, EventDate, Sequence) 
-Values ('{0}', '{1}', '{2}' ,'{3}');";
-                sqlStatement = string.Format(sqlStatement, domainEvent.GetType().AssemblyQualifiedName,
-                                             domainEvent.AggregateRootId.ToString().ToUpper(),
-                                             domainEvent.EventDate,
-                                             domainEvent.Sequence);
-                sqlStatementRunner.RunThisSql(sqlStatement);
-            }
+            foreach (var domainEvent in domainEvents)
+                sqlStatementRunner.RunThisSql(CreateSqlInsertStatement(domainEvent));
+        }
+
+        private static string CreateSqlInsertStatement(DomainEvent domainEvent)
+        {
+            return string.Format(InsertStatement, domainEvent.GetType().AssemblyQualifiedName,
+                                 domainEvent.AggregateRootId.ToString().ToUpper(),
+                                 domainEvent.EventDate,
+                                 domainEvent.Sequence);
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
@@ -85,7 +81,6 @@ Values ('{0}', '{1}', '{2}' ,'{3}');";
 //                connection.Close();
 //            }
 //        }
-
 
 //        public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
 //        {
