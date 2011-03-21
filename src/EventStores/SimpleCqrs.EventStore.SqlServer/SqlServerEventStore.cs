@@ -29,6 +29,7 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Init()
         {
+            return;
             var createSql =
                 @"
 IF  not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{1}]') AND type in (N'U'))

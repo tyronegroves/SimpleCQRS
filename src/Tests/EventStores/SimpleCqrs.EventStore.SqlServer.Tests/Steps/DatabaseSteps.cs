@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Simple.Data;
 using TechTalk.SpecFlow;
@@ -21,6 +22,30 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Steps
                 db.EventStore.DeleteByEventId(eventId);
             }
         }
+
+        [Given(@"the EventStore table does not exist")]
+        public void GivenTheEventStoreTableDoesNotExist()
+        {
+            var sqlConfiguration = ScenarioContext.Current.Get<SqlServerConfiguration>();
+
+            var createSql =
+                @"
+IF  not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{1}]') AND type in (N'U'))
+begin
+Drop table [{1}];
+end";
+            using (var connection = new SqlConnection(sqlConfiguration.ConnectionString))
+            {
+                connection.Open();
+                var sql = string.Format(createSql, "", "EventStore");
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
 
         [Given(@"I have the following events in the database")]
         public void GivenIHaveTheFollowingEventsInTheDatabase(Table table)
