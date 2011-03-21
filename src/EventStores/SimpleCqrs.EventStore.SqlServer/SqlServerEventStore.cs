@@ -110,14 +110,9 @@ end";
         {
             var events = new List<DomainEvent>();
 
-            string eventParameters = domainEventTypes.Select(x => x.GetType().FullName).Join("','");
+            string eventParameters = domainEventTypes.Select(x=>x.AssemblyQualifiedName).Join("','");
 
-            if (!string.IsNullOrWhiteSpace(eventParameters))
-            {
-                eventParameters = "'" + eventParameters + "'";
-            }
-
-            var fetchSql = "select eventtype, data from {0} where eventtype in '{1}'";
+            var fetchSql = "select eventtype, data from {0} where eventtype in ('{1}')";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
@@ -131,7 +126,8 @@ end";
                             string type = reader["EventType"].ToString();
                             string data = reader["data"].ToString();
 
-                            events.Add(serializer.Deserialize(Type.GetType(type), data));
+                            var domainEvent = serializer.Deserialize(Type.GetType(type), data);
+                            events.Add(domainEvent);
                         }
                     }
                 }

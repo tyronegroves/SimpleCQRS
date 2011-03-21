@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SimpleCqrs.Eventing;
 using TechTalk.SpecFlow;
 
@@ -31,6 +32,17 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
         {
             var eventStore = CreateTheEventStore();
             var events = eventStore.GetEvents(new Guid(aggregateRootId), 0);
+
+            ScenarioContext.Current.Set(events);
+        }
+
+        [When(@"I retrieve the domain events for the following types")]
+        public void WhenIRetrieveTheDomainEventsForTheFollowingTypes(Table table)
+        {
+            var types = table.Rows.Select(x => Type.GetType(x["Type"]));
+
+            var eventStore = CreateTheEventStore();
+            var events = eventStore.GetEventsByEventTypes(types);
 
             ScenarioContext.Current.Set(events);
         }
