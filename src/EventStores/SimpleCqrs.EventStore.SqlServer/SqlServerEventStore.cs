@@ -57,7 +57,7 @@ end";
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
             var events = new List<DomainEvent>();
-            var fetchSql = "select eventtype, serialized from {1} where aggregaterootid = '{2}' and sequence >= {3}";
+            var fetchSql = "select eventtype, data from {1} where aggregaterootid = '{2}' and sequence >= {3}";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
@@ -70,9 +70,9 @@ end";
                         while (reader.Read())
                         {
                             string type = reader["EventType"].ToString();
-                            string serialized = reader["Serialized"].ToString();
+                            string data = reader["data"].ToString();
 
-                            events.Add(serializer.Deserialize(Type.GetType(type), serialized));
+                            events.Add(serializer.Deserialize(Type.GetType(type), data));
                         }
                     }
                 }
@@ -117,7 +117,7 @@ end";
                 eventParameters = "'" + eventParameters + "'";
             }
 
-            var fetchSql = "select eventtype, serialized from {0} where eventtype in '{1}'";
+            var fetchSql = "select eventtype, data from {0} where eventtype in '{1}'";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
@@ -129,9 +129,9 @@ end";
                         while (reader.Read())
                         {
                             string type = reader["EventType"].ToString();
-                            string serialized = reader["Serialized"].ToString();
+                            string data = reader["data"].ToString();
 
-                            events.Add(serializer.Deserialize(Type.GetType(type), serialized));
+                            events.Add(serializer.Deserialize(Type.GetType(type), data));
                         }
                     }
                 }

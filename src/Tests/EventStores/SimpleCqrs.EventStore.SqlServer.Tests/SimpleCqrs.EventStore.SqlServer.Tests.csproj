@@ -75,6 +75,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\GetEvents.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GetEvents.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\InsertEvents.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -106,6 +111,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\GetEvents.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GetEvents.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\InsertEvents.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>InsertEvents.feature.cs</LastGenOutput>

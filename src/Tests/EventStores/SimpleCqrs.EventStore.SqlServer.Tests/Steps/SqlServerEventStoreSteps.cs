@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SimpleCqrs.Eventing;
-using SimpleCqrs.EventStore.SqlServer.Serializers;
 using TechTalk.SpecFlow;
 
 namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
@@ -15,6 +15,15 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
 
             var eventStore = CreateTheEventStore();
             eventStore.Insert(eventsToAdd);
+        }
+
+        [When(@"I retrieve the domain events for '(.*)'")]
+        public void z(string aggregateRootId)
+        {
+            var eventStore = CreateTheEventStore();
+            var events = eventStore.GetEvents(new Guid(aggregateRootId), 0);
+
+            ScenarioContext.Current.Set(events);
         }
 
         private static SqlServerEventStore CreateTheEventStore()

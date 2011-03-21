@@ -22,6 +22,25 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Steps
             }
         }
 
+        [Given(@"I have the following events in the database")]
+        public void GivenIHaveTheFollowingEventsInTheDatabase(Table table)
+        {
+            dynamic db = GetTheDatabase();
+
+            var eventStoreRecords = table.CreateSet<EventStore>();
+
+            foreach (var record in eventStoreRecords)
+            {
+                dynamic recordToAdd = new SimpleRecord();
+                recordToAdd.Data = record.Data;
+                recordToAdd.Sequence = record.Sequence;
+                recordToAdd.EventDate = record.EventDate;
+                recordToAdd.AggregateRootId = record.AggregateRootId;
+                recordToAdd.EventType = record.EventType;
+                db.EventStore.Insert(recordToAdd);
+            }
+        }
+
         [Then(@"I should have the following events in the database")]
         public void x(Table table)
         {
