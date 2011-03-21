@@ -10,6 +10,18 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Steps
     [Binding]
     public class DatabaseSteps
     {
+        public static void ClearTheEventStore()
+        {
+            dynamic db = GetTheDatabase();
+
+            var events = GetTheDomainEvents();
+            foreach (var @event in events)
+            {
+                var eventId = @event.EventId;
+                db.EventStore.DeleteByEventId(eventId);
+            }
+        }
+
         [Then(@"I should have the following events in the database")]
         public void x(Table table)
         {
@@ -18,11 +30,9 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Steps
             table.CompareToSet(events);
         }
 
-        private IEnumerable<EventStore> GetTheDomainEvents()
+        private static IEnumerable<EventStore> GetTheDomainEvents()
         {
-            var sqlServerConfiguration = ScenarioContext.Current.Get<SqlServerConfiguration>();
-
-            var db = Database.OpenConnection(sqlServerConfiguration.ConnectionString);
+            dynamic db = GetTheDatabase();
 
             IEnumerable<dynamic> databaseRecords = db.EventStore.FindAll(db.EventStore.EventType != "x").ToList()
                                                    ?? new dynamic[] {};
@@ -36,6 +46,13 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Steps
                                                        EventType = x.EventType,
                                                        Sequence = x.Sequence
                                                    });
+        }
+
+        private static object GetTheDatabase()
+        {
+            var sqlServerConfiguration = ScenarioContext.Current.Get<SqlServerConfiguration>();
+
+            return Database.OpenConnection(sqlServerConfiguration.ConnectionString);
         }
     }
 

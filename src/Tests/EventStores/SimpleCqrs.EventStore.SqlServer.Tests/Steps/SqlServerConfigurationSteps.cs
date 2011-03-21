@@ -10,6 +10,8 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Steps
         {
             var sqlServerConfiguration = new SqlServerConfiguration(connectionString);
             ScenarioContext.Current.Set(sqlServerConfiguration);
+
+            DatabaseSteps.ClearTheEventStore();
         }
     }
 }
