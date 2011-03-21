@@ -45,12 +45,23 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Features
         public virtual void ScenarioSetup(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioStart(scenarioInfo);
+            this.FeatureBackground();
         }
         
         [NUnit.Framework.TearDownAttribute()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
+        }
+        
+        public virtual void FeatureBackground()
+        {
+#line 6
+#line hidden
+#line 7
+ testRunner.Given("the connection string to my database is", "Data Source=DEGWCAUTHOND2\\SQLEXPRESS;Initial Catalog=test;Integrated Security=Tru" +
+                    "e;MultipleActiveResultSets=True;", ((TechTalk.SpecFlow.Table)(null)));
+#line hidden
         }
         
         [NUnit.Framework.TestAttribute()]
@@ -82,16 +93,12 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("I add the domain events to the store");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
-                        "EventId",
                         "EventDate",
                         "Sequence",
-                        "Data",
                         "AggregateRootId"});
             table2.AddRow(new string[] {
-                        "1",
                         "3/20/2010 3:01:04 AM",
                         "2",
-                        "Data1",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7"});
 #line 20
  testRunner.Then("I should have the following events in the database", ((string)(null)), table2);
