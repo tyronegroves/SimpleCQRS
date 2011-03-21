@@ -17,6 +17,15 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
             eventStore.Insert(eventsToAdd);
         }
 
+        [When(@"I retrieve the domain events for '(.*)' and sequence (.*)")]
+        public void z(string aggregateRootId, int sequence)
+        {
+            var eventStore = CreateTheEventStore();
+            var events = eventStore.GetEvents(new Guid(aggregateRootId), sequence);
+
+            ScenarioContext.Current.Set(events);
+        }
+
         [When(@"I retrieve the domain events for '(.*)'")]
         public void z(string aggregateRootId)
         {

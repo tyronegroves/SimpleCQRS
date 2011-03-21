@@ -66,10 +66,10 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("GetEvents")]
-        public virtual void GetEvents()
+        [NUnit.Framework.DescriptionAttribute("Get Events by aggregate root id")]
+        public virtual void GetEventsByAggregateRootId()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("GetEvents", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Events by aggregate root id", ((string[])(null)));
 #line 12
 this.ScenarioSetup(scenarioInfo);
 #line hidden
@@ -133,6 +133,77 @@ this.ScenarioSetup(scenarioInfo);
                         "98"});
 #line 25
  testRunner.Then("I should get back the following DomainEvents", ((string)(null)), table4);
+#line hidden
+            testRunner.CollectScenarioErrors();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Get Events by sequence")]
+        public virtual void GetEventsBySequence()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Events by sequence", ((string[])(null)));
+#line 30
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "EventDate",
+                        "Data",
+                        "Sequence",
+                        "AggregateRootId",
+                        "EventType"});
+            table5.AddRow(new string[] {
+                        "3/20/2010 3:01:04 AM",
+                        "Serialized Object",
+                        "1",
+                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
+                        "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
+                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+            table5.AddRow(new string[] {
+                        "3/20/2010 4:01:04 AM",
+                        "Serialized Object2",
+                        "2",
+                        "D50E4D4F-0893-45B2-92F8-897514812A91",
+                        "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
+                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+            table5.AddRow(new string[] {
+                        "3/20/2010 5:01:04 AM",
+                        "Serialized Object2",
+                        "3",
+                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
+                        "SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.Even" +
+                            "tStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+#line 31
+ testRunner.Given("I have the following events in the database", ((string)(null)), table5);
+#line hidden
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table6.AddRow(new string[] {
+                        "Sequence",
+                        "97"});
+#line 36
+ testRunner.And("deserializing \'Serialized Object\' will return a SomethingHappenedEvent with the f" +
+                    "ollowing data", ((string)(null)), table6);
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table7.AddRow(new string[] {
+                        "Sequence",
+                        "98"});
+#line 39
+ testRunner.And("deserializing \'Serialized Object2\' will return a SomethingElseHappenedEvent with " +
+                    "the following data", ((string)(null)), table7);
+#line 42
+ testRunner.When("I retrieve the domain events for \'8312E92C-DF1C-4970-A9D5-6414120C3CF7\' and seque" +
+                    "nce 2");
+#line hidden
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Sequence"});
+            table8.AddRow(new string[] {
+                        "98"});
+#line 43
+ testRunner.Then("I should get back the following DomainEvents", ((string)(null)), table8);
 #line hidden
             testRunner.CollectScenarioErrors();
         }
