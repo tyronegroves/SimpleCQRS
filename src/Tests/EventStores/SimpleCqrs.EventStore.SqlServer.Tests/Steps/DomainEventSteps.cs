@@ -40,7 +40,8 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
         [Given(@"that event will serialize to '(.*)'")]
         public void x(string result)
         {
-            domainEventSerializer.Setup(x=>x.Serialize(eventsToAdd.Last()))
+            var domainEvent = eventsToAdd.ToList().Last();
+            domainEventSerializer.Setup(x=>x.Serialize(domainEvent))
                 .Returns(result);
         }
     }

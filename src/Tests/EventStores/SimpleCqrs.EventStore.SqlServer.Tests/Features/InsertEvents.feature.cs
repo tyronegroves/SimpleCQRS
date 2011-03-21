@@ -84,23 +84,31 @@ this.ScenarioSetup(scenarioInfo);
             table1.AddRow(new string[] {
                         "Sequence",
                         "2"});
+            table1.AddRow(new string[] {
+                        "ThisHappened",
+                        "something"});
 #line 13
  testRunner.Given("I have a SomethingHappenedEvent to be added to the store with the following value" +
                     "s", ((string)(null)), table1);
-#line 18
- testRunner.And("that event will serialize to \'Serialized Object\'");
 #line 19
+ testRunner.And("that event will serialize to \'Serialized Object\'");
+#line 20
  testRunner.When("I add the domain events to the store");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "EventDate",
+                        "Data",
                         "Sequence",
-                        "AggregateRootId"});
+                        "AggregateRootId",
+                        "EventType"});
             table2.AddRow(new string[] {
                         "3/20/2010 3:01:04 AM",
+                        "Serialized Object",
                         "2",
-                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7"});
-#line 20
+                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
+                        "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
+                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+#line 21
  testRunner.Then("I should have the following events in the database", ((string)(null)), table2);
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -111,7 +119,7 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void InsertTwoDomainEvents()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Insert two domain events", ((string[])(null)));
-#line 24
+#line 25
 this.ScenarioSetup(scenarioInfo);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -126,9 +134,14 @@ this.ScenarioSetup(scenarioInfo);
             table3.AddRow(new string[] {
                         "Sequence",
                         "2"});
-#line 25
+            table3.AddRow(new string[] {
+                        "ThisHappened",
+                        "something"});
+#line 26
  testRunner.Given("I have a SomethingHappenedEvent to be added to the store with the following value" +
                     "s", ((string)(null)), table3);
+#line 32
+ testRunner.And("that event will serialize to \'The First Record\'");
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -142,25 +155,38 @@ this.ScenarioSetup(scenarioInfo);
             table4.AddRow(new string[] {
                         "Sequence",
                         "4"});
-#line 30
- testRunner.Given("I have a SomethingElseHappenedEvent to be added to the store with the following v" +
+            table4.AddRow(new string[] {
+                        "SomeDataToStore",
+                        "Testing"});
+#line 33
+ testRunner.And("I have a SomethingElseHappenedEvent to be added to the store with the following v" +
                     "alues", ((string)(null)), table4);
-#line 35
+#line 39
+ testRunner.And("that event will serialize to \'The Second Record\'");
+#line 40
  testRunner.When("I add the domain events to the store");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                         "EventDate",
+                        "Data",
                         "Sequence",
-                        "AggregateRootId"});
+                        "AggregateRootId",
+                        "EventType"});
             table5.AddRow(new string[] {
                         "3/20/2010 3:01:04 AM",
+                        "The First Record",
                         "2",
-                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7"});
+                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
+                        "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
+                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
             table5.AddRow(new string[] {
                         "4/24/2010 3:01:04 AM",
+                        "The Second Record",
                         "4",
-                        "C3579C12-C29B-4F65-8D83-B79AC5C85718"});
-#line 36
+                        "C3579C12-C29B-4F65-8D83-B79AC5C85718",
+                        "SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.Even" +
+                            "tStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+#line 41
  testRunner.Then("I should have the following events in the database", ((string)(null)), table5);
 #line hidden
             testRunner.CollectScenarioErrors();

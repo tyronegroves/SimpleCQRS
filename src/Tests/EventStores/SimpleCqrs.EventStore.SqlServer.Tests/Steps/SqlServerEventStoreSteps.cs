@@ -20,7 +20,8 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
         private static SqlServerEventStore CreateTheEventStore()
         {
             var sqlServerConfiguration = ScenarioContext.Current.Get<SqlServerConfiguration>();
-            return new SqlServerEventStore(sqlServerConfiguration, new JsonDomainEventSerializer());
+            var domainEventSerializer = ScenarioContext.Current.Get<IDomainEventSerializer>();
+            return new SqlServerEventStore(sqlServerConfiguration, domainEventSerializer);
         }
     }
 }
