@@ -34,6 +34,6 @@ Scenario: Insert two domain events
 	| Sequence        | 4                                    |
 	When I add the domain events to the store
 	Then I should have the following events in the database
-	| EventId | EventDate            | Sequence | Data  | AggregateRootId                      |
-	| 1       | 3/20/2010 3:01:04 AM | 2        | Data1 | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 |
-	| 2       | 4/24/2010 3:01:04 AM | 4        | Data2 | C3579C12-C29B-4F65-8D83-B79AC5C85718 |
+	| EventDate            | Sequence | AggregateRootId                      |
+	| 3/20/2010 3:01:04 AM | 2        | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 |
+	| 4/24/2010 3:01:04 AM | 4        | C3579C12-C29B-4F65-8D83-B79AC5C85718 |

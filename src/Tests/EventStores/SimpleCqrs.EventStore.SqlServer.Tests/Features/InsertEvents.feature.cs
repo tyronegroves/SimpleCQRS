@@ -149,22 +149,16 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("I add the domain events to the store");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
-                        "EventId",
                         "EventDate",
                         "Sequence",
-                        "Data",
                         "AggregateRootId"});
             table5.AddRow(new string[] {
-                        "1",
                         "3/20/2010 3:01:04 AM",
                         "2",
-                        "Data1",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7"});
             table5.AddRow(new string[] {
-                        "2",
                         "4/24/2010 3:01:04 AM",
                         "4",
-                        "Data2",
                         "C3579C12-C29B-4F65-8D83-B79AC5C85718"});
 #line 36
  testRunner.Then("I should have the following events in the database", ((string)(null)), table5);

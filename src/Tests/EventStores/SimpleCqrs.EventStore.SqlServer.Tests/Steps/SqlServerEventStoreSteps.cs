@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SimpleCqrs.Eventing;
+using SimpleCqrs.EventStore.SqlServer.Serializers;
 using TechTalk.SpecFlow;
 
 namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
@@ -16,9 +17,10 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
             eventStore.Insert(eventsToAdd);
         }
 
-        private SqlServerEventStore CreateTheEventStore()
+        private static SqlServerEventStore CreateTheEventStore()
         {
-            return ScenarioContext.Current.Get<IServiceLocator>().Resolve<SqlServerEventStore>();
+            var sqlServerConfiguration = ScenarioContext.Current.Get<SqlServerConfiguration>();
+            return new SqlServerEventStore(sqlServerConfiguration, new JsonDomainEventSerializer());
         }
     }
 }
