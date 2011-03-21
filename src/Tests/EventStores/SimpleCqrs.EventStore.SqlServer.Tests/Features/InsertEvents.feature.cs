@@ -59,8 +59,8 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Features
 #line 6
 #line hidden
 #line 7
- testRunner.Given("the connection string to my database is", "Data Source=DEGWCAUTHOND2\\SQLEXPRESS;Initial Catalog=test;Integrated Security=Tru" +
-                    "e;MultipleActiveResultSets=True;", ((TechTalk.SpecFlow.Table)(null)));
+ testRunner.Given("the connection string to my database is", "Data Source=localhost;Initial Catalog=test;Integrated Security=True;MultipleActiv" +
+                    "eResultSets=True;", ((TechTalk.SpecFlow.Table)(null)));
 #line hidden
         }
         

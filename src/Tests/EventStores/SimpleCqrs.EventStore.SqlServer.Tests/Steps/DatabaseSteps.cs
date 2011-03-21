@@ -14,13 +14,19 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Steps
         public static void ClearTheEventStore()
         {
             dynamic db = GetTheDatabase();
-
-            var events = GetTheDomainEvents();
-            foreach (var @event in events)
+            try
             {
-                var eventId = @event.EventId;
-                db.EventStore.DeleteByEventId(eventId);
+                var events = GetTheDomainEvents();
+                foreach (var @event in events)
+                {
+                    var eventId = @event.EventId;
+                    db.EventStore.DeleteByEventId(eventId);
+                }
+            } catch
+            {
             }
+
+            db = null;
         }
 
         [Given(@"the EventStore table does not exist")]
@@ -30,7 +36,7 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Steps
 
             var createSql =
                 @"
-IF  not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{1}]') AND type in (N'U'))
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{1}]') AND type in (N'U'))
 begin
 Drop table [{1}];
 end";
@@ -89,7 +95,7 @@ end";
                                                        EventId = x.EventId,
                                                        EventType = x.EventType,
                                                        Sequence = x.Sequence
-                                                   });
+                                                   }).ToList();
         }
 
         private static object GetTheDatabase()
