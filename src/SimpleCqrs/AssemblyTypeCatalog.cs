@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -11,7 +12,27 @@ namespace SimpleCqrs
 
         public AssemblyTypeCatalog(IEnumerable<Assembly> assemblies)
         {
-            this.assemblies = assemblies;
+            this.assemblies = ValidateAssemblies(assemblies);
+        }
+
+        private static IEnumerable<Assembly> ValidateAssemblies(IEnumerable<Assembly> enumerable)
+        {
+            var validAssemblies = new List<Assembly>();
+            foreach(var assembly in enumerable)
+            {
+                try
+                {
+
+                    assembly.GetTypes();
+                    validAssemblies.Add(assembly);
+                }
+                catch(Exception exception)
+                {
+                    Debug.WriteLine(exception);
+                }
+            }
+
+            return validAssemblies;
         }
 
         public Type[] GetDerivedTypes(Type type)
