@@ -8,23 +8,22 @@ namespace SimpleCqrs
 {
     public class AssemblyTypeCatalog : ITypeCatalog
     {
-        private readonly IEnumerable<Assembly> assemblies;
+        private readonly IEnumerable<Type> loadedTypes;
 
         public AssemblyTypeCatalog(IEnumerable<Assembly> assemblies)
         {
-            this.assemblies = ValidateAssemblies(assemblies);
+            loadedTypes = LoadTypes(assemblies);
         }
 
-        private static IEnumerable<Assembly> ValidateAssemblies(IEnumerable<Assembly> enumerable)
+        private static IEnumerable<Type> LoadTypes(IEnumerable<Assembly> assemblies)
         {
-            var validAssemblies = new List<Assembly>();
-            foreach(var assembly in enumerable)
+            var loadedTypes = new List<Type>();
+            foreach(var assembly in assemblies)
             {
                 try
                 {
-
-                    assembly.GetTypes();
-                    validAssemblies.Add(assembly);
+                    var types = assembly.GetTypes();
+                    loadedTypes.AddRange(types);
                 }
                 catch(Exception exception)
                 {
@@ -32,13 +31,13 @@ namespace SimpleCqrs
                 }
             }
 
-            return validAssemblies;
+            return loadedTypes;
         }
 
         public Type[] GetDerivedTypes(Type type)
         {
-            return (from assembly in assemblies
-                   from derivedType in assembly.GetTypes()
+            return (
+                   from derivedType in loadedTypes
                    where type != derivedType
                    where type.IsAssignableFrom(derivedType)
                    select derivedType).ToArray();
@@ -51,8 +50,7 @@ namespace SimpleCqrs
 
         public Type[] GetGenericInterfaceImplementations(Type type)
         {
-            return (from assembly in assemblies
-                    from derivedType in assembly.GetTypes()
+            return (from derivedType in loadedTypes
                     from interfaceType in derivedType.GetInterfaces()
                     where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == type
                     select derivedType).Distinct().ToArray();
@@ -60,8 +58,7 @@ namespace SimpleCqrs
 
         public Type[] GetInterfaceImplementations(Type type)
         {
-            return (from assembly in assemblies
-                    from derivedType in assembly.GetTypes()
+            return (from derivedType in loadedTypes
                     where !derivedType.IsInterface
                     from interfaceType in derivedType.GetInterfaces()
                     where interfaceType == type
