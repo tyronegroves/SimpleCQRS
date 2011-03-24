@@ -12,6 +12,7 @@
     <AssemblyName>SimpleCqrs</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,12 +52,30 @@
     <Compile Include="Commanding\ICommandWithAggregateRootId.cs" />
     <Compile Include="Commanding\IHandleCommands.cs" />
     <Compile Include="Commanding\LocalCommandBus.cs" />
+    <Compile Include="Domain\AggregateRoot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\DomainRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\Entity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\EntityCollection.cs" />
+    <Compile Include="Domain\IDomainEventProducer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IDomainRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\ISnapshotOriginator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\Snapshot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Eventing\EntityDomainEvent.cs" />
     <Compile Include="Eventing\DomainEventHandlerFactory.cs" />
-    <Compile Include="Domain\AggregateRoot.cs" />
-    <Compile Include="Domain\DomainRepository.cs" />
-    <Compile Include="Domain\IDomainRepository.cs" />
-    <Compile Include="Domain\ISnapshotOriginator.cs" />
-    <Compile Include="Domain\Snapshot.cs" />
     <Compile Include="Eventing\DomainEvent.cs" />
     <Compile Include="Eventing\IDomainEventHandlerFactory.cs" />
     <Compile Include="Eventing\IEventBus.cs" />
