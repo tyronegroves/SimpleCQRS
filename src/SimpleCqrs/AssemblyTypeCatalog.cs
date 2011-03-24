@@ -25,9 +25,12 @@ namespace SimpleCqrs
                     var types = assembly.GetTypes();
                     loadedTypes.AddRange(types);
                 }
-                catch(Exception exception)
+                catch(ReflectionTypeLoadException exception)
                 {
-                    Debug.WriteLine(exception);
+                    exception.LoaderExceptions
+                        .Select(e => e.Message)
+                        .Distinct().ToList()
+                        .ForEach(Debug.WriteLine);
                 }
             }
 
