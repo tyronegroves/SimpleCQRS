@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SimpleCqrs.Eventing")]
+[assembly: AssemblyTitle("SimpleCQRSDemo")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("DEG")]
-[assembly: AssemblyProduct("SimpleCqrs.Eventing")]
-[assembly: AssemblyCopyright("Copyright © DEG 2010")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("SimpleCQRSDemo")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("22ecc770-0ff1-4888-8cc3-873b9f6d3587")]
+[assembly: Guid("fc8c43fb-fe55-4f62-b63d-9c9eadf37238")]
 
 // Version information for an assembly consists of the following four values:
 //
