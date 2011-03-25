@@ -15,35 +15,18 @@ namespace SimpleCqrs
             loadedTypes = LoadTypes(assemblies);
         }
 
-        private static IEnumerable<Type> LoadTypes(IEnumerable<Assembly> assemblies)
+        public Type[] LoadedTypes
         {
-            var loadedTypes = new List<Type>();
-            foreach(var assembly in assemblies)
-            {
-                try
-                {
-                    var types = assembly.GetTypes();
-                    loadedTypes.AddRange(types);
-                }
-                catch(ReflectionTypeLoadException exception)
-                {
-                    exception.LoaderExceptions
-                        .Select(e => e.Message)
-                        .Distinct().ToList()
-                        .ForEach(message => Debug.WriteLine(message));
-                }
-            }
-
-            return loadedTypes;
+            get { return loadedTypes.ToArray(); }
         }
 
         public Type[] GetDerivedTypes(Type type)
         {
             return (
-                   from derivedType in loadedTypes
-                   where type != derivedType
-                   where type.IsAssignableFrom(derivedType)
-                   select derivedType).ToArray();
+                       from derivedType in loadedTypes
+                       where type != derivedType
+                       where type.IsAssignableFrom(derivedType)
+                       select derivedType).ToArray();
         }
 
         public Type[] GetDerivedTypes<T>()
@@ -71,6 +54,28 @@ namespace SimpleCqrs
         public Type[] GetInterfaceImplementations<T>()
         {
             return GetInterfaceImplementations(typeof(T));
+        }
+
+        private static IEnumerable<Type> LoadTypes(IEnumerable<Assembly> assemblies)
+        {
+            var loadedTypes = new List<Type>();
+            foreach(var assembly in assemblies)
+            {
+                try
+                {
+                    var types = assembly.GetTypes();
+                    loadedTypes.AddRange(types);
+                }
+                catch(ReflectionTypeLoadException exception)
+                {
+                    exception.LoaderExceptions
+                        .Select(e => e.Message)
+                        .Distinct().ToList()
+                        .ForEach(message => Debug.WriteLine(message));
+                }
+            }
+
+            return loadedTypes;
         }
     }
 }
