@@ -30,7 +30,7 @@ namespace SimpleCqrs
                     exception.LoaderExceptions
                         .Select(e => e.Message)
                         .Distinct().ToList()
-                        .ForEach(Debug.WriteLine);
+                        .ForEach(message => Debug.WriteLine(message));
                 }
             }
 
