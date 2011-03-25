@@ -33,9 +33,22 @@ namespace SimpleCqrs.Domain
         public void Save(AggregateRoot aggregateRoot)
         {
             var domainEvents = aggregateRoot.UncommittedEvents;
+
             eventStore.Insert(domainEvents);
             eventBus.PublishEvents(domainEvents);
+            
             aggregateRoot.CommitEvents();
+
+            SaveSnapshot(aggregateRoot);
+        }
+
+        private void SaveSnapshot(AggregateRoot aggregateRoot)
+        {
+            var snapshotOriginator = aggregateRoot as ISnapshotOriginator;
+            if(snapshotOriginator == null || !snapshotOriginator.HasSnapshot) return;
+
+            var snapshot = snapshotOriginator.GetSnapshot();
+            snapshotStore.SaveSnapshot(snapshot);
         }
 
         private static void LoadSnapshot(AggregateRoot aggregateRoot, Snapshot snapshot)
