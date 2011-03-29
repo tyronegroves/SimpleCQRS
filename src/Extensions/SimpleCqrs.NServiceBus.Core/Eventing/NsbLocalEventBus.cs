@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using SimpleCqrs.Eventing;
+using System.Text;
 
 namespace SimpleCqrs.NServiceBus.Eventing
 {
@@ -98,4 +99,32 @@ namespace SimpleCqrs.NServiceBus.Eventing
             }
         }
     }
+
+#if (NET35 || NET20)
+    public class AggregateException : Exception
+    {
+        public IList<Exception> InnerExceptions { get; set; }
+
+        public AggregateException(List<Exception> exceptionList)
+        {
+            InnerExceptions = exceptionList;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("An exception occurred!");
+            if(InnerExceptions != null)
+            {
+                int count = 1;
+                foreach (var exc in InnerExceptions)
+                {
+                    sb.AppendLine(count + "\t:\t" + exc);
+                    count++;
+                }
+            }
+            return sb.ToString();
+        }
+    }
+#endif
 }
