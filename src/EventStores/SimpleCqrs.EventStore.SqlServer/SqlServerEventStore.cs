@@ -13,11 +13,6 @@ namespace SimpleCqrs.EventStore.SqlServer
         private readonly IDomainEventSerializer serializer;
         private readonly SqlServerConfiguration configuration;
 
-        public SqlServerEventStore(string connectionString, IDomainEventSerializer serializer) :
-            this(new SqlServerConfiguration(connectionString), serializer)
-        {
-        }
-
         public SqlServerEventStore(SqlServerConfiguration configuration, IDomainEventSerializer serializer)
         {
             this.serializer = serializer;
