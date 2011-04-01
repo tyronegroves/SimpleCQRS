@@ -6,7 +6,7 @@
 Background:
 	Given the connection string to my database is
 	"""
-	Data Source=localhost;Initial Catalog=test;Integrated Security=True;MultipleActiveResultSets=True;
+	Data Source=.\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;MultipleActiveResultSets=True;
 	"""
 
 Scenario: The event store does not exist before inserting

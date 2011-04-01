@@ -86,9 +86,11 @@ end";
             var sql = new StringBuilder();
             foreach (var de in domainEvents)
             {
+                var type = GetTheType(de);
+
                 sql.AppendFormat("insert into {0} values ('{1}', '{2}', '{3}', {4}, '{5}')",
                                  "EventStore",
-                                 de.GetType().AssemblyQualifiedName, de.AggregateRootId, de.EventDate, de.Sequence,
+                                 type, de.AggregateRootId, de.EventDate, de.Sequence,
                                  serializer.Serialize(de));
             }
 
@@ -105,6 +107,8 @@ end";
                 }
             }
         }
+
+
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
         {
@@ -134,6 +138,13 @@ end";
                 connection.Close();
             }
             return events;
+        }
+
+        private static string GetTheType(DomainEvent domainEvent)
+        {
+            var typeArray = domainEvent.GetType().AssemblyQualifiedName.Split(" ".ToCharArray());
+            var type = typeArray[0] + " " + typeArray[1].Replace(",", "");
+            return type;
         }
 
     }

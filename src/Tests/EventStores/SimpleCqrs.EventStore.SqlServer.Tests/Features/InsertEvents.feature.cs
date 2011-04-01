@@ -59,8 +59,8 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Features
 #line 6
 #line hidden
 #line 7
- testRunner.Given("the connection string to my database is", "Data Source=localhost;Initial Catalog=test;Integrated Security=True;MultipleActiv" +
-                    "eResultSets=True;", ((TechTalk.SpecFlow.Table)(null)));
+ testRunner.Given("the connection string to my database is", "Data Source=.\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;MultipleAc" +
+                    "tiveResultSets=True;", ((TechTalk.SpecFlow.Table)(null)));
 #line hidden
         }
         
@@ -107,7 +107,7 @@ this.ScenarioSetup(scenarioInfo);
                         "2",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
 #line 21
  testRunner.Then("I should have the following events in the database", ((string)(null)), table2);
 #line hidden
@@ -178,14 +178,14 @@ this.ScenarioSetup(scenarioInfo);
                         "2",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table5.AddRow(new string[] {
                         "4/24/2010 3:01:04 AM",
                         "The Second Record",
                         "4",
                         "C3579C12-C29B-4F65-8D83-B79AC5C85718",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.Even" +
-                            "tStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "tStore.SqlServer.Tests"});
 #line 41
  testRunner.Then("I should have the following events in the database", ((string)(null)), table5);
 #line hidden
