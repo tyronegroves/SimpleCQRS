@@ -27,22 +27,10 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Init()
         {
-            const string createSql = @"
-IF  not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{0}]') AND type in (N'U'))
-begin
-create table [{0}](
-   EventId int identity not null primary key,
-   EventType nvarchar(255),
-   AggregateRootId uniqueidentifier not null,
-   EventDate datetime not null,
-   Sequence int not null,
-   Data nvarchar(max)
-)
-end";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(createSql, "EventStore");
+                var sql = string.Format(SqlStatements.CreateTheEventStoreTable, "EventStore");
                 using (var command = new SqlCommand(sql, connection))
                     command.ExecuteNonQuery();
                 connection.Close();
@@ -52,11 +40,10 @@ end";
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
             var events = new List<DomainEvent>();
-            const string fetchSql = "select eventtype, data from {1} where aggregaterootid = '{2}' and sequence >= {3}";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(fetchSql, "", "EventStore", aggregateRootId,
+                var sql = string.Format(SqlStatements.GetEventsByAggregateRootAndSequence, "", "EventStore", aggregateRootId,
                                         startSequence);
                 using (var command = new SqlCommand(sql, connection))
                 using (var reader = command.ExecuteReader())
@@ -74,16 +61,13 @@ end";
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
-            
-            const string insertSql = "insert into {0} values ('{1}', '{2}', '{3}', {4}, '{5}')";
-
             var sql = new StringBuilder();
             foreach (var de in domainEvents)
-                sql.AppendFormat(insertSql, "EventStore", GetTheType(de), de.AggregateRootId, de.EventDate, de.Sequence,
+                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", GetTheType(de), de.AggregateRootId, de.EventDate, de.Sequence,
                                  serializer.Serialize(de));
 
             if (sql.Length <= 0) return;
-            
+
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
@@ -99,11 +83,10 @@ end";
 
             var eventParameters = domainEventTypes.Select(TypeToStringHelperMethods.GetString).Join("','");
 
-            const string fetchSql = "select eventtype, data from {0} where eventtype in ('{1}')";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(fetchSql, "EventStore", eventParameters);
+                var sql = string.Format(SqlStatements.GetEventsByType, "EventStore", eventParameters);
                 using (var command = new SqlCommand(sql, connection))
                 using (var reader = command.ExecuteReader())
                     while (reader.Read())
