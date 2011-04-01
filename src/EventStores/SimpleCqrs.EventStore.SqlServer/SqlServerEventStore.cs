@@ -108,13 +108,11 @@ end";
             }
         }
 
-
-
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
         {
             var events = new List<DomainEvent>();
 
-            string eventParameters = domainEventTypes.Select(x=>x.AssemblyQualifiedName).Join("','");
+            string eventParameters = domainEventTypes.Select(TypeToStringHelperMethods.GetString).Join("','");
 
             var fetchSql = "select eventtype, data from {0} where eventtype in ('{1}')";
             using (var connection = new SqlConnection(configuration.ConnectionString))
@@ -142,10 +140,7 @@ end";
 
         private static string GetTheType(DomainEvent domainEvent)
         {
-            var typeArray = domainEvent.GetType().AssemblyQualifiedName.Split(" ".ToCharArray());
-            var type = typeArray[0] + " " + typeArray[1].Replace(",", "");
-            return type;
+            return TypeToStringHelperMethods.GetString(domainEvent.GetType());
         }
-
     }
 }

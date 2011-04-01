@@ -85,21 +85,21 @@ this.ScenarioSetup(scenarioInfo);
                         "1",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table1.AddRow(new string[] {
                         "3/20/2010 4:01:04 AM",
                         "Serialized Objecta",
                         "2",
                         "D50E4D4F-0893-45B2-92F8-897514812A91",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table1.AddRow(new string[] {
                         "3/20/2010 5:01:04 AM",
                         "Serialized Object2",
                         "3",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.Even" +
-                            "tStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "tStore.SqlServer.Tests"});
 #line 13
  testRunner.Given("I have the following events in the database", ((string)(null)), table1);
 #line hidden
@@ -157,21 +157,21 @@ this.ScenarioSetup(scenarioInfo);
                         "1",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table5.AddRow(new string[] {
                         "3/20/2010 4:01:04 AM",
                         "Serialized Objecta",
                         "2",
                         "D50E4D4F-0893-45B2-92F8-897514812A91",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table5.AddRow(new string[] {
                         "3/20/2010 5:01:04 AM",
                         "Serialized Object2",
                         "3",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.Even" +
-                            "tStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "tStore.SqlServer.Tests"});
 #line 31
  testRunner.Given("I have the following events in the database", ((string)(null)), table5);
 #line hidden
@@ -228,21 +228,21 @@ this.ScenarioSetup(scenarioInfo);
                         "1",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table9.AddRow(new string[] {
                         "3/20/2010 4:01:04 AM",
                         "Serialized Object2",
                         "2",
                         "D50E4D4F-0893-45B2-92F8-897514812A91",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table9.AddRow(new string[] {
                         "3/20/2010 5:01:04 AM",
                         "Serialized Object3",
                         "3",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.Even" +
-                            "tStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "tStore.SqlServer.Tests"});
 #line 48
  testRunner.Given("I have the following events in the database", ((string)(null)), table9);
 #line hidden
@@ -280,7 +280,7 @@ this.ScenarioSetup(scenarioInfo);
                         "Type"});
             table13.AddRow(new string[] {
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
 #line 62
  testRunner.When("I retrieve the domain events for the following types", ((string)(null)), table13);
 #line hidden
@@ -316,21 +316,21 @@ this.ScenarioSetup(scenarioInfo);
                         "1",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table15.AddRow(new string[] {
                         "3/20/2010 4:01:04 AM",
                         "Serialized Object2",
                         "2",
                         "D50E4D4F-0893-45B2-92F8-897514812A91",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table15.AddRow(new string[] {
                         "3/20/2010 5:01:04 AM",
                         "Serialized Object3",
                         "3",
                         "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.Even" +
-                            "tStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "tStore.SqlServer.Tests"});
 #line 71
  testRunner.Given("I have the following events in the database", ((string)(null)), table15);
 #line hidden
@@ -368,10 +368,10 @@ this.ScenarioSetup(scenarioInfo);
                         "Type"});
             table19.AddRow(new string[] {
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventSto" +
-                            "re.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "re.SqlServer.Tests"});
             table19.AddRow(new string[] {
                         "SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.Even" +
-                            "tStore.SqlServer.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"});
+                            "tStore.SqlServer.Tests"});
 #line 85
  testRunner.When("I retrieve the domain events for the following types", ((string)(null)), table19);
 #line hidden
