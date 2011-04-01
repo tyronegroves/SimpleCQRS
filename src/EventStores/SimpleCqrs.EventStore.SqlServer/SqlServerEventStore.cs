@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using SimpleCqrs.Eventing;
-using System.Reflection;
-using System.Data.SqlClient;
-
 using ServiceStack.Text;
+using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs.EventStore.SqlServer
 {
     public class SqlServerEventStore : IEventStore
     {
-        private IDomainEventSerializer serializer = null;
-        private SqlServerConfiguration configuration = null;
+        private readonly IDomainEventSerializer serializer;
+        private readonly SqlServerConfiguration configuration;
 
         public SqlServerEventStore(string connectionString, IDomainEventSerializer serializer) :
             this(new SqlServerConfiguration(connectionString), serializer)
@@ -69,8 +67,8 @@ end";
                     {
                         while (reader.Read())
                         {
-                            string type = reader["EventType"].ToString();
-                            string data = reader["data"].ToString();
+                            var type = reader["EventType"].ToString();
+                            var data = reader["data"].ToString();
 
                             events.Add(serializer.Deserialize(Type.GetType(type), data));
                         }
@@ -112,7 +110,7 @@ end";
         {
             var events = new List<DomainEvent>();
 
-            string eventParameters = domainEventTypes.Select(TypeToStringHelperMethods.GetString).Join("','");
+            var eventParameters = domainEventTypes.Select(TypeToStringHelperMethods.GetString).Join("','");
 
             var fetchSql = "select eventtype, data from {0} where eventtype in ('{1}')";
             using (var connection = new SqlConnection(configuration.ConnectionString))
@@ -125,8 +123,8 @@ end";
                     {
                         while (reader.Read())
                         {
-                            string type = reader["EventType"].ToString();
-                            string data = reader["data"].ToString();
+                            var type = reader["EventType"].ToString();
+                            var data = reader["data"].ToString();
 
                             var domainEvent = serializer.Deserialize(Type.GetType(type), data);
                             events.Add(domainEvent);
