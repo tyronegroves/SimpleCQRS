@@ -74,16 +74,13 @@ end";
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
+            
+            const string insertSql = "insert into {0} values ('{1}', '{2}', '{3}', {4}, '{5}')";
+
             var sql = new StringBuilder();
             foreach (var de in domainEvents)
-            {
-                var type = GetTheType(de);
-
-                sql.AppendFormat("insert into {0} values ('{1}', '{2}', '{3}', {4}, '{5}')",
-                                 "EventStore",
-                                 type, de.AggregateRootId, de.EventDate, de.Sequence,
+                sql.AppendFormat(insertSql, "EventStore", GetTheType(de), de.AggregateRootId, de.EventDate, de.Sequence,
                                  serializer.Serialize(de));
-            }
 
             if (sql.Length <= 0) return;
             
