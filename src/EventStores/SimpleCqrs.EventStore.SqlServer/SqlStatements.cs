@@ -7,7 +7,7 @@
         internal const string GetEventsByAggregateRootAndSequence = "select eventtype, data from {1} where aggregaterootid = '{2}' and sequence >= {3}";
         internal const string CreateTheEventStoreTable = @"IF  not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{0}]') AND type in (N'U'))
 begin
-create table [{0}](
+create table dbo.[{0}](
    EventId int identity not null primary key,
    EventType nvarchar(255),
    AggregateRootId uniqueidentifier not null,
