@@ -58,7 +58,7 @@ namespace SimpleCqrs.EventStore.SqlServer
         {
             var sql = new StringBuilder();
             foreach (var de in domainEvents)
-                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", GetTheType(de), de.AggregateRootId, de.EventDate, de.Sequence,
+                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", TypeToStringHelperMethods.GetString(de.GetType()), de.AggregateRootId, de.EventDate, de.Sequence,
                                  serializer.Serialize(de));
 
             if (sql.Length <= 0) return;
@@ -95,11 +95,6 @@ namespace SimpleCqrs.EventStore.SqlServer
                 connection.Close();
             }
             return events;
-        }
-
-        private static string GetTheType(DomainEvent domainEvent)
-        {
-            return TypeToStringHelperMethods.GetString(domainEvent.GetType());
         }
     }
 }
