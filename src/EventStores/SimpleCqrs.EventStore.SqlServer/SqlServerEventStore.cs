@@ -27,11 +27,10 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Init()
         {
-            var createSql =
-                @"
-IF  not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{1}]') AND type in (N'U'))
+            const string createSql = @"
+IF  not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{0}]') AND type in (N'U'))
 begin
-create table [{1}](
+create table [{0}](
    EventId int identity not null primary key,
    EventType nvarchar(255),
    AggregateRootId uniqueidentifier not null,
@@ -43,11 +42,9 @@ end";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(createSql, "", "EventStore");
+                var sql = string.Format(createSql, "EventStore");
                 using (var command = new SqlCommand(sql, connection))
-                {
                     command.ExecuteNonQuery();
-                }
                 connection.Close();
             }
         }
@@ -55,25 +52,21 @@ end";
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
             var events = new List<DomainEvent>();
-            var fetchSql = "select eventtype, data from {1} where aggregaterootid = '{2}' and sequence >= {3}";
+            const string fetchSql = "select eventtype, data from {1} where aggregaterootid = '{2}' and sequence >= {3}";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
                 var sql = string.Format(fetchSql, "", "EventStore", aggregateRootId,
                                         startSequence);
                 using (var command = new SqlCommand(sql, connection))
-                {
-                    using (var reader = command.ExecuteReader())
+                using (var reader = command.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            var type = reader["EventType"].ToString();
-                            var data = reader["data"].ToString();
+                        var type = reader["EventType"].ToString();
+                        var data = reader["data"].ToString();
 
-                            events.Add(serializer.Deserialize(Type.GetType(type), data));
-                        }
+                        events.Add(serializer.Deserialize(Type.GetType(type), data));
                     }
-                }
                 connection.Close();
             }
             return events;
@@ -92,17 +85,14 @@ end";
                                  serializer.Serialize(de));
             }
 
-            if (sql.Length > 0)
+            if (sql.Length <= 0) return;
+            
+            using (var connection = new SqlConnection(configuration.ConnectionString))
             {
-                using (var connection = new SqlConnection(configuration.ConnectionString))
-                {
-                    connection.Open();
-                    using (var command = new SqlCommand(sql.ToString(), connection))
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    connection.Close();
-                }
+                connection.Open();
+                using (var command = new SqlCommand(sql.ToString(), connection))
+                    command.ExecuteNonQuery();
+                connection.Close();
             }
         }
 
@@ -112,25 +102,21 @@ end";
 
             var eventParameters = domainEventTypes.Select(TypeToStringHelperMethods.GetString).Join("','");
 
-            var fetchSql = "select eventtype, data from {0} where eventtype in ('{1}')";
+            const string fetchSql = "select eventtype, data from {0} where eventtype in ('{1}')";
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
                 var sql = string.Format(fetchSql, "EventStore", eventParameters);
                 using (var command = new SqlCommand(sql, connection))
-                {
-                    using (var reader = command.ExecuteReader())
+                using (var reader = command.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            var type = reader["EventType"].ToString();
-                            var data = reader["data"].ToString();
+                        var type = reader["EventType"].ToString();
+                        var data = reader["data"].ToString();
 
-                            var domainEvent = serializer.Deserialize(Type.GetType(type), data);
-                            events.Add(domainEvent);
-                        }
+                        var domainEvent = serializer.Deserialize(Type.GetType(type), data);
+                        events.Add(domainEvent);
                     }
-                }
                 connection.Close();
             }
             return events;
