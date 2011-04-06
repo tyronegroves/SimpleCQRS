@@ -12,7 +12,7 @@ namespace SimpleCqrs.EventStore.SqlServer.Serializers
 
         public string Serialize(DomainEvent domainEvent)
         {
-            return JsonSerializer.SerializeToString(domainEvent, typeof(DomainEvent));
+            return JsonSerializer.SerializeToString(domainEvent, domainEvent.GetType());
         }
 
         public DomainEvent Deserialize(Type targetType, string serializedDomainEvent)
