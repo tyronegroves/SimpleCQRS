@@ -65,5 +65,12 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
             var domainEvents = ScenarioContext.Current.Get<IEnumerable<DomainEvent>>();
             table.CompareToSet(domainEvents);
         }
+
+        [Then(@"I should get back the following SomethingHappenedEvents")]
+        public void g(Table table)
+        {
+            var somethingHappenedEvents = ScenarioContext.Current.Get<IEnumerable<DomainEvent>>().OfType<SomethingHappenedEvent>();
+            table.CompareToSet(somethingHappenedEvents);
+        }
     }
 }

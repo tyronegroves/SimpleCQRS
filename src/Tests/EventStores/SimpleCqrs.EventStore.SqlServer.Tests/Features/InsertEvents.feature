@@ -42,3 +42,16 @@ Scenario: Insert two domain events
 	| EventDate            | Data              | Sequence | AggregateRootId                      | EventType                                                                                               |
 	| 3/20/2010 3:01:04 AM | The First Record  | 2        | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 | SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests     |
 	| 4/24/2010 3:01:04 AM | The Second Record | 4        | C3579C12-C29B-4F65-8D83-B79AC5C85718 | SimpleCqrs.EventStore.SqlServer.Tests.SomethingElseHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests |
+
+Scenario: Inserting and retrieving an event
+	Given I have a SomethingHappenedEvent to be added to the store with the following values
+	| Field           | Value                                |
+	| EventDate       | 3/20/2010 3:01:04 AM                 |
+	| AggregateRootId | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 |
+	| Sequence        | 2                                    |
+	| ThisHappened    | something                            |
+	And I am choosing to use the Json Serializer
+	When I add the domain events to the store
+	Then I should get back the following SomethingHappenedEvents
+	| EventDate            | AggregateRootId                      | Sequence | ThisHappened |
+	| 3/20/2010 3:01:04 AM | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 | 2        | something    |

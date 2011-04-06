@@ -95,7 +95,9 @@
     <Compile Include="SomethingHappenedEvent.cs" />
     <Compile Include="Steps\DatabaseSteps.cs" />
     <Compile Include="Steps\DomainEventSteps.cs" />
+    <Compile Include="Steps\JsonSerializerSteps.cs" />
     <Compile Include="Steps\RuntimeSteps.cs" />
+    <Compile Include="Steps\SomethingHappenedEventSteps.cs" />
     <Compile Include="Steps\SqlServerConfigurationSteps.cs" />
     <Compile Include="Steps\SqlServerEventStoreSteps.cs" />
     <Compile Include="TestingRuntime.cs" />
