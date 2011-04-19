@@ -13,6 +13,7 @@
     <RootNamespace>NerdDinner.CommandService</RootNamespace>
     <AssemblyName>NerdDinner.CommandService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,7 +34,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="SimpleCqrs.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="SimpleCqrs">
+      <HintPath>..\..\..\binaries\SimpleCqrs.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -121,18 +124,6 @@
     <ProjectReference Include="..\..\..\src\ServiceLocators\SimpleCqrs.Unity\SimpleCqrs.Unity.csproj">
       <Project>{00634E6C-A282-404A-B08B-338FD4CA41A9}</Project>
       <Name>SimpleCqrs.Unity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
-      <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
-      <Name>SimpleCqrs.Commanding</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\SimpleCqrs.Core\SimpleCqrs.Core.csproj">
-      <Project>{EC740994-5BB9-40B6-BB1A-614FC5E5D315}</Project>
-      <Name>SimpleCqrs.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\SimpleCqrs.Eventing\SimpleCqrs.Eventing.csproj">
-      <Project>{14B54A00-FE42-420F-AF8F-91C62346FB6E}</Project>
-      <Name>SimpleCqrs.Eventing</Name>
     </ProjectReference>
     <ProjectReference Include="..\NerdDinner.Commands\NerdDinner.Commands.csproj">
       <Project>{ABA8CA3F-5074-4B3E-8A82-116188C3560D}</Project>

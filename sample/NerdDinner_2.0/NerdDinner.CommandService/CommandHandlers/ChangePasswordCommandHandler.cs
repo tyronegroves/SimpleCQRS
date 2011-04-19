@@ -6,7 +6,7 @@ namespace NerdDinner.CommandService.CommandHandlers
 {
     public class ChangePasswordCommandHandler : AggregateRootCommandHandler<ChangePasswordCommand, User>
     {
-        protected override void Handle(ChangePasswordCommand command, User user)
+        public override void Handle(ChangePasswordCommand command, User user)
         {
             user.ChangePassword(command.NewPassword);
         }

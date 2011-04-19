@@ -18,6 +18,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +53,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="OpenSearchToolkit">
       <HintPath>lib\OpenSearchToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleCqrs">
+      <HintPath>..\..\..\binaries\SimpleCqrs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -361,10 +365,6 @@
     <Content Include="Services\OpenSearch.ashx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\SimpleCqrs.Commanding\SimpleCqrs.Commanding.csproj">
-      <Project>{679AE05D-B80E-421D-B259-387D9926E335}</Project>
-      <Name>SimpleCqrs.Commanding</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NerdDinner.Commands\NerdDinner.Commands.csproj">
       <Project>{ABA8CA3F-5074-4B3E-8A82-116188C3560D}</Project>
       <Name>NerdDinner.Commands</Name>
