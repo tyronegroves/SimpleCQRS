@@ -85,7 +85,7 @@
       <Project>{FB617064-BEF2-4DD8-BF12-B1B4589F2FE2}</Project>
       <Name>Sample.JesseHouse.Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sample.JesseHouse\Sample.JesseHouse.Commands\Sample.JesseHouse.Commands.csproj">
+    <ProjectReference Include="..\Sample.JesseHouse.Commands\Sample.JesseHouse.Commands.csproj">
       <Project>{A5BB06A5-78F4-4F61-91D4-ADED1A4670F1}</Project>
       <Name>Sample.JesseHouse.Commands</Name>
     </ProjectReference>

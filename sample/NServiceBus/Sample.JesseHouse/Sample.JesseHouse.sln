@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Web", "Sample.JesseHouse.Web.csproj", "{CEECD0F3-51E3-494D-8F69-3307638D5BCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Web", "Sample.JesseHouse\Sample.JesseHouse.Web.csproj", "{CEECD0F3-51E3-494D-8F69-3307638D5BCA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Commands", "Sample.JesseHouse.Commands\Sample.JesseHouse.Commands.csproj", "{A5BB06A5-78F4-4F61-91D4-ADED1A4670F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Processing", "..\Sample.JesseHouse.Processing\Sample.JesseHouse.Processing.csproj", "{D230A023-FAA1-4858-ACC9-86F800A6EFB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Processing", "Sample.JesseHouse.Processing\Sample.JesseHouse.Processing.csproj", "{D230A023-FAA1-4858-ACC9-86F800A6EFB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Events", "..\Sample.JesseHouse.Events\Sample.JesseHouse.Events.csproj", "{FB617064-BEF2-4DD8-BF12-B1B4589F2FE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Events", "Sample.JesseHouse.Events\Sample.JesseHouse.Events.csproj", "{FB617064-BEF2-4DD8-BF12-B1B4589F2FE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.ViewModel", "..\Sample.JesseHouse.ViewModel\Sample.JesseHouse.ViewModel.csproj", "{8DCAB6CE-680D-4BCB-B17F-8AE1487F1AE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.ViewModel", "Sample.JesseHouse.ViewModel\Sample.JesseHouse.ViewModel.csproj", "{8DCAB6CE-680D-4BCB-B17F-8AE1487F1AE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Domain", "..\Sample.JesseHouse.Domain\Sample.JesseHouse.Domain.csproj", "{C28D8A9E-EE20-4E73-9BD9-6227DADDBA76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JesseHouse.Domain", "Sample.JesseHouse.Domain\Sample.JesseHouse.Domain.csproj", "{C28D8A9E-EE20-4E73-9BD9-6227DADDBA76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
