@@ -6,7 +6,7 @@ namespace NerdDinner.CommandService.CommandHandlers
 {
     public class EditDinnerCommandHandler : AggregateRootCommandHandler<EditDinnerCommand, Dinner>
     {
-        protected override void Handle(EditDinnerCommand command, Dinner dinner)
+        public override void Handle(EditDinnerCommand command, Dinner dinner)
         {
             dinner.Edit(command.EventDate, command.Title, command.Description, command.ContactPhone, command.Host, command.Location);
         }

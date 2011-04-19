@@ -6,7 +6,7 @@ namespace NerdDinner.CommandService.CommandHandlers
 {
     public class RsvpForDinnerCommandHandler : AggregateRootCommandHandler<RsvpForDinnerCommand, Dinner>
     {
-        protected override void Handle(RsvpForDinnerCommand command, Dinner dinner)
+        public override void Handle(RsvpForDinnerCommand command, Dinner dinner)
         {
             dinner.RegisterRsvp(command.AttendeeId, command.AttendeeName);
         }

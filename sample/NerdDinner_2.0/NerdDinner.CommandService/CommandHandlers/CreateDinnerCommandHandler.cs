@@ -24,7 +24,7 @@ namespace NerdDinner.CommandService.CommandHandlers
             this.membershipReadModel = membershipReadModel;
         }
 
-        protected override void Handle(CreateDinnerCommand command)
+        public override void Handle(CreateDinnerCommand command)
         {
             Return(ValidateCommand(command));
 

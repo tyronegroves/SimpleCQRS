@@ -14,7 +14,7 @@ namespace NerdDinner.CommandService.CommandHandlers
             this.domainRepository = domainRepository;
         }
 
-        protected override void Handle(RegisterUserCommand command)
+        public override void Handle(RegisterUserCommand command)
         {
             var user = new User(command.UserId, command.UserName, command.Password, command.Email);
             domainRepository.Save(user);
