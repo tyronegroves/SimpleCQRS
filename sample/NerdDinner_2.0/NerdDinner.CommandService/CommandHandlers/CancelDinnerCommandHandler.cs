@@ -20,7 +20,7 @@ namespace NerdDinner.CommandService.CommandHandlers
             this.dinnerReadModel = dinnerReadModel;
         }
 
-        protected override int ValidateCommand(CancelDinnerCommand command)
+        public override int ValidateCommand(CancelDinnerCommand command)
         {
             if(!dinnerReadModel.DinnerExists(command.DinnerId))
                 return (int)CancelDinnerStatus.DinnerDoesNotExists;
@@ -28,7 +28,7 @@ namespace NerdDinner.CommandService.CommandHandlers
             return (int)CancelDinnerStatus.Successful;
         }
 
-        protected override void Handle(CancelDinnerCommand command, Dinner dinner)
+        public override void Handle(CancelDinnerCommand command, Dinner dinner)
         {
             dinner.Cancel();
         }

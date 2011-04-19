@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Core.Tests", "Tests\SimpleCqrs.Core.Tests\SimpleCqrs.Core.Tests.csproj", "{6AEAEE90-CF43-47CE-BD60-9F9519120BC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.Tests", "Tests\SimpleCqrs.Tests\SimpleCqrs.Tests.csproj", "{6AEAEE90-CF43-47CE-BD60-9F9519120BC6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventStores", "EventStores", "{77CC485D-D260-45FC-A161-3DDF3A571C41}"
 EndProject
