@@ -62,9 +62,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\EntityCollection.cs" />
-    <Compile Include="Domain\IDomainEventProducer.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="IHaveATestMode.cs" />
     <Compile Include="Domain\IDomainRepository.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -42,11 +42,12 @@ namespace SimpleCqrs.Domain
         public void CommitEvents()
         {
             uncommittedEvents.Clear();
+            entities.ForEach(entity => entity.CommitEvents());
         }
 
         public void RegisterEntity(Entity entity)
         {
-            entity.Parent = this;
+            entity.AggregateRoot = this;
             entities.Add(entity);
         }
 
@@ -76,7 +77,7 @@ namespace SimpleCqrs.Domain
             var list = entities
                 .Where(entity => entity.Id == entityDomainEvent.EntityId).ToList();
             list
-                .ForEach(entity => entity.ApplyHistoricalEvent(entityDomainEvent));
+                .ForEach(entity => entity.ApplyHistoricalEvents(entityDomainEvent));
         }
 
         private static string GetEventHandlerMethodName(string domainEventTypeName)
