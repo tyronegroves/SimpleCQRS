@@ -22,8 +22,13 @@ namespace SimpleCqrs.Utilites
 
             var serviceLocator = runtime.ServiceLocator;
             var eventStore = (MongoEventStore)serviceLocator.Resolve<IEventStore>();
-            var domainEventTypes = GetDomainEventTypesHandledByHandler(handlerType);
-            selector.Add("_t", new Document{{"$in", domainEventTypes}});
+
+            if (!selector.ContainsKey("_t"))
+            {
+                var domainEventTypes = GetDomainEventTypesHandledByHandler(handlerType);
+                selector.Add("_t", new Document {{"$in", domainEventTypes}});
+            }
+
             var domainEvents = eventStore.GetEventsBySelector(selector);
             var eventBus = new LocalEventBus(new []{handlerType}, new DomainEventHandlerFactory(serviceLocator));
 
