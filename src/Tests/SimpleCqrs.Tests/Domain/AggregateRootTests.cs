@@ -20,17 +20,6 @@ namespace SimpleCqrs.Core.Tests.Domain
         }
 
         [TestMethod]
-        public void WhenEntityIsRegisteredAndEventIsAppliedToAggregateRootTheEventIsAppliedToTheEntity()
-        {
-            var aggregateRoot = new MyAggregateRoot();
-            var entity = new MyEntity();
-
-            aggregateRoot.RegisterEntity(entity);
-
-            Assert.AreSame(aggregateRoot, entity.UncommittedEvents[0]);
-        }
-
-        [TestMethod]
         public void WhenRegisterEntityIsCalledEntityAggegrateRootIsAssigned()
         {
             var aggregateRoot = new MyAggregateRoot();
@@ -211,6 +200,8 @@ namespace SimpleCqrs.Core.Tests.Domain
 
     public class MyAggregateRoot : AggregateRoot
     {
+        private int count;
+
         public MyAggregateRoot()
         {
             EventIds = new List<int>();

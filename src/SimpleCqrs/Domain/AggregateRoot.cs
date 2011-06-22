@@ -12,8 +12,8 @@ namespace SimpleCqrs.Domain
         private readonly Queue<DomainEvent> uncommittedEvents = new Queue<DomainEvent>();
         private readonly List<Entity> entities = new List<Entity>(); 
 
-        public Guid Id { get; protected set; }
-        public int LastEventSequence { get; private set; }
+        public Guid Id { get; protected internal set; }
+        public int LastEventSequence { get; protected internal set; }
 
         public ReadOnlyCollection<DomainEvent> UncommittedEvents
         {

@@ -4,6 +4,6 @@
     {
         Snapshot GetSnapshot();
         void LoadSnapshot(Snapshot snapshot);
-        bool HasSnapshot { get; }
+        bool ShouldTakeSnapshot(Snapshot previousSnapshot);
     }
 }

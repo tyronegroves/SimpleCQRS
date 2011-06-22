@@ -12,16 +12,14 @@ namespace SimpleCqrs.EventStore.MongoDb
     public class MongoEventStore : IEventStore
     {
         private static readonly MethodInfo MapMethod = typeof(MappingStoreBuilder).GetMethod("Map", Type.EmptyTypes);
-        private readonly IMongoDatabase database;
+        private readonly MongoConfiguration configuration;
+        private readonly string databaseName;
 
         public MongoEventStore(string connectionString, ITypeCatalog typeCatalog)
         {
             var connectionStringBuilder = new MongoConnectionStringBuilder(connectionString);
-            var configuration = BuildMongoConfiguration(typeCatalog, connectionString);
-            var mongo = new Mongo(configuration);
-            mongo.Connect();
-
-            database = mongo.GetDatabase(connectionStringBuilder.Database);
+            databaseName = connectionStringBuilder.Database;
+            configuration = BuildMongoConfiguration(typeCatalog, connectionString);
         }
 
         private static MongoConfiguration BuildMongoConfiguration(ITypeCatalog domainEventTypeCatalog, string connectionString)
@@ -42,31 +40,56 @@ namespace SimpleCqrs.EventStore.MongoDb
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
-            var eventsCollection = database.GetCollection<DomainEvent>("events").Linq();
-            return (from domainEvent in eventsCollection
-                    where domainEvent.AggregateRootId == aggregateRootId
-                    where domainEvent.Sequence > startSequence
-                    select domainEvent).ToList();
+            using (var mongo = new Mongo(configuration))
+            {
+                mongo.Connect();
+
+                var database = mongo.GetDatabase(databaseName);
+                var eventsCollection = database.GetCollection<DomainEvent>("events").Linq();
+
+                return (from domainEvent in eventsCollection
+                        where domainEvent.AggregateRootId == aggregateRootId
+                        where domainEvent.Sequence > startSequence
+                        select domainEvent).ToList();
+            }
         }
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
-            var eventsCollection = database.GetCollection<DomainEvent>("events");
-            eventsCollection.Insert(domainEvents);
+            using (var mongo = new Mongo(configuration))
+            {
+                mongo.Connect();
+
+                var database = mongo.GetDatabase(databaseName);
+                var eventsCollection = database.GetCollection<DomainEvent>("events");
+                eventsCollection.Insert(domainEvents);
+            }
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
         {
-            var document = new Document { { "_t", new Document { { "$in", domainEventTypes.Select(t => t.Name).ToArray() } } } };
-            var cursor = database.GetCollection<DomainEvent>("events").Find(document);
+            using (var mongo = new Mongo(configuration))
+            {
+                mongo.Connect();
 
-            return cursor.Documents;
+                var database = mongo.GetDatabase(databaseName);
+                var document = new Document {{"_t", new Document {{"$in", domainEventTypes.Select(t => t.Name).ToArray()}}}};
+                var cursor = database.GetCollection<DomainEvent>("events").Find(document);
+
+                return cursor.Documents.ToList();
+            }
         }
 
         public IEnumerable<DomainEvent> GetEventsBySelector(Document selector)
         {
-            var cursor = database.GetCollection<DomainEvent>("events").Find(selector);
-            return cursor.Documents;
+            using (var mongo = new Mongo(configuration))
+            {
+                mongo.Connect();
+
+                var database = mongo.GetDatabase(databaseName);
+                var cursor = database.GetCollection<DomainEvent>("events").Find(selector);
+                return cursor.Documents.ToList();
+            }
         }
 
         private static void MapEventType(Type type, MappingStoreBuilder mapping)

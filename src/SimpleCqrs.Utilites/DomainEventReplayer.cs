@@ -16,20 +16,15 @@ namespace SimpleCqrs.Utilites
             this.runtime = runtime;
         }
 
-        public void ReplayEventsForHandlerType(Type handlerType, Document selector)
+        public void ReplayEventsForHandlerType(Type handlerType)
         {
             runtime.Start();
 
             var serviceLocator = runtime.ServiceLocator;
-            var eventStore = (MongoEventStore)serviceLocator.Resolve<IEventStore>();
+            var eventStore = serviceLocator.Resolve<IEventStore>();
+            var domainEventTypes = GetDomainEventTypesHandledByHandler(handlerType);
 
-            if (!selector.ContainsKey("_t"))
-            {
-                var domainEventTypes = GetDomainEventTypesHandledByHandler(handlerType);
-                selector.Add("_t", new Document {{"$in", domainEventTypes}});
-            }
-
-            var domainEvents = eventStore.GetEventsBySelector(selector);
+            var domainEvents = eventStore.GetEventsByEventTypes(domainEventTypes);
             var eventBus = new LocalEventBus(new []{handlerType}, new DomainEventHandlerFactory(serviceLocator));
 
             eventBus.PublishEvents(domainEvents);
