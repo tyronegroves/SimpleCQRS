@@ -181,6 +181,29 @@ namespace SimpleCqrs.Core.Tests.Domain
                                                 .All(domainEvent => domainEvent.AggregateRootId == aggregateRootId);
             Assert.IsTrue(allAggregateRootIdsMatch);
         }
+
+        [TestMethod]
+        public void ThrowsAFriendlyErrorMessageWhenTheEventDoesNotEndInEvent()
+        {
+            var aggregateRoot = mockAggregateRoot.Object;
+
+            SimpleCqrsInvalidEventNameException exception = null;
+            try
+            {
+                aggregateRoot.LoadFromHistoricalEvents(new EvenIsNotTheLastWordInThisClass());
+            } catch (SimpleCqrsInvalidEventNameException ex)
+            {
+                exception = ex;
+            }
+
+            Assert.IsNotNull(exception, "Should have received an invalid name error");
+
+        }
+
+    }
+
+    public class EvenIsNotTheLastWordInThisClass : DomainEvent
+    {
     }
 
     public class MyAggregateRoot : AggregateRoot

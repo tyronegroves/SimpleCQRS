@@ -66,6 +66,7 @@
     <Compile Include="Eventing\LocalEventBus.cs" />
     <Compile Include="Eventing\MemoryEventStore.cs" />
     <Compile Include="Eventing\NullSnapshotStore.cs" />
+    <Compile Include="Eventing\SimpleCqrsInvalidEventNameException.cs" />
     <Compile Include="IRegisterComponents.cs" />
     <Compile Include="IServiceLocator.cs" />
     <Compile Include="ISimpleCqrsRuntime.cs" />
