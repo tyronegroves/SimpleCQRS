@@ -200,6 +200,30 @@ namespace SimpleCqrs.Core.Tests.Domain
 
         }
 
+        [TestMethod]
+        public void ThrowsAFriendlyErrorMessageWhenTheEventDoesNotEndInEventButEventAppearsInTheName()
+        {
+            var aggregateRoot = mockAggregateRoot.Object;
+
+            SimpleCqrsInvalidEventNameException exception = null;
+            try
+            {
+                aggregateRoot.LoadFromHistoricalEvents(new EventIsNotTheLastWordInThisClass());
+            }
+            catch (SimpleCqrsInvalidEventNameException ex)
+            {
+                exception = ex;
+            }
+
+            Assert.IsNotNull(exception, "Should have received an invalid name error"); 
+        }
+
+
+    }
+
+    public class EventIsNotTheLastWordInThisClass : DomainEvent
+    {
+        
     }
 
     public class EvenIsNotTheLastWordInThisClass : DomainEvent

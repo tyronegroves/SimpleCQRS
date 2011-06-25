@@ -61,15 +61,10 @@ namespace SimpleCqrs.Domain
 
         private static string GetEventHandlerMethodName(string domainEventTypeName)
         {
-            try
-            {
-                var eventIndex = domainEventTypeName.LastIndexOf("Event");
-                return "On" + domainEventTypeName.Remove(eventIndex, 5);
-            }
-            catch
-            {
+            if (domainEventTypeName.EndsWith("Event") == false) 
                 throw new SimpleCqrsInvalidEventNameException();
-            }
+            var eventIndex = domainEventTypeName.LastIndexOf("Event");
+            return "On" + domainEventTypeName.Remove(eventIndex, 5);
         }
 
         private static bool EventHandlerMethodInfoHasCorrectParameter(MethodInfo eventHandlerMethodInfo, Type domainEventType)
