@@ -4,35 +4,36 @@ using System.Reflection;
 
 namespace SimpleCqrs.Commanding
 {
-    public class LocalCommandBus : ICommandBus
+    public class LocalCommandBus : ICommandBus, IHaveATestMode
     {
         private readonly IDictionary<Type, CommandHandlerInvoker> commandInvokers;
-        
+
         public LocalCommandBus(ITypeCatalog typeCatalog, IServiceLocator serviceLocator)
         {
-            ThrowIfNoCommandHandlers = true;
-            commandInvokers =
-                CommandInvokerDictionaryBuilderHelpers.CreateADictionaryOfCommandInvokers(typeCatalog, serviceLocator);
+            commandInvokers = CommandInvokerDictionaryBuilderHelpers.CreateADictionaryOfCommandInvokers(typeCatalog, serviceLocator);
         }
 
-        public bool ThrowIfNoCommandHandlers { get; set; }
+        bool IHaveATestMode.IsInTestMode { get; set; }
 
         public int Execute<TCommand>(TCommand command) where TCommand : ICommand
         {
             var commandHandler = GetTheCommandHandler(command);
-            return commandHandler.Execute(command);
+            return commandHandler == null ? 0 : commandHandler.Execute(command);
         }
 
         public void Send<TCommand>(TCommand command) where TCommand : ICommand
         {
             var commandHandler = GetTheCommandHandler(command);
+            
+            if (commandHandler == null) return;
+            
             commandHandler.Send(command);
         }
 
         private CommandHandlerInvoker GetTheCommandHandler(ICommand command)
         {
             CommandHandlerInvoker commandInvoker;
-            if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker) && ThrowIfNoCommandHandlers)
+            if(!commandInvokers.TryGetValue(command.GetType(), out commandInvoker) && !((IHaveATestMode)this).IsInTestMode)
                 throw new CommandHandlerNotFoundException(command.GetType());
             return commandInvoker;
         }

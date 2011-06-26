@@ -10,9 +10,10 @@ namespace SimpleCqrs.Domain
     public abstract class AggregateRoot
     {
         private readonly Queue<DomainEvent> uncommittedEvents = new Queue<DomainEvent>();
+        private readonly List<Entity> entities = new List<Entity>(); 
 
-        public Guid Id { get; protected set; }
-        public int LastEventSequence { get; private set; }
+        public Guid Id { get; protected internal set; }
+        public int LastEventSequence { get; protected internal set; }
 
         public ReadOnlyCollection<DomainEvent> UncommittedEvents
         {
@@ -23,11 +24,10 @@ namespace SimpleCqrs.Domain
         {
             if(domainEvents.Length == 0) return;
 
-            domainEvents = domainEvents.OrderBy(domainEvent => domainEvent.Sequence).ToArray();
-            LastEventSequence = domainEvents.Last().Sequence;
+            var domainEventList = domainEvents.OrderBy(domainEvent => domainEvent.Sequence).ToList();
+            LastEventSequence = domainEventList.Last().Sequence;
 
-            foreach(var domainEvent in domainEvents)
-                ApplyEventToInternalState(domainEvent);
+            domainEventList.ForEach(ApplyEventToInternalState);
         }
 
         public void Apply(DomainEvent domainEvent)
@@ -42,6 +42,13 @@ namespace SimpleCqrs.Domain
         public void CommitEvents()
         {
             uncommittedEvents.Clear();
+            entities.ForEach(entity => entity.CommitEvents());
+        }
+
+        public void RegisterEntity(Entity entity)
+        {
+            entity.AggregateRoot = this;
+            entities.Add(entity);
         }
 
         private void ApplyEventToInternalState(DomainEvent domainEvent)
@@ -54,9 +61,23 @@ namespace SimpleCqrs.Domain
                                                          BindingFlags.Instance | BindingFlags.Public |
                                                          BindingFlags.NonPublic, null, new[] {domainEventType}, null);
 
-            if(methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
+            if(methodInfo != null && EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType))
+            {
+                methodInfo.Invoke(this, new[] {domainEvent});
+            }
 
-            methodInfo.Invoke(this, new[] {domainEvent});
+            ApplyEventToEntities(domainEvent);
+        }
+
+        private void ApplyEventToEntities(DomainEvent domainEvent)
+        {
+            var entityDomainEvent = domainEvent as EntityDomainEvent;
+            if (entityDomainEvent == null) return;
+
+            var list = entities
+                .Where(entity => entity.Id == entityDomainEvent.EntityId).ToList();
+            list
+                .ForEach(entity => entity.ApplyHistoricalEvents(entityDomainEvent));
         }
 
         private static string GetEventHandlerMethodName(string domainEventTypeName)
