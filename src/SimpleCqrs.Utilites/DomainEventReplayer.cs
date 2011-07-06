@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MongoDB;
 using SimpleCqrs.Eventing;
-using SimpleCqrs.EventStore.MongoDb;
 
 namespace SimpleCqrs.Utilites
 {
@@ -18,14 +16,19 @@ namespace SimpleCqrs.Utilites
 
         public void ReplayEventsForHandlerType(Type handlerType)
         {
+            ReplayEventsForHandlerType(handlerType, DateTime.MinValue, DateTime.MaxValue);
+        }
+
+        public void ReplayEventsForHandlerType(Type handlerType, DateTime startDate, DateTime endDate)
+        {
             runtime.Start();
 
             var serviceLocator = runtime.ServiceLocator;
             var eventStore = serviceLocator.Resolve<IEventStore>();
             var domainEventTypes = GetDomainEventTypesHandledByHandler(handlerType);
 
-            var domainEvents = eventStore.GetEventsByEventTypes(domainEventTypes);
-            var eventBus = new LocalEventBus(new []{handlerType}, new DomainEventHandlerFactory(serviceLocator));
+            var domainEvents = eventStore.GetEventsByEventTypes(domainEventTypes, startDate, endDate);
+            var eventBus = new LocalEventBus(new[] {handlerType}, new DomainEventHandlerFactory(serviceLocator));
 
             eventBus.PublishEvents(domainEvents);
         }
@@ -33,9 +36,9 @@ namespace SimpleCqrs.Utilites
         private static IEnumerable<Type> GetDomainEventTypesHandledByHandler(Type handlerType)
         {
             return (from i in handlerType.GetInterfaces()
-                   where i.IsGenericType
-                   where i.GetGenericTypeDefinition() == typeof(IHandleDomainEvents<>)
-                   select i.GetGenericArguments()[0]).ToList();
+                    where i.IsGenericType
+                    where i.GetGenericTypeDefinition() == typeof(IHandleDomainEvents<>)
+                    select i.GetGenericArguments()[0]).ToList();
         }
     }
 }

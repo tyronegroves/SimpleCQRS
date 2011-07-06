@@ -6,7 +6,7 @@ using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs.NServiceBus.Eventing
 {
-    public class NsbLocalEventBus : IEventBus
+    internal class NsbLocalEventBus : IEventBus
     {
         private readonly IDomainEventHandlerFactory eventHandlerBuilder;
         private IDictionary<Type, EventHandlerInvoker> eventHandlerInvokers;

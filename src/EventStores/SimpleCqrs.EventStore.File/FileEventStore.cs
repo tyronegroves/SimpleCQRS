@@ -54,7 +54,7 @@ namespace SimpleCqrs.EventStore.File
             }
         }
 
-        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();
         }

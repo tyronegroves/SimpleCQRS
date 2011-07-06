@@ -19,14 +19,14 @@ namespace SimpleCqrs.Domain
 
         public TAggregateRoot GetById<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot, new()
         {
+            var aggregateRoot = new TAggregateRoot();
             var snapshot = GetSnapshotFromSnapshotStore(aggregateRootId);
-            var lastEventSequence = snapshot == null ? 0 : snapshot.LastEventSequence;
+            var lastEventSequence = snapshot == null || !(aggregateRoot is ISnapshotOriginator) ? 0 : snapshot.LastEventSequence;
             var domainEvents = eventStore.GetEvents(aggregateRootId, lastEventSequence);
 
             if (lastEventSequence == 0 && domainEvents.Count() == 0)
                 return null;
 
-            var aggregateRoot = new TAggregateRoot();
 
             LoadSnapshot(aggregateRoot, snapshot);
             aggregateRoot.LoadFromHistoricalEvents(domainEvents.ToArray());

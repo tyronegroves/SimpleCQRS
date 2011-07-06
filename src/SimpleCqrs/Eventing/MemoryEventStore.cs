@@ -21,9 +21,11 @@ namespace SimpleCqrs.Eventing
             storedDomainEvents.AddRange(domainEvents);
         }
 
-        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
         {
             return (from domainEvent in storedDomainEvents
+                    where domainEvent.EventDate >= startDate
+                    where domainEvent.EventDate <= endDate
                     where domainEventTypes.Contains(domainEvent.GetType())
                     select domainEvent);
         }

@@ -27,20 +27,20 @@ namespace SimpleCqrs.EventStore.MongoDb
             var configurationBuilder = new MongoConfigurationBuilder();
             configurationBuilder.ConnectionString(connectionString);
             configurationBuilder.Mapping(mapping =>
-            {
-                mapping.DefaultProfile(profile => profile.SubClassesAre(t => t.IsSubclassOf(typeof(DomainEvent))));
-                domainEventTypeCatalog
-                    .GetDerivedTypes(typeof(DomainEvent))
-                    .ToList()
-                    .ForEach(type => MapEventType(type, mapping));
-            });
+                                             {
+                                                 mapping.DefaultProfile(profile => profile.SubClassesAre(t => t.IsSubclassOf(typeof(DomainEvent))));
+                                                 domainEventTypeCatalog
+                                                     .GetDerivedTypes(typeof(DomainEvent))
+                                                     .ToList()
+                                                     .ForEach(type => MapEventType(type, mapping));
+                                             });
 
             return configurationBuilder.BuildConfiguration();
         }
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
-            using (var mongo = new Mongo(configuration))
+            using(var mongo = new Mongo(configuration))
             {
                 mongo.Connect();
 
@@ -56,7 +56,7 @@ namespace SimpleCqrs.EventStore.MongoDb
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
-            using (var mongo = new Mongo(configuration))
+            using(var mongo = new Mongo(configuration))
             {
                 mongo.Connect();
 
@@ -66,15 +66,20 @@ namespace SimpleCqrs.EventStore.MongoDb
             }
         }
 
-        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
         {
-            using (var mongo = new Mongo(configuration))
+            using(var mongo = new Mongo(configuration))
             {
                 mongo.Connect();
 
                 var database = mongo.GetDatabase(databaseName);
-                var document = new Document {{"_t", new Document {{"$in", domainEventTypes.Select(t => t.Name).ToArray()}}}};
-                var cursor = database.GetCollection<DomainEvent>("events").Find(document);
+                var selector = new Document
+                                   {
+                                       { "_t", new Document { { "$in", domainEventTypes.Select(t => t.Name).ToArray() } } }, 
+                                       { "EventDate", new Document { { "$gte", startDate }, { "$lte", endDate } } }
+                                   };
+
+                var cursor = database.GetCollection<DomainEvent>("events").Find(selector);
 
                 return cursor.Documents.ToList();
             }
@@ -82,7 +87,7 @@ namespace SimpleCqrs.EventStore.MongoDb
 
         public IEnumerable<DomainEvent> GetEventsBySelector(Document selector)
         {
-            using (var mongo = new Mongo(configuration))
+            using(var mongo = new Mongo(configuration))
             {
                 mongo.Connect();
 
@@ -92,10 +97,22 @@ namespace SimpleCqrs.EventStore.MongoDb
             }
         }
 
+        public IEnumerable<DomainEvent> GetEventsBySelector(Document selector, int skip, int limit)
+        {
+            using(var mongo = new Mongo(configuration))
+            {
+                mongo.Connect();
+
+                var database = mongo.GetDatabase(databaseName);
+                var cursor = database.GetCollection<DomainEvent>("events").Find(selector);
+                return cursor.Skip(skip).Limit(limit).Documents.ToList();
+            }
+        }
+
         private static void MapEventType(Type type, MappingStoreBuilder mapping)
         {
             MapMethod.MakeGenericMethod(type)
-                .Invoke(mapping, new object[] { });
+                .Invoke(mapping, new object[] {});
         }
     }
 }
