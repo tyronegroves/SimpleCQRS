@@ -66,6 +66,40 @@ namespace SimpleCqrs.EventStore.MongoDb
             }
         }
 
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
+        {
+            using(var mongo = new Mongo(configuration))
+            {
+                mongo.Connect();
+
+                var database = mongo.GetDatabase(databaseName);
+                var selector = new Document {{"_t", new Document {{"$in", domainEventTypes.Select(t => t.Name).ToArray()}}}};
+
+                var cursor = database.GetCollection<DomainEvent>("events").Find(selector);
+
+                return cursor.Documents.ToList();
+            }
+        }
+
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, Guid aggregateRootId)
+        {
+            using (var mongo = new Mongo(configuration))
+            {
+                mongo.Connect();
+
+                var database = mongo.GetDatabase(databaseName);
+                var selector = new Document
+                                   {
+                                       {"_t", new Document {{"$in", domainEventTypes.Select(t => t.Name).ToArray()}}},
+                                       {"AggregateRootId", aggregateRootId}
+                                   };
+
+                var cursor = database.GetCollection<DomainEvent>("events").Find(selector);
+
+                return cursor.Documents.ToList();
+            }
+        }
+
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
         {
             using(var mongo = new Mongo(configuration))
@@ -75,8 +109,8 @@ namespace SimpleCqrs.EventStore.MongoDb
                 var database = mongo.GetDatabase(databaseName);
                 var selector = new Document
                                    {
-                                       { "_t", new Document { { "$in", domainEventTypes.Select(t => t.Name).ToArray() } } }, 
-                                       { "EventDate", new Document { { "$gte", startDate }, { "$lte", endDate } } }
+                                       {"_t", new Document {{"$in", domainEventTypes.Select(t => t.Name).ToArray()}}},
+                                       {"EventDate", new Document {{"$gte", startDate}, {"$lte", endDate}}}
                                    };
 
                 var cursor = database.GetCollection<DomainEvent>("events").Find(selector);

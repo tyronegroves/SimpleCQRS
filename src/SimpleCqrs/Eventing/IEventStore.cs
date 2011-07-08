@@ -7,6 +7,8 @@ namespace SimpleCqrs.Eventing
     {
         IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence);
         void Insert(IEnumerable<DomainEvent> domainEvents);
+        IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes);
+        IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, Guid aggregateRootId);
         IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate);
     }
 }

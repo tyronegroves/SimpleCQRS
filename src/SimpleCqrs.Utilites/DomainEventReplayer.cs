@@ -19,6 +19,20 @@ namespace SimpleCqrs.Utilites
             ReplayEventsForHandlerType(handlerType, DateTime.MinValue, DateTime.MaxValue);
         }
 
+        public void ReplayEventsForHandlerType(Type handlerType, Guid aggregateRootId)
+        {
+            runtime.Start();
+
+            var serviceLocator = runtime.ServiceLocator;
+            var eventStore = serviceLocator.Resolve<IEventStore>();
+            var domainEventTypes = GetDomainEventTypesHandledByHandler(handlerType);
+
+            var domainEvents = eventStore.GetEventsByEventTypes(domainEventTypes, aggregateRootId);
+            var eventBus = new LocalEventBus(new[] { handlerType }, new DomainEventHandlerFactory(serviceLocator));
+
+            eventBus.PublishEvents(domainEvents);
+        }
+
         public void ReplayEventsForHandlerType(Type handlerType, DateTime startDate, DateTime endDate)
         {
             runtime.Start();

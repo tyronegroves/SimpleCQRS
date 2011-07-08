@@ -21,6 +21,21 @@ namespace SimpleCqrs.Eventing
             storedDomainEvents.AddRange(domainEvents);
         }
 
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
+        {
+            return (from domainEvent in storedDomainEvents
+                    where domainEventTypes.Contains(domainEvent.GetType())
+                    select domainEvent);
+        }
+
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, Guid aggregateRootId)
+        {
+            return (from domainEvent in storedDomainEvents
+                    where domainEvent.AggregateRootId == aggregateRootId
+                    where domainEventTypes.Contains(domainEvent.GetType())
+                    select domainEvent);
+        }
+
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
         {
             return (from domainEvent in storedDomainEvents
