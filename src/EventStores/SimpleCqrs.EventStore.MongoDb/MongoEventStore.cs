@@ -11,19 +11,19 @@ namespace SimpleCqrs.EventStore.MongoDb
 {
     public class MongoEventStore : IEventStore
     {
-        private readonly MongoCollection<DomainEvent> collection;
+        private readonly MongoCollection<DomainEvent> _collection;
 
         public MongoEventStore(string connectionString, ITypeCatalog typeCatalog)
         {
             typeCatalog.GetDerivedTypes(typeof(DomainEvent)).ToList().
                 ForEach(x => BsonClassMap.LookupClassMap(x));
 
-            collection = MongoServer.Create(connectionString).GetDatabase("events").GetCollection<DomainEvent>("events");
+            _collection = MongoServer.Create(connectionString).GetDatabase("events").GetCollection<DomainEvent>("events");
         }
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
-            return collection.Find(
+            return _collection.Find(
                 Query.And(
                     Query.EQ("AggregateRootId", aggregateRootId), 
                     Query.GT("Sequence", startSequence))).
@@ -32,12 +32,12 @@ namespace SimpleCqrs.EventStore.MongoDb
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
-            collection.InsertBatch(domainEvents);
+            _collection.InsertBatch(domainEvents);
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
         {
-            return collection.Find(
+            return _collection.Find(
                 Query.And(
                     Query.In("_t", domainEventTypes.Select(t => new BsonString(t.Name)).ToArray()), 
                     Query.GTE("EventDate", startDate),
@@ -47,7 +47,7 @@ namespace SimpleCqrs.EventStore.MongoDb
 
         public IEnumerable<DomainEvent> GetEventsBySelector(IMongoQuery selector, int skip, int limit)
         {
-            return collection.Find(selector).SetSkip(skip).SetLimit(limit);
+            return _collection.Find(selector).SetSkip(skip).SetLimit(limit);
         }
 
     }
