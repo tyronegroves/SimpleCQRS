@@ -20,6 +20,8 @@ namespace SimpleCqrs.EventStore.SqlServer
             Init();
         }
 
+        public bool UseShortEventTypeNames { get; set; }
+
         public void Init()
         {
             using (var connection = new SqlConnection(configuration.ConnectionString))
@@ -58,9 +60,12 @@ namespace SimpleCqrs.EventStore.SqlServer
         {
             var sql = new StringBuilder();
             foreach (var domainEvent in domainEvents)
-                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", TypeToStringHelperMethods.GetString(domainEvent.GetType()), domainEvent.AggregateRootId, domainEvent.EventDate, domainEvent.Sequence,
+            {
+                var type = GetTheEventType(domainEvent);
+                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", type, domainEvent.AggregateRootId, domainEvent.EventDate, domainEvent.Sequence,
                                  (serializer.Serialize(domainEvent) ?? string.Empty)
-                                 .Replace("'", "''"));
+                                     .Replace("'", "''"));
+            }
 
             if (sql.Length <= 0) return;
 
@@ -71,6 +76,13 @@ namespace SimpleCqrs.EventStore.SqlServer
                     command.ExecuteNonQuery();
                 connection.Close();
             }
+        }
+
+        private string GetTheEventType(DomainEvent domainEvent)
+        {
+            if (UseShortEventTypeNames)
+                return domainEvent.GetType().Name;
+            return TypeToStringHelperMethods.GetString(domainEvent.GetType());
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)

@@ -9,6 +9,18 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
     [Binding]
     public class SqlServerEventStoreSteps
     {
+        [BeforeScenario]
+        public void Setup()
+        {
+            ScenarioContext.Current.Set(false, "UseShortEventTypeNames");
+        }
+
+        [When(@"I set the store to use short event type names")]
+        public void WhenISetTheStoreToUseShortEventTypeNames()
+        {
+            ScenarioContext.Current.Set(true, "UseShortEventTypeNames");
+        }
+
         [When(@"I add the domain events to the store")]
         public void WhenIAddTheDomainEventsToTheStore()
         {
@@ -51,7 +63,9 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
         {
             var sqlServerConfiguration = ScenarioContext.Current.Get<SqlServerConfiguration>();
             var domainEventSerializer = ScenarioContext.Current.Get<IDomainEventSerializer>();
-            return new SqlServerEventStore(sqlServerConfiguration, domainEventSerializer);
+            var sqlServerEventStore = new SqlServerEventStore(sqlServerConfiguration, domainEventSerializer);
+            sqlServerEventStore.UseShortEventTypeNames = ScenarioContext.Current.Get<bool>("UseShortEventTypeNames");
+            return sqlServerEventStore;
         }
     }
 }

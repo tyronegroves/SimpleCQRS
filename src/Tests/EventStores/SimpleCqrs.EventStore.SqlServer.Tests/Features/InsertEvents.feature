@@ -22,6 +22,21 @@ Scenario: Insert one domain event
 	| EventDate            | Data              | Sequence | AggregateRootId                      | EventType                                                                                           |
 	| 3/20/2010 3:01:04 AM | Serialized Object | 2        | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 | SimpleCqrs.EventStore.SqlServer.Tests.SomethingHappenedEvent, SimpleCqrs.EventStore.SqlServer.Tests |
 
+Scenario: Insert one domain event (when using short event type names)
+	Given I have a SomethingHappenedEvent to be added to the store with the following values
+	| Field           | Value                                |
+	| EventDate       | 3/20/2010 3:01:04 AM                 |
+	| AggregateRootId | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 |
+	| Sequence        | 2                                    |
+	| ThisHappened    | something                            |
+	And that event will serialize to 'Serialized Object'
+	When I set the store to use short event type names
+	And I add the domain events to the store
+	Then I should have the following events in the database
+	| EventDate            | Data              | Sequence | AggregateRootId                      | EventType                                                                                           |
+	| 3/20/2010 3:01:04 AM | Serialized Object | 2        | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 | SomethingHappenedEvent |
+
+
 Scenario: Insert two domain events
 	Given I have a SomethingHappenedEvent to be added to the store with the following values
 	| Field           | Value                                |
