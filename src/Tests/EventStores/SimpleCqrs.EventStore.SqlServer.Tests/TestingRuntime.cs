@@ -20,6 +20,11 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests
             this.typeCatalog = typeCatalog;
         }
 
+        public Type[] LoadedTypes
+        {
+            get { return typeCatalog.LoadedTypes; }
+        }
+
         public Type[] GetDerivedTypes(Type type)
         {
             return typeCatalog.GetDerivedTypes(type);

@@ -73,7 +73,7 @@ namespace SimpleCqrs.EventStore.SqlServer
             }
         }
 
-        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
+        public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
         {
             var events = new List<DomainEvent>();
 
@@ -97,5 +97,6 @@ namespace SimpleCqrs.EventStore.SqlServer
             }
             return events;
         }
+
     }
 }

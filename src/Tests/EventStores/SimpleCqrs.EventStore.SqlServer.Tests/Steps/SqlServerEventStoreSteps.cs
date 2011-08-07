@@ -42,7 +42,7 @@ namespace SimpleCqrs.EventStore.SqlServer.Tests.Specs
             var types = table.Rows.Select(x => Type.GetType(x["Type"]));
 
             var eventStore = CreateTheEventStore();
-            var events = eventStore.GetEventsByEventTypes(types);
+            var events = eventStore.GetEventsByEventTypes(types, DateTime.MinValue, DateTime.MaxValue);
 
             ScenarioContext.Current.Set(events);
         }
