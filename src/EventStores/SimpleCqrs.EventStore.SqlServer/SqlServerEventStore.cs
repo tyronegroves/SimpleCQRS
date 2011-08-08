@@ -25,6 +25,17 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Init()
         {
+            CreateTheEventStoreTableIfNecessary();
+            SetTheShortNamesOfAnyDomainEventTypes();
+        }
+
+        private void SetTheShortNamesOfAnyDomainEventTypes()
+        {
+            shortDomainEventTypes = (new DomainEventTypesDictionaryGenerator()).GenerateDictionaryOfDomainTypes();
+        }
+
+        private void CreateTheEventStoreTableIfNecessary()
+        {
             using (var connection = new SqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
@@ -33,8 +44,6 @@ namespace SimpleCqrs.EventStore.SqlServer
                     command.ExecuteNonQuery();
                 connection.Close();
             }
-
-            shortDomainEventTypes = (new DomainEventTypesDictionaryGenerator()).GenerateDictionaryOfDomainTypes();
         }
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
