@@ -29,6 +29,54 @@ namespace SimpleCqrs.EventStore.SqlServer
             SetTheShortNamesOfAnyDomainEventTypes();
         }
 
+        public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
+        {
+            var events = new List<DomainEvent>();
+            using (var connection = new SqlConnection(configuration.ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(TheSqlStatementForGettingTheEvents(aggregateRootId, startSequence), connection))
+                using (var reader = command.ExecuteReader())
+                    while (reader.Read())
+                        AddTheEventFromTheDatabase(reader, events);
+                connection.Close();
+            }
+            return events;
+        }
+
+        public void Insert(IEnumerable<DomainEvent> domainEvents)
+        {
+            if (domainEvents.Any() == false) return;
+
+            using (var connection = new SqlConnection(configuration.ConnectionString))
+            {
+                connection.Open();
+
+                ExecuteThisSqlStatement(connection, GenerateTheInsertStatementForTheseEvents(domainEvents));
+
+                connection.Close();
+            }
+        }
+
+        private static void ExecuteThisSqlStatement(SqlConnection connection, StringBuilder sql)
+        {
+            using (var command = new SqlCommand(sql.ToString(), connection))
+                command.ExecuteNonQuery();
+        }
+
+        private StringBuilder GenerateTheInsertStatementForTheseEvents(IEnumerable<DomainEvent> domainEvents)
+        {
+            var sql = new StringBuilder();
+            foreach (var domainEvent in domainEvents)
+            {
+                var type = GetTheEventType(domainEvent);
+                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", type, domainEvent.AggregateRootId, domainEvent.EventDate, domainEvent.Sequence,
+                                 (serializer.Serialize(domainEvent) ?? string.Empty)
+                                     .Replace("'", "''"));
+            }
+            return sql;
+        }
+
         private void SetTheShortNamesOfAnyDomainEventTypes()
         {
             shortDomainEventTypes = (new DomainEventTypesDictionaryGenerator()).GenerateDictionaryOfDomainTypes();
@@ -46,27 +94,19 @@ namespace SimpleCqrs.EventStore.SqlServer
             }
         }
 
-        public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
+        private static string TheSqlStatementForGettingTheEvents(Guid aggregateRootId, int startSequence)
         {
-            var events = new List<DomainEvent>();
-            using (var connection = new SqlConnection(configuration.ConnectionString))
-            {
-                connection.Open();
-                var sql = string.Format(SqlStatements.GetEventsByAggregateRootAndSequence, "", "EventStore", aggregateRootId,
-                                        startSequence);
-                using (var command = new SqlCommand(sql, connection))
-                using (var reader = command.ExecuteReader())
-                    while (reader.Read())
-                    {
-                        var type = reader["EventType"].ToString();
-                        var data = reader["data"].ToString();
+            return string.Format(SqlStatements.GetEventsByAggregateRootAndSequence, "", "EventStore", aggregateRootId,
+                                 startSequence);
+        }
 
-                        var targetType = GetTheTargetType(type);
-                        events.Add(serializer.Deserialize(targetType, data));
-                    }
-                connection.Close();
-            }
-            return events;
+        private void AddTheEventFromTheDatabase(SqlDataReader reader, List<DomainEvent> events)
+        {
+            var type = reader["EventType"].ToString();
+            var data = reader["data"].ToString();
+
+            var targetType = GetTheTargetType(type);
+            events.Add(serializer.Deserialize(targetType, data));
         }
 
         private Type GetTheTargetType(string type)
@@ -76,31 +116,9 @@ namespace SimpleCqrs.EventStore.SqlServer
                        : shortDomainEventTypes[type];
         }
 
-        private bool ThisTypeIsTheFullNamespacedTypeName(string type)
+        private static bool ThisTypeIsTheFullNamespacedTypeName(string type)
         {
             return type.Contains(",");
-        }
-
-        public void Insert(IEnumerable<DomainEvent> domainEvents)
-        {
-            var sql = new StringBuilder();
-            foreach (var domainEvent in domainEvents)
-            {
-                var type = GetTheEventType(domainEvent);
-                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", type, domainEvent.AggregateRootId, domainEvent.EventDate, domainEvent.Sequence,
-                                 (serializer.Serialize(domainEvent) ?? string.Empty)
-                                     .Replace("'", "''"));
-            }
-
-            if (sql.Length <= 0) return;
-
-            using (var connection = new SqlConnection(configuration.ConnectionString))
-            {
-                connection.Open();
-                using (var command = new SqlCommand(sql.ToString(), connection))
-                    command.ExecuteNonQuery();
-                connection.Close();
-            }
         }
 
         private string GetTheEventType(DomainEvent domainEvent)
