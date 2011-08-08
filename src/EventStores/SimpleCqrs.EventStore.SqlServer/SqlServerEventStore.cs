@@ -12,7 +12,7 @@ namespace SimpleCqrs.EventStore.SqlServer
     {
         private readonly IDomainEventSerializer serializer;
         private readonly SqlServerConfiguration configuration;
-        private IDictionary<string, Type> domainEventTypesDictionary;
+        private IDictionary<string, Type> shortDomainEventTypes;
 
         public SqlServerEventStore(SqlServerConfiguration configuration, IDomainEventSerializer serializer)
         {
@@ -34,7 +34,7 @@ namespace SimpleCqrs.EventStore.SqlServer
                 connection.Close();
             }
 
-            domainEventTypesDictionary = (new DomainEventTypesDictionaryGenerator()).GenerateDictionaryOfDomainTypes();
+            shortDomainEventTypes = (new DomainEventTypesDictionaryGenerator()).GenerateDictionaryOfDomainTypes();
         }
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
@@ -62,11 +62,14 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         private Type GetTheTargetType(string type)
         {
-            if (type.Contains(","))
-                return Type.GetType(type);
+            return ThisTypeIsTheFullNamespacedTypeName(type)
+                       ? Type.GetType(type)
+                       : shortDomainEventTypes[type];
+        }
 
-
-            return domainEventTypesDictionary[type];
+        private bool ThisTypeIsTheFullNamespacedTypeName(string type)
+        {
+            return type.Contains(",");
         }
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
@@ -93,9 +96,9 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         private string GetTheEventType(DomainEvent domainEvent)
         {
-            if (UseShortEventTypeNames)
-                return domainEvent.GetType().Name;
-            return TypeToStringHelperMethods.GetString(domainEvent.GetType());
+            return UseShortEventTypeNames
+                       ? domainEvent.GetType().Name
+                       : TypeToStringHelperMethods.GetString(domainEvent.GetType());
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
@@ -122,6 +125,5 @@ namespace SimpleCqrs.EventStore.SqlServer
             }
             return events;
         }
-
     }
 }
