@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DomainEventTypesDictionaryGenerator.cs" />
     <Compile Include="IDomainEventSerializer.cs" />
     <Compile Include="Serializers\JsonDomainEventSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

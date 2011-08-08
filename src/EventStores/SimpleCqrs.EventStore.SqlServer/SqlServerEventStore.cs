@@ -12,7 +12,7 @@ namespace SimpleCqrs.EventStore.SqlServer
     {
         private readonly IDomainEventSerializer serializer;
         private readonly SqlServerConfiguration configuration;
-        private Dictionary<string, Type> domainEventTypesDictionary;
+        private IDictionary<string, Type> domainEventTypesDictionary;
 
         public SqlServerEventStore(SqlServerConfiguration configuration, IDomainEventSerializer serializer)
         {
@@ -34,13 +34,7 @@ namespace SimpleCqrs.EventStore.SqlServer
                 connection.Close();
             }
 
-            var list = new List<Type>();
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                var domainEventTypes = assembly.GetTypes().Where(x => x.BaseType == typeof (DomainEvent));
-                list.AddRange(domainEventTypes);
-            }
-            domainEventTypesDictionary = list.ToDictionary(x => x.Name, x => x);
+            domainEventTypesDictionary = (new DomainEventTypesDictionaryGenerator()).GenerateDictionaryOfDomainTypes();
         }
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
