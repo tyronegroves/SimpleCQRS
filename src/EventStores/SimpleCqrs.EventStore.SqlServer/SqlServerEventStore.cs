@@ -12,6 +12,7 @@ namespace SimpleCqrs.EventStore.SqlServer
     {
         private readonly IDomainEventSerializer serializer;
         private readonly SqlServerConfiguration configuration;
+        private Dictionary<string, Type> domainEventTypesDictionary;
 
         public SqlServerEventStore(SqlServerConfiguration configuration, IDomainEventSerializer serializer)
         {
@@ -32,6 +33,14 @@ namespace SimpleCqrs.EventStore.SqlServer
                     command.ExecuteNonQuery();
                 connection.Close();
             }
+
+            var list = new List<Type>();
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var domainEventTypes = assembly.GetTypes().Where(x => x.BaseType == typeof (DomainEvent));
+                list.AddRange(domainEventTypes);
+            }
+            domainEventTypesDictionary = list.ToDictionary(x => x.Name, x => x);
         }
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
@@ -61,13 +70,9 @@ namespace SimpleCqrs.EventStore.SqlServer
         {
             if (type.Contains(","))
                 return Type.GetType(type);
-            var list = new List<Type>();
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-                foreach (var eventType in assembly.GetTypes().Where(x => x.BaseType == typeof (DomainEvent)))
-                    list.Add(eventType);
 
-            var dictionary = list.ToDictionary(x => x.Name, x => x);
-            return dictionary[type];
+
+            return domainEventTypesDictionary[type];
         }
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
