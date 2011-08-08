@@ -49,11 +49,25 @@ namespace SimpleCqrs.EventStore.SqlServer
                         var type = reader["EventType"].ToString();
                         var data = reader["data"].ToString();
 
-                        events.Add(serializer.Deserialize(Type.GetType(type), data));
+                        var targetType = GetTheTargetType(type);
+                        events.Add(serializer.Deserialize(targetType, data));
                     }
                 connection.Close();
             }
             return events;
+        }
+
+        private Type GetTheTargetType(string type)
+        {
+            if (type.Contains(","))
+                return Type.GetType(type);
+            var list = new List<Type>();
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                foreach (var eventType in assembly.GetTypes().Where(x => x.BaseType == typeof (DomainEvent)))
+                    list.Add(eventType);
+
+            var dictionary = list.ToDictionary(x => x.Name, x => x);
+            return dictionary[type];
         }
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)

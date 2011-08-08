@@ -91,3 +91,21 @@ Scenario: Get events with two event types
 	| 97       | 
 	| 98       |
 	| 99       |
+
+Scenario: Get Events by aggregate root id (with short names)
+	Given I have the following events in the database
+	| EventDate            | Data               | Sequence | AggregateRootId                      | EventType                  |
+	| 3/20/2010 3:01:04 AM | Serialized Object  | 1        | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 | SomethingHappenedEvent     |
+	| 3/20/2010 4:01:04 AM | Serialized Objecta | 2        | D50E4D4F-0893-45B2-92F8-897514812A91 | SomethingHappenedEvent     |
+	| 3/20/2010 5:01:04 AM | Serialized Object2 | 3        | 8312E92C-DF1C-4970-A9D5-6414120C3CF7 | SomethingElseHappenedEvent |
+	And deserializing 'Serialized Object' will return a SomethingHappenedEvent with the following data
+	| Field           | Value |
+	| Sequence        | 97    |
+	And deserializing 'Serialized Object2' will return a SomethingElseHappenedEvent with the following data
+	| Field           | Value |
+	| Sequence        | 98    |
+	When I retrieve the domain events for '8312E92C-DF1C-4970-A9D5-6414120C3CF7'
+	Then I should get back the following DomainEvents
+	| Sequence |
+	| 97       |
+	| 98       | 

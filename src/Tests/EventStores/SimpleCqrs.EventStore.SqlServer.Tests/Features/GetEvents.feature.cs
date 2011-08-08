@@ -401,6 +401,75 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Get Events by aggregate root id (with short names)")]
+        public virtual void GetEventsByAggregateRootIdWithShortNames()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Events by aggregate root id (with short names)", ((string[])(null)));
+#line 95
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
+                        "EventDate",
+                        "Data",
+                        "Sequence",
+                        "AggregateRootId",
+                        "EventType"});
+            table21.AddRow(new string[] {
+                        "3/20/2010 3:01:04 AM",
+                        "Serialized Object",
+                        "1",
+                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
+                        "SomethingHappenedEvent"});
+            table21.AddRow(new string[] {
+                        "3/20/2010 4:01:04 AM",
+                        "Serialized Objecta",
+                        "2",
+                        "D50E4D4F-0893-45B2-92F8-897514812A91",
+                        "SomethingHappenedEvent"});
+            table21.AddRow(new string[] {
+                        "3/20/2010 5:01:04 AM",
+                        "Serialized Object2",
+                        "3",
+                        "8312E92C-DF1C-4970-A9D5-6414120C3CF7",
+                        "SomethingElseHappenedEvent"});
+#line 96
+ testRunner.Given("I have the following events in the database", ((string)(null)), table21);
+#line hidden
+            TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table22.AddRow(new string[] {
+                        "Sequence",
+                        "97"});
+#line 101
+ testRunner.And("deserializing \'Serialized Object\' will return a SomethingHappenedEvent with the f" +
+                    "ollowing data", ((string)(null)), table22);
+#line hidden
+            TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table23.AddRow(new string[] {
+                        "Sequence",
+                        "98"});
+#line 104
+ testRunner.And("deserializing \'Serialized Object2\' will return a SomethingElseHappenedEvent with " +
+                    "the following data", ((string)(null)), table23);
+#line 107
+ testRunner.When("I retrieve the domain events for \'8312E92C-DF1C-4970-A9D5-6414120C3CF7\'");
+#line hidden
+            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Sequence"});
+            table24.AddRow(new string[] {
+                        "97"});
+            table24.AddRow(new string[] {
+                        "98"});
+#line 108
+ testRunner.Then("I should get back the following DomainEvents", ((string)(null)), table24);
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #endregion
