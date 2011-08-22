@@ -68,7 +68,15 @@ namespace SimpleCqrs.Commanding
             {
                 var handleMethod = GetTheHandleMethod();
                 var commandHandler = CreateTheCommandHandler();
-                handleMethod.Invoke(commandHandler, new object[] {handlingContext});
+
+                try
+                {
+                    handleMethod.Invoke(commandHandler, new object[] { handlingContext });
+                }
+                catch(TargetInvocationException ex)
+                {
+                    throw ex.InnerException;
+                }
             }
 
             private ICommandHandlingContext<ICommand> CreateTheCommandHandlingContext(ICommand command)

@@ -56,7 +56,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
                 .Returns(new[] { typeof(MyTestCommandHandler) });
 
-            var serviceLocator = new MockServiceLocator {ResolveFunc = t => new MyTestCommandHandler()};
+            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
 
             var commandBus = CreateCommandBus(serviceLocator);
             commandBus.Execute(new MyTest3Command { ReturnValue = 321 });
@@ -66,30 +66,30 @@ namespace SimpleCqrs.Core.Tests.Commanding
         public void CommandHandlerForMyCommandIsCalledWhenHandlerTypeIsInTypeCatalog()
         {
             mocker.GetMock<ITypeCatalog>()
-                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof (IHandleCommands<>)))
-                .Returns(new[] {typeof (MyTestCommandHandler)});
+                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
+                .Returns(new[] { typeof(MyTestCommandHandler) });
 
-            var serviceLocator = new MockServiceLocator {ResolveFunc = t => new MyTestCommandHandler()};
+            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
 
             var commandBus = CreateCommandBus(serviceLocator);
-            var result = commandBus.Execute(new MyTestCommand {ReturnValue = 321});
+            var result = commandBus.Execute(new MyTestCommand { ReturnValue = 321 });
 
             Assert.AreEqual(321, result);
         }
 
         [TestMethod]
-        [ExpectedException(typeof (DuplicateCommandHandlersException))]
+        [ExpectedException(typeof(DuplicateCommandHandlersException))]
         public void DuplicateCommandHandlersExceptionIsThrownWhenTwoCommandHandlersForSameCommandExist()
         {
             mocker.GetMock<ITypeCatalog>()
-                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof (IHandleCommands<>)))
+                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
                 .Returns(new[]
                              {
                                  typeof (MyTestCommandHandler),
                                  typeof (MyTestCommandHandler)
                              });
 
-            var serviceLocator = new MockServiceLocator {ResolveFunc = t => new MyTestCommandHandler()};
+            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
 
             var commandBus = CreateCommandBus(serviceLocator);
             commandBus.Execute(new MyTestCommand());
@@ -99,17 +99,37 @@ namespace SimpleCqrs.Core.Tests.Commanding
         public void CommandHandlerThatImplementsTwoHandlersAreCalledWhenHandlerTypeIsInTypeCatalog()
         {
             mocker.GetMock<ITypeCatalog>()
-                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof (IHandleCommands<>)))
-                .Returns(new[] {typeof (HandlerForTwoCommands)});
+                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
+                .Returns(new[] { typeof(HandlerForTwoCommands) });
 
-            var serviceLocator = new MockServiceLocator {ResolveFunc = t => new HandlerForTwoCommands()};
+            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new HandlerForTwoCommands() };
 
             var commandBus = CreateCommandBus(serviceLocator);
-            var result = commandBus.Execute(new MyTestCommand {ReturnValue = 102});
-            var result2 = commandBus.Execute(new MyTest2Command {ReturnValue = 45});
+            var result = commandBus.Execute(new MyTestCommand { ReturnValue = 102 });
+            var result2 = commandBus.Execute(new MyTest2Command { ReturnValue = 45 });
 
             Assert.AreEqual(102, result);
             Assert.AreEqual(45, result2);
+        }
+
+        [TestMethod]
+        public void Handle_WhenExceptionIsThrown_InvokerThrowsInitialException()
+        {
+            mocker.GetMock<ITypeCatalog>()
+                .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
+                .Returns(new[] { typeof(MyTestCommandHandler) });
+
+            var myExceptionThrowingHandler = new MyTestCommandHandler
+            {
+                OnHandle = (ctx) => { throw new Exception("THE SANTA ROCKS!"); }
+            };
+
+            var serviceLocator = new MockServiceLocator { ResolveFunc = t => myExceptionThrowingHandler };
+
+            var commandBus = CreateCommandBus(serviceLocator);
+
+            var ex = CustomAsserts.Throws<Exception>(() => commandBus.Execute(new MyTestCommand()));
+            Assert.AreEqual("THE SANTA ROCKS!", ex.Message);
         }
 
         private ICommandBus CreateCommandBus(IServiceLocator serviceLocator)
@@ -121,9 +141,14 @@ namespace SimpleCqrs.Core.Tests.Commanding
 
     public class MyTestCommandHandler : IHandleCommands<MyTestCommand>
     {
+        public Action<ICommandHandlingContext<MyTestCommand>> OnHandle;
+
         public void Handle(ICommandHandlingContext<MyTestCommand> handlingContext)
         {
-            handlingContext.Return(handlingContext.Command.ReturnValue);
+            if (OnHandle == null)
+                handlingContext.Return(handlingContext.Command.ReturnValue);
+            else
+                OnHandle(handlingContext);
         }
     }
 
