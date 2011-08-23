@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 #region License
 
@@ -36,6 +37,10 @@ namespace SimpleCqrs
             : base(string.Format("Could not resolve serviceType '{0}'", service), innerException)
         {
             ServiceType = service;
+        }
+
+        protected ServiceResolutionException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
 
         public Type ServiceType { get; set; }

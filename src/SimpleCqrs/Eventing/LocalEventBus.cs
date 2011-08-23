@@ -17,10 +17,12 @@ namespace SimpleCqrs.Eventing
 
         public void PublishEvent(DomainEvent domainEvent)
         {
-            if(!eventHandlerInvokers.ContainsKey(domainEvent.GetType())) return;
+            var domainEventType = domainEvent.GetType();
+            var invokers = (from entry in eventHandlerInvokers
+                           where  entry.Key.IsAssignableFrom(domainEventType)
+                           select entry.Value).ToList();
 
-            var eventHandlerInvoker = eventHandlerInvokers[domainEvent.GetType()];
-            eventHandlerInvoker.Publish(domainEvent);
+            invokers.ForEach(i => i.Publish(domainEvent));
         }
 
         public void PublishEvents(IEnumerable<DomainEvent> domainEvents)
