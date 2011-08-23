@@ -43,6 +43,7 @@
     <Compile Include="Commanding\CommandHandlerNotFoundException.cs" />
     <Compile Include="Commanding\CommandInvokerDictionaryBuilderHelpers.cs" />
     <Compile Include="Commanding\CommandWithAggregateRootId.cs" />
+    <Compile Include="Commanding\CreateCommandHandler.cs" />
     <Compile Include="Commanding\DuplicateCommandHandlersException.cs" />
     <Compile Include="Commanding\ExecuteTimeoutException.cs" />
     <Compile Include="Commanding\ICommand.cs" />
