@@ -17,7 +17,7 @@ namespace SimpleCqrs.Domain
             this.eventBus = eventBus;
         }
 
-        public TAggregateRoot GetById<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot, new()
+        public virtual TAggregateRoot GetById<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot, new()
         {
             var aggregateRoot = new TAggregateRoot();
             var snapshot = GetSnapshotFromSnapshotStore(aggregateRootId);
@@ -34,7 +34,7 @@ namespace SimpleCqrs.Domain
             return aggregateRoot;
         }
 
-        public void Save(AggregateRoot aggregateRoot)
+        public virtual void Save(AggregateRoot aggregateRoot)
         {
             var domainEvents = aggregateRoot.UncommittedEvents;
 
