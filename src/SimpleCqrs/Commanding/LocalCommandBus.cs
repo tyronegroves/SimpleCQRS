@@ -75,7 +75,9 @@ namespace SimpleCqrs.Commanding
                 }
                 catch(TargetInvocationException ex)
                 {
-                    throw ex.InnerException;
+                    throw new Exception(
+                        string.Format("Command handler '{0}' for '{1}' failed. Inspect inner exception.", commandHandler.GetType().Name, handlingContext.Command.GetType().Name),
+                        ex.InnerException);
                 }
             }
 
