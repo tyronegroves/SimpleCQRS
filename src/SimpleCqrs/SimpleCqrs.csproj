@@ -56,6 +56,7 @@
     <Compile Include="Domain\AggregateRoot.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Domain\AggregateRootNotFoundException.cs" />
     <Compile Include="Domain\DomainRepository.cs">
       <SubType>Code</SubType>
     </Compile>

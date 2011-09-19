@@ -84,6 +84,39 @@ namespace SimpleCqrs.Core.Tests.Domain
             Assert.AreEqual(0, aggregateRoot.UncommittedEvents.Count);
         }
 
+		[TestMethod]
+		public void GettingExistingByIdThrowsExceptionWhenNotFound()
+		{
+			var eventStore = new Mock<IEventStore>().Object;
+			var snapshotStore = new Mock<ISnapshotStore>().Object;
+			var eventBus = new Mock<IEventBus>().Object;
+			var repository = new DomainRepository(eventStore, snapshotStore, eventBus);
+			var aggregateRootId = Guid.NewGuid();
+
+			var exception = CustomAsserts.Throws<AggregateRootNotFoundException>(() =>
+				repository.GetExistingById<MyTestAggregateRoot>(aggregateRootId)
+				);
+
+			Assert.AreEqual(aggregateRootId, exception.AggregateRootId);
+			Assert.AreEqual(typeof(MyTestAggregateRoot), exception.Type);
+		}
+
+		[TestMethod]
+		public void GettingExistingByIdReturnsAggregateWhenFound()
+		{
+			var aggregateRootId = Guid.NewGuid();
+
+			var eventStore = new Mock<IEventStore>();
+			eventStore.Setup(x => x.GetEvents(aggregateRootId, It.IsAny<int>())).Returns(new[] { new MyTestEvent() });
+			var snapshotStore = new Mock<ISnapshotStore>().Object;
+			var eventBus = new Mock<IEventBus>().Object;
+			var repository = new DomainRepository(eventStore.Object, snapshotStore, eventBus);
+
+			var fetchedAggregateRoot = repository.GetExistingById<MyTestAggregateRoot>(aggregateRootId);
+
+			Assert.IsNotNull(fetchedAggregateRoot);
+		}
+
         private DomainRepository CreateDomainRepository()
         {
             return mocker.Resolve<DomainRepository>();
@@ -99,7 +132,7 @@ namespace SimpleCqrs.Core.Tests.Domain
                 EventIds = new List<int>();
             }
 
-            private void OnMyTest(MyTestEvent myTestEvent)
+        	private void OnMyTest(MyTestEvent myTestEvent)
             {
                 MyTestEventHandleCount++;
                 EventIds.Add(myTestEvent.Sequence);
