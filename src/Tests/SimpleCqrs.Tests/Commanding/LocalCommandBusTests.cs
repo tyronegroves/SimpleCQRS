@@ -129,7 +129,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
             var commandBus = CreateCommandBus(serviceLocator);
 
             var ex = CustomAsserts.Throws<Exception>(() => commandBus.Execute(new MyTestCommand()));
-            Assert.AreEqual("THE SANTA ROCKS!", ex.Message);
+            Assert.AreEqual("THE SANTA ROCKS!", ex.InnerException.Message);
         }
 
         private ICommandBus CreateCommandBus(IServiceLocator serviceLocator)

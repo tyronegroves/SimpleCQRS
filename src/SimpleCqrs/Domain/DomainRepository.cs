@@ -22,14 +22,23 @@ namespace SimpleCqrs.Domain
             var aggregateRoot = new TAggregateRoot();
             var snapshot = GetSnapshotFromSnapshotStore(aggregateRootId);
             var lastEventSequence = snapshot == null || !(aggregateRoot is ISnapshotOriginator) ? 0 : snapshot.LastEventSequence;
-            var domainEvents = eventStore.GetEvents(aggregateRootId, lastEventSequence);
+            var domainEvents = eventStore.GetEvents(aggregateRootId, lastEventSequence).ToArray();
 
-            if (lastEventSequence == 0 && domainEvents.Count() == 0)
+            if (lastEventSequence == 0 && domainEvents.Length == 0)
                 return null;
-
-
+            
             LoadSnapshot(aggregateRoot, snapshot);
-            aggregateRoot.LoadFromHistoricalEvents(domainEvents.ToArray());
+            aggregateRoot.LoadFromHistoricalEvents(domainEvents);
+
+            return aggregateRoot;
+        }
+
+        public virtual TAggregateRoot GetExistingById<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot, new()
+        {
+            var aggregateRoot = GetById<TAggregateRoot>(aggregateRootId);
+
+            if(aggregateRoot == null)
+                throw new AggregateRootNotFoundException(aggregateRootId, typeof(TAggregateRoot));
 
             return aggregateRoot;
         }

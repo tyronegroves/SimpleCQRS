@@ -192,9 +192,48 @@ namespace SimpleCqrs.Core.Tests.Domain
                                                 .All(domainEvent => domainEvent.AggregateRootId == aggregateRootId);
             Assert.IsTrue(allAggregateRootIdsMatch);
         }
+
+		[TestMethod]
+		public void WhenEventModifierIsSetModificationsAreApplied()
+		{
+			// Arrange
+			var fakeModification = new FakeModification
+			{
+				ModifyValueTo = "Yes we can"
+			};
+			var aggregateRoot = new MyAggregateRoot();
+			var domainEvent = new EventForModificationTestEvent();
+
+			EventModifier.Modification = fakeModification;
+
+			// Act
+			aggregateRoot.Apply(domainEvent);
+
+			// Assert
+			Assert.AreEqual(domainEvent.ModifiedValue, fakeModification.ModifyValueTo);
+
+			// Teardown
+			EventModifier.Modification = null;
+		}
+
+    	private class FakeModification : IEventModification
+		{
+			public void Apply(DomainEvent e)
+			{
+				if (e is EventForModificationTestEvent)
+					((EventForModificationTestEvent)e).ModifiedValue = ModifyValueTo;
+			}
+
+    		public string ModifyValueTo { get; set; }
+		}
+
+    	private class EventForModificationTestEvent : DomainEvent
+		{
+			public string ModifiedValue { get; set; }
+		}
     }
 
-    public class MyEntity : Entity
+	public class MyEntity : Entity
     {
     }
 

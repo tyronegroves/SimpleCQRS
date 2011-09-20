@@ -36,6 +36,9 @@ namespace SimpleCqrs.Domain
             ApplyEventToInternalState(domainEvent);
             domainEvent.AggregateRootId = Id;
             domainEvent.EventDate = DateTime.Now;
+            
+            EventModifier.Modify(domainEvent);
+
             uncommittedEvents.Enqueue(domainEvent);
         }
 
@@ -57,7 +60,8 @@ namespace SimpleCqrs.Domain
             var domainEventTypeName = domainEventType.Name;
             var aggregateRootType = GetType();
 
-            var methodInfo = aggregateRootType.GetMethod(GetEventHandlerMethodName(domainEventTypeName),
+        	var eventHandlerMethodName = GetEventHandlerMethodName(domainEventTypeName);
+        	var methodInfo = aggregateRootType.GetMethod(eventHandlerMethodName,
                                                          BindingFlags.Instance | BindingFlags.Public |
                                                          BindingFlags.NonPublic, null, new[] {domainEventType}, null);
 
