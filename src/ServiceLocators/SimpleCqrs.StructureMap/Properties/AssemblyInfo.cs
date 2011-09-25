@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SimpleCqrs.Core.Tests")]
+[assembly: AssemblyTitle("SimpleCqrs.StructureMap")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("DEG")]
-[assembly: AssemblyProduct("SimpleCqrs.Core.Tests")]
-[assembly: AssemblyCopyright("Copyright © DEG 2010")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("SimpleCqrs.StructureMap")]
+[assembly: AssemblyCopyright("Copyright © 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0c55a564-940c-4f87-bf91-ebfd87108ef5")]
+[assembly: Guid("45b7d4d4-3fac-49df-9cc3-45a59b1b59a0")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,5 +31,6 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

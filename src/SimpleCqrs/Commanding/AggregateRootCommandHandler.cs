@@ -6,9 +6,19 @@ namespace SimpleCqrs.Commanding
         where TCommand : ICommandWithAggregateRootId
         where TAggregateRoot : AggregateRoot, new()
     {
+        private readonly IDomainRepository domainRepository;
+
+        protected AggregateRootCommandHandler() : this(ServiceLocator.Current.Resolve<IDomainRepository>())
+        {
+        }
+
+        protected AggregateRootCommandHandler(IDomainRepository domainRepository)
+        {
+            this.domainRepository = domainRepository;
+        }
+
         void IHandleCommands<TCommand>.Handle(ICommandHandlingContext<TCommand> handlingContext)
         {
-            var domainRepository = GetTheDomainRepository();
             var command = handlingContext.Command;
 
             var aggregateRoot = domainRepository.GetById<TAggregateRoot>(command.AggregateRootId);
@@ -17,13 +27,8 @@ namespace SimpleCqrs.Commanding
 
             Handle(command, aggregateRoot);
 
-            if (aggregateRoot != null)
+            if(aggregateRoot != null)
                 domainRepository.Save(aggregateRoot);
-        }
-
-        private static IDomainRepository GetTheDomainRepository()
-        {
-            return ServiceLocator.Current.Resolve<IDomainRepository>();
         }
 
         private void ValidateTheCommand(ICommandHandlingContext<TCommand> handlingContext, TCommand command, TAggregateRoot aggregateRoot)
