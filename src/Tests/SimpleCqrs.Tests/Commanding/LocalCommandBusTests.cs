@@ -60,6 +60,8 @@ namespace SimpleCqrs.Core.Tests.Commanding
         [TestMethod]
         public void CommandHandlerForMyCommandIsCalledWhenHandlerTypeIsInTypeCatalog()
         {
+            serviceLocator.ResolveFunc = Activator.CreateInstance;
+
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
                 .Returns(new[] {typeof(MyTestCommandHandler)});

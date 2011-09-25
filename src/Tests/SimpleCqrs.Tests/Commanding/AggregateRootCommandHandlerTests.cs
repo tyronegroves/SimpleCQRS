@@ -21,7 +21,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
             ServiceLocator.SetCurrent(mockServiceLocator);
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void When_the_command_is_handled_the_aggregateroot_with_the_aggregaterootid_is_retrieved_out_of_the_domainrepository()
         {
             var aggregateRootId = new Guid("438DBA36-8253-4AC3-BF37-0CBB86F167BB");
