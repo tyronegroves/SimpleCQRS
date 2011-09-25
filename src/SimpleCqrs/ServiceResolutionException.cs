@@ -39,7 +39,7 @@ namespace SimpleCqrs
             ServiceType = service;
         }
 
-        protected ServiceResolutionException(SerializationInfo info, StreamingContext context) : base(info, context)
+        public ServiceResolutionException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 

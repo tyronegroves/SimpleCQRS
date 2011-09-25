@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SimpleCqrs.RabbitMQ")]
+[assembly: AssemblyTitle("SimpleCqrs.Rhino.ServiceBus")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("SimpleCqrs.RabbitMQ")]
+[assembly: AssemblyProduct("SimpleCqrs.Rhino.ServiceBus")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7e7172ed-ed37-4a04-af75-d48cd2d06910")]
+[assembly: Guid("b87d4af7-1f84-4d57-9402-2a4c333ca6fd")]
 
 // Version information for an assembly consists of the following four values:
 //

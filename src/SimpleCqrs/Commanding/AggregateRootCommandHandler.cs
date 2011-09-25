@@ -8,16 +8,16 @@ namespace SimpleCqrs.Commanding
     {
         void IHandleCommands<TCommand>.Handle(ICommandHandlingContext<TCommand> handlingContext)
         {
+            var domainRepository = GetTheDomainRepository();
             var command = handlingContext.Command;
 
-            var domainRepository = GetTheDomainRepository();
             var aggregateRoot = domainRepository.GetById<TAggregateRoot>(command.AggregateRootId);
 
             ValidateTheCommand(handlingContext, command, aggregateRoot);
 
             Handle(command, aggregateRoot);
 
-            if(aggregateRoot != null)
+            if (aggregateRoot != null)
                 domainRepository.Save(aggregateRoot);
         }
 

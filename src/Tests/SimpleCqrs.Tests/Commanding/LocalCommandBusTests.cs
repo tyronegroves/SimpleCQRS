@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using AutoMoq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using SimpleCqrs.Commanding;
 
 namespace SimpleCqrs.Core.Tests.Commanding
@@ -11,11 +10,13 @@ namespace SimpleCqrs.Core.Tests.Commanding
     public class LocalCommandBusTests
     {
         private AutoMoqer mocker;
+        private MockServiceLocator serviceLocator;
 
         [TestInitialize]
         public void SetupMocksForAllTest()
         {
             mocker = new AutoMoqer();
+            serviceLocator = new MockServiceLocator(mocker);
         }
 
         [TestMethod]
@@ -23,9 +24,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
         {
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] { typeof(MyTestCommandHandler) });
-
-            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
+                .Returns(new[] {typeof(MyTestCommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
             ((IHaveATestMode)commandBus).IsInTestMode = true;
@@ -38,14 +37,12 @@ namespace SimpleCqrs.Core.Tests.Commanding
         {
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] { typeof(MyTestCommandHandler) });
-
-            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
+                .Returns(new[] {typeof(MyTestCommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
             ((IHaveATestMode)commandBus).IsInTestMode = true;
 
-            commandBus.Execute(new MyTest3Command { ReturnValue = 321 });
+            commandBus.Execute(new MyTest3Command {ReturnValue = 321});
         }
 
         [TestMethod]
@@ -54,12 +51,10 @@ namespace SimpleCqrs.Core.Tests.Commanding
         {
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] { typeof(MyTestCommandHandler) });
-
-            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
+                .Returns(new[] {typeof(MyTestCommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
-            commandBus.Execute(new MyTest3Command { ReturnValue = 321 });
+            commandBus.Execute(new MyTest3Command {ReturnValue = 321});
         }
 
         [TestMethod]
@@ -67,12 +62,10 @@ namespace SimpleCqrs.Core.Tests.Commanding
         {
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] { typeof(MyTestCommandHandler) });
-
-            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
+                .Returns(new[] {typeof(MyTestCommandHandler)});
 
             var commandBus = CreateCommandBus(serviceLocator);
-            var result = commandBus.Execute(new MyTestCommand { ReturnValue = 321 });
+            var result = commandBus.Execute(new MyTestCommand {ReturnValue = 321});
 
             Assert.AreEqual(321, result);
         }
@@ -85,11 +78,9 @@ namespace SimpleCqrs.Core.Tests.Commanding
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
                 .Returns(new[]
                              {
-                                 typeof (MyTestCommandHandler),
-                                 typeof (MyTestCommandHandler)
+                                 typeof(MyTestCommandHandler),
+                                 typeof(MyTestCommandHandler)
                              });
-
-            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new MyTestCommandHandler() };
 
             var commandBus = CreateCommandBus(serviceLocator);
             commandBus.Execute(new MyTestCommand());
@@ -100,13 +91,11 @@ namespace SimpleCqrs.Core.Tests.Commanding
         {
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] { typeof(HandlerForTwoCommands) });
-
-            var serviceLocator = new MockServiceLocator { ResolveFunc = t => new HandlerForTwoCommands() };
+                .Returns(new[] {typeof(HandlerForTwoCommands)});
 
             var commandBus = CreateCommandBus(serviceLocator);
-            var result = commandBus.Execute(new MyTestCommand { ReturnValue = 102 });
-            var result2 = commandBus.Execute(new MyTest2Command { ReturnValue = 45 });
+            var result = commandBus.Execute(new MyTestCommand {ReturnValue = 102});
+            var result2 = commandBus.Execute(new MyTest2Command {ReturnValue = 45});
 
             Assert.AreEqual(102, result);
             Assert.AreEqual(45, result2);
@@ -117,14 +106,11 @@ namespace SimpleCqrs.Core.Tests.Commanding
         {
             mocker.GetMock<ITypeCatalog>()
                 .Setup(typeCatalog => typeCatalog.GetGenericInterfaceImplementations(typeof(IHandleCommands<>)))
-                .Returns(new[] { typeof(MyTestCommandHandler) });
+                .Returns(new[] {typeof(MyTestCommandHandler)});
 
-            var myExceptionThrowingHandler = new MyTestCommandHandler
-            {
-                OnHandle = (ctx) => { throw new Exception("THE SANTA ROCKS!"); }
-            };
-
-            var serviceLocator = new MockServiceLocator { ResolveFunc = t => myExceptionThrowingHandler };
+            mocker.GetMock<MyTestCommandHandler>()
+                .Setup(handler => handler.Handle(It.IsAny<ICommandHandlingContext<MyTestCommand>>()))
+                .Throws(new Exception("THE SANTA ROCKS!"));
 
             var commandBus = CreateCommandBus(serviceLocator);
 
@@ -141,14 +127,9 @@ namespace SimpleCqrs.Core.Tests.Commanding
 
     public class MyTestCommandHandler : IHandleCommands<MyTestCommand>
     {
-        public Action<ICommandHandlingContext<MyTestCommand>> OnHandle;
-
-        public void Handle(ICommandHandlingContext<MyTestCommand> handlingContext)
+        public virtual void Handle(ICommandHandlingContext<MyTestCommand> handlingContext)
         {
-            if (OnHandle == null)
-                handlingContext.Return(handlingContext.Command.ReturnValue);
-            else
-                OnHandle(handlingContext);
+            handlingContext.Return(handlingContext.Command.ReturnValue);
         }
     }
 
@@ -178,90 +159,5 @@ namespace SimpleCqrs.Core.Tests.Commanding
     public class MyTest3Command : ICommand
     {
         public int ReturnValue { get; set; }
-    }
-
-    public class MockServiceLocator : IServiceLocator
-    {
-        public Func<Type, object> ResolveFunc { get; set; }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Resolve<T>() where T : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Resolve<T>(string key) where T : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public object Resolve(Type type)
-        {
-            return ResolveFunc(type);
-        }
-
-        public IList<T> ResolveServices<T>() where T : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register<TInterface>(Type implType) where TInterface : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register<TInterface, TImplementation>() where TImplementation : class, TInterface
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register<TInterface, TImplementation>(string key) where TImplementation : class, TInterface
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register(string key, Type type)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register(Type serviceType, Type implType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register<TInterface>(TInterface instance) where TInterface : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Release(object instance)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Reset()
-        {
-            throw new NotImplementedException();
-        }
-
-        public TService Inject<TService>(TService instance) where TService : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void TearDown<TService>(TService instance) where TService : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Register<Interface>(Func<Interface> factoryMethod) where Interface : class
-        {
-            throw new NotImplementedException();
-        }
     }
 }

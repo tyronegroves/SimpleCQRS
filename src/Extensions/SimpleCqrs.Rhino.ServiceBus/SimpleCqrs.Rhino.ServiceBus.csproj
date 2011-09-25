@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CC7464F8-AE5B-4BD7-A833-EE9CB7B59BE7}</ProjectGuid>
+    <ProjectGuid>{EE1B7085-F7BC-48BD-B058-C33DF4CD0F74}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleCqrs.RabbitMQ</RootNamespace>
-    <AssemblyName>SimpleCqrs.RabbitMQ</AssemblyName>
+    <RootNamespace>SimpleCqrs.Rhino.ServiceBus</RootNamespace>
+    <AssemblyName>SimpleCqrs.Rhino.ServiceBus</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\binaries\extension\rabbitmq\</OutputPath>
+    <OutputPath>..\..\..\binaries\extension\rhino.servicebus\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,16 +31,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RabbitMQ.Client">
-      <HintPath>..\..\..\lib\RabbitMQ.Client.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Rhino.ServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RabbitCommandListener.cs" />
+    <Compile Include="ReplyConsumer.cs" />
+    <Compile Include="DomainEventConsumer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reply.cs" />
+    <Compile Include="Request.cs" />
+    <Compile Include="RequestReplyMessageOwnersSelector.cs" />
+    <Compile Include="RsbCommandBus.cs" />
+    <Compile Include="RsbCommandConsumer.cs" />
+    <Compile Include="RsbEventBus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SimpleCqrs\SimpleCqrs.csproj">

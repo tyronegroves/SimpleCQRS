@@ -49,7 +49,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commanding\AggregateRootCommandHandlerTests.cs" />
     <Compile Include="Commanding\LocalCommandBusTests.cs" />
+    <Compile Include="Commanding\MockServiceLocator.cs" />
     <Compile Include="Domain\AggregateRootTests.cs" />
     <Compile Include="Domain\EntityTests.cs" />
     <Compile Include="Events\DirectEventBusTests.cs" />
