@@ -85,7 +85,7 @@ namespace SimpleCqrs
         /// <returns>An instance of <see cref="ICommandBus"/>.</returns>
         protected virtual ICommandBus GetCommandBus(IServiceLocator serviceLocator)
         {
-            return serviceLocator.Resolve<LocalCommandBus>();
+            return new LocalCommandBus(serviceLocator.Resolve<ITypeCatalog>(), serviceLocator);
         }
 
         /// <summary>
