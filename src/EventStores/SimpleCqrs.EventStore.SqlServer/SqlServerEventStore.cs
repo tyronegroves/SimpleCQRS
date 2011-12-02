@@ -47,7 +47,13 @@ namespace SimpleCqrs.EventStore.SqlServer
                         var type = reader["EventType"].ToString();
                         var data = reader["data"].ToString();
 
-                        events.Add(serializer.Deserialize(Type.GetType(type), data));
+                        try
+                        {
+                            events.Add(serializer.Deserialize(Type.GetType(type), data));
+                        } catch(ArgumentNullException ex) 
+                        {
+                            throw new Exception(string.Format("Cannot find type '{0}', yet the type is in the event store. Are you sure you haven't changed a class name or something stupid like that?", type.Split(',')[0]), ex.InnerException);
+                        }
                     }
                 connection.Close();
             }
