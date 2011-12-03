@@ -52,7 +52,7 @@ namespace SimpleCqrs.EventStore.SqlServer
                             events.Add(serializer.Deserialize(Type.GetType(type), data));
                         } catch(ArgumentNullException ex) 
                         {
-                            throw new Exception(string.Format("Cannot find type '{0}', yet the type is in the event store. Are you sure you haven't changed a class name or something stupid like that?", type.Split(',')[0]), ex.InnerException);
+                            throw new Exception(string.Format("Cannot find type '{0}', yet the type is in the event store. Are you sure you haven't changed a class name or something arising from mental dullness?", type.Split(',')[0]), ex.InnerException);
                         }
                     }
                 connection.Close();
