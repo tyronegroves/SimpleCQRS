@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleCqrs.Commanding;
 using SimpleCqrs.Domain;
 using SimpleCqrs.Eventing;
@@ -166,7 +163,6 @@ namespace SimpleCqrs.Ninject.Tests.Integration
 
     class AccountReportDenormalized : IHandleDomainEvents<AccountCreatedEvent>, IHandleDomainEvents<AccountNameSetEvent>
     {
-
         public void Handle(AccountNameSetEvent domainEvent)
         {
             NinjectServiceLocatorIntegrationTests.NameSetEventHandlerWasCalled = true;
