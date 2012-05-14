@@ -1,4 +1,5 @@
 ﻿// -----------------------------------------------------------------------
+// Juan Pablo Olmos Lara
 // https://github.com/jupaol
 // jupaol@hotmail.com
 // http://jupaol.blogspot.com/

@@ -1,4 +1,11 @@
-﻿using System;
+﻿// -----------------------------------------------------------------------
+// Juan Pablo Olmos Lara
+// https://github.com/jupaol
+// jupaol@hotmail.com
+// http://jupaol.blogspot.com/
+// -----------------------------------------------------------------------
+
+using System;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleCqrs.Commanding;
