@@ -41,13 +41,13 @@
       <HintPath>..\..\..\binaries\servicelocators\unity\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\src\EventStores\SimpleCqrs.EventStore.SqlServer\bin\Debug\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\..\..\lib\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="SimpleCqrs">
       <HintPath>..\..\..\binaries\SimpleCqrs.dll</HintPath>
     </Reference>
     <Reference Include="SimpleCqrs.EventStore.SqlServer">
-      <HintPath>..\..\..\src\EventStores\SimpleCqrs.EventStore.SqlServer\bin\Debug\SimpleCqrs.EventStore.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\binaries\eventstores\sqlserver\SimpleCqrs.EventStore.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="SimpleCqrs.Unity">
       <HintPath>..\..\..\binaries\servicelocators\unity\SimpleCqrs.Unity.dll</HintPath>
