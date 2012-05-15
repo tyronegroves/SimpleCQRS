@@ -64,7 +64,7 @@ namespace SimpleCqrs.EventStore.SqlServer
         {
             var sql = new StringBuilder();
             foreach (var domainEvent in domainEvents)
-                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", TypeToStringHelperMethods.GetString(domainEvent.GetType()), domainEvent.AggregateRootId, domainEvent.EventDate.ToUniversalTime(), domainEvent.Sequence,
+                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", TypeToStringHelperMethods.GetString(domainEvent.GetType()), domainEvent.AggregateRootId, domainEvent.EventDate.ToString("s"), domainEvent.Sequence,
                                  (serializer.Serialize(domainEvent) ?? string.Empty)
                                  .Replace("'", "''"));
 

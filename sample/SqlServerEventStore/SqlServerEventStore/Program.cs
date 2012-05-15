@@ -70,8 +70,7 @@ namespace SqlServerEventStoreSample
     public class BinarySampleRuntime : SimpleCqrs.SimpleCqrsRuntime<SimpleCqrs.Unity.UnityServiceLocator>
     {
         protected override IEventStore GetEventStore(SimpleCqrs.IServiceLocator serviceLocator) {
-            var configuration = new SqlServerConfiguration("Server=(local)\\sqlexpress;Database=test_event_store;Trusted_Connection=True;",
-                "dbo", "binary_event_store");
+            var configuration = new SqlServerConfiguration(@"Server=(local)\sqlexpress;Database=test_event_store;Trusted_Connection=True;");
             return new SqlServerEventStore(configuration, new BinaryDomainEventSerializer());
         }
     }
@@ -80,8 +79,7 @@ namespace SqlServerEventStoreSample
     {
         protected override IEventStore GetEventStore(SimpleCqrs.IServiceLocator serviceLocator)
         {
-            var configuration = new SqlServerConfiguration("Server=(local)\\sqlexpress;Database=test_event_store;Trusted_Connection=True;",
-                "dbo", "json_event_store");
+            var configuration = new SqlServerConfiguration(@"Server=(local)\sqlexpress;Database=test_event_store;Trusted_Connection=True;");
             return new SqlServerEventStore(configuration, new JsonDomainEventSerializer());
         }
     }
