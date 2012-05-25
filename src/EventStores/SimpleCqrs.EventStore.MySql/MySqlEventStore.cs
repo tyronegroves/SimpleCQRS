@@ -40,7 +40,7 @@ namespace SimpleCqrs.EventStore.MySql
             using (var connection = new MySqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(MySqlStatements.xGetEventsByAggregateRootAndSequence, "", "EventStore", aggregateRootId,
+                var sql = string.Format(MySqlStatements.GetEventsByAggregateRootAndSequence, "", "EventStore", aggregateRootId,
                                         startSequence);
                 using (var command = new MySqlCommand(sql, connection))
                 using (var reader = command.ExecuteReader())
@@ -94,7 +94,7 @@ namespace SimpleCqrs.EventStore.MySql
             using (var connection = new MySqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(MySqlStatements.xGetEventsByType, "EventStore", eventParameters);
+                var sql = string.Format(MySqlStatements.GetEventsByType, "EventStore", eventParameters);
                 using (var command = new MySqlCommand(sql, connection))
                 using (var reader = command.ExecuteReader())
                     while (reader.Read())

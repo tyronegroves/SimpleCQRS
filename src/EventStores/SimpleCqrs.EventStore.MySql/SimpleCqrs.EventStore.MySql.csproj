@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper">
-      <HintPath>..\..\packages\Dapper.1.8\lib\net40\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\packages\MySql.Data.6.5.4\lib\net40\MySql.Data.dll</HintPath>
     </Reference>
@@ -56,6 +53,7 @@
     <Compile Include="MySqlServerConfiguration.cs" />
     <Compile Include="MySqlEventStore.cs" />
     <Compile Include="MySqlStatements.cs" />
+    <Compile Include="SqlMapper.cs" />
     <Compile Include="TypeToStringHelperMethods.cs" />
   </ItemGroup>
   <ItemGroup>
