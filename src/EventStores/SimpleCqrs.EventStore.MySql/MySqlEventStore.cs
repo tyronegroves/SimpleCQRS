@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+// using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System.Linq;
 using System.Text;
 using ServiceStack.Text;
 using SimpleCqrs.Eventing;
+using Dapper;
 
-namespace SimpleCqrs.EventStore.SqlServer
+namespace SimpleCqrs.EventStore.MySql
 {
-    public class SqlServerEventStore : IEventStore
+    public class MySqlEventStore : IEventStore
     {
         private readonly IDomainEventSerializer serializer;
-        private readonly SqlServerConfiguration configuration;
+        private readonly MySqlServerConfiguration configuration;
 
-        public SqlServerEventStore(SqlServerConfiguration configuration, IDomainEventSerializer serializer)
+        public MySqlEventStore(MySqlServerConfiguration configuration, IDomainEventSerializer serializer)
         {
             this.serializer = serializer;
             this.configuration = configuration;
@@ -22,11 +24,11 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Init()
         {
-            using (var connection = new SqlConnection(configuration.ConnectionString))
+            using (var connection = new MySqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(SqlStatements.CreateTheEventStoreTable, "EventStore");
-                using (var command = new SqlCommand(sql, connection))
+                var sql = string.Format(MySqlStatements.CreateTheEventStoreTable, "EventStore");
+                using (var command = new MySqlCommand(sql, connection))
                     command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -35,12 +37,12 @@ namespace SimpleCqrs.EventStore.SqlServer
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
             var events = new List<DomainEvent>();
-            using (var connection = new SqlConnection(configuration.ConnectionString))
+            using (var connection = new MySqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(SqlStatements.GetEventsByAggregateRootAndSequence, "", "EventStore", aggregateRootId,
+                var sql = string.Format(MySqlStatements.GetEventsByAggregateRootAndSequence, "", "EventStore", aggregateRootId,
                                         startSequence);
-                using (var command = new SqlCommand(sql, connection))
+                using (var command = new MySqlCommand(sql, connection))
                 using (var reader = command.ExecuteReader())
                     while (reader.Read())
                     {
@@ -62,19 +64,23 @@ namespace SimpleCqrs.EventStore.SqlServer
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
         {
-            var sql = new StringBuilder();
-            foreach (var domainEvent in domainEvents)
-                sql.AppendFormat(SqlStatements.InsertEvents, "EventStore", TypeToStringHelperMethods.GetString(domainEvent.GetType()), domainEvent.AggregateRootId, domainEvent.EventDate.ToString("s"), domainEvent.Sequence,
-                                 (serializer.Serialize(domainEvent) ?? string.Empty)
-                                 .Replace("'", "''"));
+            var queries = domainEvents.Select( domainEvent => 
+                new {
+                    EventType = TypeToStringHelperMethods.GetString(domainEvent.GetType()), 
+                    AggregateRootId = domainEvent.AggregateRootId,  
+                    EventDate = domainEvent.EventDate, 
+                    Sequence = domainEvent.Sequence, 
+                    Data = (serializer.Serialize(domainEvent) ?? string.Empty)
+                                 .Replace("'", "''")
+                });
 
-            if (sql.Length <= 0) return;
 
-            using (var connection = new SqlConnection(configuration.ConnectionString))
+            if (!queries.Any()) return;
+
+            using (var connection = new MySqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand(sql.ToString(), connection))
-                    command.ExecuteNonQuery();
+                connection.Execute(string.Format(MySqlStatements.InsertEvents, "EventStore"), queries);
                 connection.Close();
             }
         }
@@ -85,11 +91,11 @@ namespace SimpleCqrs.EventStore.SqlServer
 
             var eventParameters = domainEventTypes.Select(TypeToStringHelperMethods.GetString).Join("','");
 
-            using (var connection = new SqlConnection(configuration.ConnectionString))
+            using (var connection = new MySqlConnection(configuration.ConnectionString))
             {
                 connection.Open();
-                var sql = string.Format(SqlStatements.GetEventsByType, "EventStore", eventParameters);
-                using (var command = new SqlCommand(sql, connection))
+                var sql = string.Format(MySqlStatements.GetEventsByType, "EventStore", eventParameters);
+                using (var command = new MySqlCommand(sql, connection))
                 using (var reader = command.ExecuteReader())
                     while (reader.Read())
                     {
