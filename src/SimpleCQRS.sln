@@ -40,9 +40,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore.SqlSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.StructureMap", "ServiceLocators\SimpleCqrs.StructureMap\SimpleCqrs.StructureMap.csproj", "{9C1063E4-1A0B-4402-8D78-A3F8E23D3D98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore.AzureBlob", "SimpleCqrs.EventStore.AzureBlob\SimpleCqrs.EventStore.AzureBlob.csproj", "{C9F25601-07CD-45D9-B4F8-E76414DD5501}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore.AzureBlob", "EventStores\SimpleCqrs.EventStore.AzureBlob\SimpleCqrs.EventStore.AzureBlob.csproj", "{C9F25601-07CD-45D9-B4F8-E76414DD5501}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore.AzureBlob.Tests", "SimpleCqrs.EventStore.AzureBlob.Tests\SimpleCqrs.EventStore.AzureBlob.Tests.csproj", "{1D8AE8E2-7BB6-4DA1-9F80-0B7C02965546}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCqrs.EventStore.AzureBlob.Tests", "Tests\EventStores\SimpleCqrs.EventStore.AzureBlob.Tests\SimpleCqrs.EventStore.AzureBlob.Tests.csproj", "{1D8AE8E2-7BB6-4DA1-9F80-0B7C02965546}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
