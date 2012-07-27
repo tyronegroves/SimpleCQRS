@@ -41,7 +41,7 @@ namespace SimpleCqrs.EventStore.AzureBlob.Tests
         [TestCleanup]
         public void CleanUpAzureBlob()
         {
-            //Container.Delete();
+            Container.Delete();
         }
 
         [TestMethod]
