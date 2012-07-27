@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace SimpleCqrs.EventStore.AzureBlob
         private const string _domainEventSequenceMetadata = "DomainEventSequence";
         private const string _filenameMetadata = "Filename";
         private const string _formatFilename = "{0}/{1}.xml";
+        private const string _contentType = "text/xml";
 
         private readonly CloudBlobContainer Container;
         private readonly DataContractSerializer Serializer;
@@ -23,7 +25,7 @@ namespace SimpleCqrs.EventStore.AzureBlob
 
         public AzureBlobEventStore(string containerName, ITypeCatalog typeCatalog, string connectionString)
         {
-            CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting(connectionString);
+            CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
             BlobClient = account.CreateCloudBlobClient();
             Container = BlobClient.GetContainerReference(containerName.ToLower());
             Container.CreateIfNotExist();
@@ -34,19 +36,30 @@ namespace SimpleCqrs.EventStore.AzureBlob
 
         public IEnumerable<DomainEvent> GetEvents(Guid aggregateRootId, int startSequence)
         {
-            foreach (CloudBlob blob in Container.GetDirectoryReference(aggregateRootId.ToString().ToLower())
+            BlockingCollection<DomainEvent> result = new BlockingCollection<DomainEvent>();
+
+            IEnumerable<CloudBlob> cloudBlobs = Container.GetDirectoryReference(aggregateRootId.ToString().ToLower())
                 .ListBlobs()
-                .Select(eventInfo => Container.GetBlobReference(eventInfo.Uri.ToString()))
-                .Where(blob => blob.Metadata[_aggregateRootIdMetadata] == aggregateRootId.ToString().ToLower()
-                    && int.Parse(blob.Metadata[_domainEventSequenceMetadata]) >= startSequence))
-            {
-                using (BlobStream stream = blob.OpenRead())
+                .Select(eventInfo => Container.GetBlobReference(eventInfo.Uri.ToString()));
+            Parallel.ForEach(cloudBlobs, blob =>
                 {
-                    DomainEvent domainEvent = (DomainEvent)Serializer.ReadObject(stream);
-                    yield return domainEvent;
-                    stream.Close();
-                }
-            }
+                    if (Valid(aggregateRootId, startSequence, blob))
+                        using (BlobStream stream = blob.OpenRead())
+                        {
+                            DomainEvent domainEvent = (DomainEvent)Serializer.ReadObject(stream);
+                            lock (result)
+                                result.Add(domainEvent);
+                            stream.Close();
+                        }
+                });
+            return result.OrderBy(b => b.Sequence);
+        }
+
+        private static bool Valid(Guid aggregateRootId, int startSequence, CloudBlob blob)
+        {
+            blob.FetchAttributes();
+            return blob.Metadata[_aggregateRootIdMetadata] == aggregateRootId.ToString().ToLower()
+                   && int.Parse(blob.Metadata[_domainEventSequenceMetadata]) >= startSequence;
         }
 
         public void Insert(IEnumerable<DomainEvent> domainEvents)
@@ -59,6 +72,7 @@ namespace SimpleCqrs.EventStore.AzureBlob
             CloudBlob blob =
                 Container.GetBlobReference(string.Format(_formatFilename, domainEvent.AggregateRootId.ToString().ToLower(),
                                                          domainEvent.Sequence));
+            blob.Properties.ContentType = _contentType;
             using (var stream = blob.OpenWrite())
             {
                 Serializer.WriteObject(stream, domainEvent);

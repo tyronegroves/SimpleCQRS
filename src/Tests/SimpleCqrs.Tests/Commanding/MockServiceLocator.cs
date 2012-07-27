@@ -26,7 +26,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
 
         public T Resolve<T>() where T : class
         {
-            if(resolveFunc != null)
+            if (resolveFunc != null)
                 return (T)resolveFunc(typeof(T));
 
             return mocker.GetMock<T>().Object;
@@ -39,7 +39,7 @@ namespace SimpleCqrs.Core.Tests.Commanding
 
         public object Resolve(Type type)
         {
-            if(resolveFunc != null)
+            if (resolveFunc != null)
                 return resolveFunc(type);
 
             dynamic mock = typeof(AutoMoqer).GetMethod("GetMock").MakeGenericMethod(type).Invoke(mocker, null);
