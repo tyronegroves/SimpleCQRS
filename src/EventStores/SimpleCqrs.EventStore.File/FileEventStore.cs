@@ -56,17 +56,39 @@ namespace SimpleCqrs.EventStore.File
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes)
         {
-            throw new NotImplementedException();
+            var eventInfos = GetEventInfos();
+            return GetEventsByEventTypes(domainEventTypes, eventInfos);
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, Guid aggregateRootId)
         {
-            throw new NotImplementedException();
+            var eventInfos = GetEventInfosForAggregateRoot(aggregateRootId, 0);
+            return GetEventsByEventTypes(domainEventTypes, eventInfos);
         }
 
         public IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, DateTime startDate, DateTime endDate)
         {
-            throw new NotImplementedException();
+            return GetEventsByEventTypes(domainEventTypes).
+                Where(x => startDate <= x.EventDate &&
+                    x.EventDate <= endDate);
+        }
+
+        private IEnumerable<DomainEvent> GetEventsByEventTypes(IEnumerable<Type> domainEventTypes, IEnumerable<dynamic> eventInfos)
+        {
+            var domainEvents = new List<DomainEvent>();
+            foreach (var eventInfo in eventInfos)
+            {
+                using (Stream stream = System.IO.File.OpenRead(eventInfo.FilePath))
+                {
+                    var domainEvent =
+                        (DomainEvent)serializer.ReadObject(stream);
+                    Type eventType = domainEvent.GetType();
+                    if (domainEventTypes.Contains(eventType))
+                        domainEvents.Add(domainEvent);
+                }
+            }
+
+            return domainEvents;
         }
 
         private IEnumerable<dynamic> GetEventInfosForAggregateRoot(Guid aggregateRootId, int startSequence)
@@ -77,6 +99,27 @@ namespace SimpleCqrs.EventStore.File
                    where fileName != null
                    let sequence = int.Parse(fileName)
                    where sequence > startSequence
+                   select new { Sequence = sequence, FilePath = filePath };
+        }
+
+        private IEnumerable<dynamic> GetEventInfos()
+        {
+            if (!Directory.Exists(baseDirectory))
+                return new List<dynamic>();
+            string[] filePaths = Directory.GetFiles(
+                baseDirectory,
+                "*.xml",
+                SearchOption.AllDirectories);
+            return GetEventInfos(filePaths);
+        }
+
+        private static IEnumerable<dynamic> GetEventInfos(string[] filePaths)
+        {
+            return from filePath in filePaths
+                   let fileName = Path.GetFileNameWithoutExtension(filePath)
+                   where fileName != null
+                   let sequence = int.Parse(fileName)
+                   orderby sequence
                    select new { Sequence = sequence, FilePath = filePath };
         }
     }
