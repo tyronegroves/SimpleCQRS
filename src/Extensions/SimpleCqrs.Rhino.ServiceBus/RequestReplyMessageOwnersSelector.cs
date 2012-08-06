@@ -31,9 +31,7 @@ namespace SimpleCqrs.Rhino.ServiceBus
             var messageType = messages[0].GetType();
             if(messageType.IsGenericType && (messageType.GetGenericTypeDefinition() == typeof(Reply<>) || messageType.GetGenericTypeDefinition() == typeof(Request<>)))
             {
-                var messageOwner = messageOwners
-                    .Where(x => x.IsOwner(messageType.GetGenericArguments()[0]))
-                    .FirstOrDefault();
+                var messageOwner = messageOwners.FirstOrDefault(x => x.IsOwner(messageType.GetGenericArguments()[0]));
 
                 var endpoint = endpointRouter.GetRoutedEndpoint(messageOwner.Endpoint);
                 endpoint.Transactional = messageOwner.Transactional;

@@ -67,7 +67,7 @@ namespace SimpleCqrs.Domain
 
             if(methodInfo != null && EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType))
             {
-                methodInfo.Invoke(this, new[] {domainEvent});
+                methodInfo.Invoke(this, new object[] {domainEvent});
             }
 
             ApplyEventToEntities(domainEvent);
@@ -86,7 +86,7 @@ namespace SimpleCqrs.Domain
 
         private static string GetEventHandlerMethodName(string domainEventTypeName)
         {
-            var eventIndex = domainEventTypeName.LastIndexOf("Event");
+            var eventIndex = domainEventTypeName.LastIndexOf("Event", StringComparison.Ordinal);
             return "On" + domainEventTypeName.Remove(eventIndex, 5);
         }
 

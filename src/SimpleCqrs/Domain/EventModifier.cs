@@ -1,4 +1,3 @@
-using System;
 using SimpleCqrs.Eventing;
 
 namespace SimpleCqrs.Domain

@@ -24,7 +24,7 @@ namespace SimpleCqrs.Domain
         {
             domainEvent.EntityId = Id;
 
-            if(!((IHaveATestMode)this).IsInTestMode)
+            if (!((IHaveATestMode)this).IsInTestMode)
                 AggregateRoot.Apply(domainEvent);
 
             uncommittedEvents.Enqueue(domainEvent);
@@ -33,9 +33,9 @@ namespace SimpleCqrs.Domain
 
         public void ApplyHistoricalEvents(params EntityDomainEvent[] entityDomainEvents)
         {
-            foreach(var entityDomainEvent in entityDomainEvents)
+            foreach (var entityDomainEvent in entityDomainEvents)
             {
-                ApplyEventToInternalState(entityDomainEvent);    
+                ApplyEventToInternalState(entityDomainEvent);
             }
         }
 
@@ -52,16 +52,16 @@ namespace SimpleCqrs.Domain
 
             var methodInfo = entityType.GetMethod(GetEventHandlerMethodName(domainEventTypeName),
                                                   BindingFlags.Instance | BindingFlags.Public |
-                                                  BindingFlags.NonPublic, null, new[] {domainEventType}, null);
+                                                  BindingFlags.NonPublic, null, new[] { domainEventType }, null);
 
-            if(methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
+            if (methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
 
-            methodInfo.Invoke(this, new[] {domainEvent});
+            methodInfo.Invoke(this, new object[] { domainEvent });
         }
 
         private static string GetEventHandlerMethodName(string domainEventTypeName)
         {
-            var eventIndex = domainEventTypeName.LastIndexOf("Event");
+            var eventIndex = domainEventTypeName.LastIndexOf("Event", StringComparison.Ordinal);
             return "On" + domainEventTypeName.Remove(eventIndex, 5);
         }
 
