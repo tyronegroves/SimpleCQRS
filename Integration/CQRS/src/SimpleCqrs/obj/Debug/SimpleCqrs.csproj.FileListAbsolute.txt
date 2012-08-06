@@ -1,0 +1,4 @@
+D:\Development\Git\SimpleCQRS-1\binaries\SimpleCqrs.dll
+D:\Development\Git\SimpleCQRS-1\binaries\SimpleCqrs.pdb
+D:\Development\Git\SimpleCQRS-1\src\SimpleCqrs\obj\Debug\SimpleCqrs.dll
+D:\Development\Git\SimpleCQRS-1\src\SimpleCqrs\obj\Debug\SimpleCqrs.pdb

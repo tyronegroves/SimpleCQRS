@@ -1,0 +1,8 @@
+D:\Development\Git\SimpleCQRS-1\src\Tests\SimpleCqrs.Tests\bin\Debug\SimpleCqrs.Core.Tests.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\SimpleCqrs.Tests\bin\Debug\SimpleCqrs.Core.Tests.pdb
+D:\Development\Git\SimpleCQRS-1\src\Tests\SimpleCqrs.Tests\bin\Debug\AutoMoq.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\SimpleCqrs.Tests\bin\Debug\SimpleCqrs.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\SimpleCqrs.Tests\bin\Debug\SimpleCqrs.pdb
+D:\Development\Git\SimpleCQRS-1\src\Tests\SimpleCqrs.Tests\obj\Debug\SimpleCqrs.Core.Tests.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\SimpleCqrs.Tests\obj\Debug\SimpleCqrs.Core.Tests.pdb
+D:\Development\Git\SimpleCQRS-1\src\Tests\SimpleCqrs.Tests\obj\Debug\SimpleCqrs.Tests.csprojResolveAssemblyReference.cache

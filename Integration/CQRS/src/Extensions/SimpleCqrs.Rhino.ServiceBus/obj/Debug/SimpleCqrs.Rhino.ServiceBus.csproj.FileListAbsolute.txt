@@ -1,0 +1,5 @@
+D:\Development\Git\SimpleCQRS-1\binaries\extension\rhino.servicebus\SimpleCqrs.Rhino.ServiceBus.dll
+D:\Development\Git\SimpleCQRS-1\binaries\extension\rhino.servicebus\SimpleCqrs.Rhino.ServiceBus.pdb
+D:\Development\Git\SimpleCQRS-1\src\Extensions\SimpleCqrs.Rhino.ServiceBus\obj\Debug\SimpleCqrs.Rhino.ServiceBus.csprojResolveAssemblyReference.cache
+D:\Development\Git\SimpleCQRS-1\src\Extensions\SimpleCqrs.Rhino.ServiceBus\obj\Debug\SimpleCqrs.Rhino.ServiceBus.dll
+D:\Development\Git\SimpleCQRS-1\src\Extensions\SimpleCqrs.Rhino.ServiceBus\obj\Debug\SimpleCqrs.Rhino.ServiceBus.pdb

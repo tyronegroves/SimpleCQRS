@@ -1,0 +1,13 @@
+<Modules>
+  <Module PersistentId="65B52205-E45D-4D6B-8F48-AFBC4406BEE8" ModuleId="SimpleCqrs.EventStore.File" />
+  <Module PersistentId="E04C12B5-A6D3-4D64-9F38-896BEE68162E" ModuleId="SimpleCqrs" />
+  <Module PersistentId="201A4DF5-2217-4202-80E8-E784737366BC" ModuleId="SimpleCqrs.EventStore.MongoDb" />
+  <Module PersistentId="C9F25601-07CD-45D9-B4F8-E76414DD5501" ModuleId="SimpleCqrs.EventStore.AzureBlob" />
+  <Module PersistentId="1D8AE8E2-7BB6-4DA1-9F80-0B7C02965546" ModuleId="SimpleCqrs.EventStore.AzureBlob.Tests" />
+  <Module PersistentId="6AEAEE90-CF43-47CE-BD60-9F9519120BC6" ModuleId="SimpleCqrs.Tests" />
+  <Module PersistentId="07C2BF77-9646-4C39-BDB2-852B76AA6C75" ModuleId="SimpleCqrs.NServiceBus" />
+  <Module PersistentId="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74" ModuleId="SimpleCqrs.Rhino.ServiceBus" />
+  <Module PersistentId="266DAB4E-3EAD-46A5-88D5-0D9B6EC73A86" ModuleId="SimpleCqrs.Utilites" />
+  <Module PersistentId="9C1063E4-1A0B-4402-8D78-A3F8E23D3D98" ModuleId="SimpleCqrs.StructureMap" />
+  <Module PersistentId="BEEBFC8E-91EC-4E24-8223-395C2302C1B3" ModuleId="SimpleCqrs.EventStore.SqlServer" />
+</Modules>

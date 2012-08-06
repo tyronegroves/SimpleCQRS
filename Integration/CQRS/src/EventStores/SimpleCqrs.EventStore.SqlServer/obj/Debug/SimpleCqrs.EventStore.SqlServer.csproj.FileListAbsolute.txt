@@ -1,0 +1,5 @@
+D:\Development\Git\SimpleCQRS-1\binaries\eventstores\sqlserver\SimpleCqrs.EventStore.SqlServer.dll
+D:\Development\Git\SimpleCQRS-1\binaries\eventstores\sqlserver\SimpleCqrs.EventStore.SqlServer.pdb
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.SqlServer\obj\Debug\SimpleCqrs.EventStore.SqlServer.csprojResolveAssemblyReference.cache
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.SqlServer\obj\Debug\SimpleCqrs.EventStore.SqlServer.dll
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.SqlServer\obj\Debug\SimpleCqrs.EventStore.SqlServer.pdb

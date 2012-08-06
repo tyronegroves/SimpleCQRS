@@ -1,0 +1,5 @@
+D:\Development\Git\SimpleCQRS-1\binaries\eventstores\file\SimpleCqrs.EventStore.File.dll
+D:\Development\Git\SimpleCQRS-1\binaries\eventstores\file\SimpleCqrs.EventStore.File.pdb
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.File\obj\Debug\SimpleCqrs.EventStore.File.dll
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.File\obj\Debug\SimpleCqrs.EventStore.File.pdb
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.File\obj\Debug\SimpleCqrs.EventStore.File.csprojResolveAssemblyReference.cache

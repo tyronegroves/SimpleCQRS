@@ -1,0 +1,10 @@
+D:\Development\Git\binaries\eventstores\azureblob\SimpleCqrs.EventStore.AzureBlob.dll
+D:\Development\Git\binaries\eventstores\azureblob\SimpleCqrs.EventStore.AzureBlob.pdb
+D:\Development\Git\SimpleCQRS-1\src\SimpleCqrs.EventStore.AzureBlob\obj\Debug\SimpleCqrs.EventStore.AzureBlob.csprojResolveAssemblyReference.cache
+D:\Development\Git\SimpleCQRS-1\src\SimpleCqrs.EventStore.AzureBlob\obj\Debug\SimpleCqrs.EventStore.AzureBlob.dll
+D:\Development\Git\SimpleCQRS-1\src\SimpleCqrs.EventStore.AzureBlob\obj\Debug\SimpleCqrs.EventStore.AzureBlob.pdb
+D:\Development\Git\SimpleCQRS-1\binaries\eventstores\azureblob\SimpleCqrs.EventStore.AzureBlob.dll
+D:\Development\Git\SimpleCQRS-1\binaries\eventstores\azureblob\SimpleCqrs.EventStore.AzureBlob.pdb
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.AzureBlob\obj\Debug\SimpleCqrs.EventStore.AzureBlob.csprojResolveAssemblyReference.cache
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.AzureBlob\obj\Debug\SimpleCqrs.EventStore.AzureBlob.dll
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.AzureBlob\obj\Debug\SimpleCqrs.EventStore.AzureBlob.pdb
