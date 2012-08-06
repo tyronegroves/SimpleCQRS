@@ -1,0 +1,13 @@
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\SimpleCrqs.EventStore.MongoDb.Tests.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\SimpleCrqs.EventStore.MongoDb.Tests.pdb
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\AutoMoq.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\SimpleCqrs.EventStore.MongoDb.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\SimpleCqrs.Unity.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\MongoDB.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\Microsoft.Practices.Unity.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\SimpleCqrs.EventStore.MongoDb.pdb
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\bin\Debug\SimpleCqrs.Unity.pdb
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\obj\Debug\SimpleCrqs.EventStore.MongoDb.Tests.csprojResolveAssemblyReference.cache
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\obj\Debug\SimpleCrqs.EventStore.MongoDb.Tests.dll
+D:\Development\Git\SimpleCQRS-1\src\Tests\EventStores\SimpleCrqs.EventStore.MongoDb.Tests\obj\Debug\SimpleCrqs.EventStore.MongoDb.Tests.pdb

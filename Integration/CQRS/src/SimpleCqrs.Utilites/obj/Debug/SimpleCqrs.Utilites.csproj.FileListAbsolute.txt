@@ -1,0 +1,5 @@
+D:\Development\Git\SimpleCQRS-1\binaries\SimpleCqrs.Utilites.dll
+D:\Development\Git\SimpleCQRS-1\binaries\SimpleCqrs.Utilites.pdb
+D:\Development\Git\SimpleCQRS-1\src\SimpleCqrs.Utilites\obj\Debug\SimpleCqrs.Utilites.csprojResolveAssemblyReference.cache
+D:\Development\Git\SimpleCQRS-1\src\SimpleCqrs.Utilites\obj\Debug\SimpleCqrs.Utilites.dll
+D:\Development\Git\SimpleCQRS-1\src\SimpleCqrs.Utilites\obj\Debug\SimpleCqrs.Utilites.pdb

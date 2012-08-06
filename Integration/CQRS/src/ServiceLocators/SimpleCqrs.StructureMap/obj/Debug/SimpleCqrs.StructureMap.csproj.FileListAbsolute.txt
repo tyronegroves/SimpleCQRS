@@ -1,0 +1,5 @@
+D:\Development\Git\SimpleCQRS-1\binaries\servicelocators\structuremap\SimpleCqrs.StructureMap.dll
+D:\Development\Git\SimpleCQRS-1\binaries\servicelocators\structuremap\SimpleCqrs.StructureMap.pdb
+D:\Development\Git\SimpleCQRS-1\src\ServiceLocators\SimpleCqrs.StructureMap\obj\Debug\SimpleCqrs.StructureMap.csprojResolveAssemblyReference.cache
+D:\Development\Git\SimpleCQRS-1\src\ServiceLocators\SimpleCqrs.StructureMap\obj\Debug\SimpleCqrs.StructureMap.dll
+D:\Development\Git\SimpleCQRS-1\src\ServiceLocators\SimpleCqrs.StructureMap\obj\Debug\SimpleCqrs.StructureMap.pdb

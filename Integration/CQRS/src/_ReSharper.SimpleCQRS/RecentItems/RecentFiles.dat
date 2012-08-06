@@ -1,0 +1,49 @@
+﻿<RecentFiles>
+  <RecentFiles>
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Domain/f:Snapshot.cs" caret="0" fromTop="0" />
+    <File id="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74/f:Request.cs" caret="0" fromTop="0" />
+    <File id="07C2BF77-9646-4C39-BDB2-852B76AA6C75/d:Commanding/d:Config/f:CommandEndpointMapping.cs" caret="0" fromTop="0" />
+    <File id="07C2BF77-9646-4C39-BDB2-852B76AA6C75/d:Commanding/d:Config/f:CommandBusConfig.cs" caret="0" fromTop="0" />
+    <File id="BEEBFC8E-91EC-4E24-8223-395C2302C1B3/f:IDomainEventSerializer.cs" caret="13" fromTop="0" />
+    <File id="07C2BF77-9646-4C39-BDB2-852B76AA6C75/f:ConfigureSimpleCqrs.cs" caret="0" fromTop="0" />
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Domain/f:ISnapshotOriginator.cs" caret="0" fromTop="0" />
+    <File id="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74/f:ReplyConsumer.cs" caret="0" fromTop="0" />
+    <File id="BEEBFC8E-91EC-4E24-8223-395C2302C1B3/f:TypeToStringHelperMethods.cs" caret="0" fromTop="0" />
+    <File id="BEEBFC8E-91EC-4E24-8223-395C2302C1B3/d:Serializers/f:JsonDomainEventSerializer.cs" caret="86" fromTop="2" />
+    <File id="07C2BF77-9646-4C39-BDB2-852B76AA6C75/f:ConfigSimpleCqrs.cs" caret="0" fromTop="0" />
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Domain/f:IEventModification.cs" caret="0" fromTop="0" />
+    <File id="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74/f:Reply.cs" caret="0" fromTop="0" />
+    <File id="BEEBFC8E-91EC-4E24-8223-395C2302C1B3/f:SqlStatements.cs" caret="0" fromTop="0" />
+    <File id="201A4DF5-2217-4202-80E8-E784737366BC/f:MongoSnapshotStore.cs" caret="0" fromTop="0" />
+    <File id="07C2BF77-9646-4C39-BDB2-852B76AA6C75/d:Eventing/f:NsbLocalEventBus.cs" caret="0" fromTop="0" />
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Domain/f:IDomainRepository.cs" caret="0" fromTop="0" />
+    <File id="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74/f:DomainEventConsumer.cs" caret="0" fromTop="0" />
+    <File id="BEEBFC8E-91EC-4E24-8223-395C2302C1B3/f:SqlServerEventStore.cs" caret="4725" fromTop="24" />
+    <File id="201A4DF5-2217-4202-80E8-E784737366BC/f:MongoEventStore.cs" caret="0" fromTop="0" />
+    <File id="07C2BF77-9646-4C39-BDB2-852B76AA6C75/d:Eventing/f:NsbEventBus.cs" caret="0" fromTop="0" />
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Domain/f:EventModifier.cs" caret="0" fromTop="0" />
+    <File id="266DAB4E-3EAD-46A5-88D5-0D9B6EC73A86/f:DomainEventReplayer.cs" caret="0" fromTop="0" />
+    <File id="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74/f:RsbEventBus.cs" caret="0" fromTop="0" />
+    <File id="BEEBFC8E-91EC-4E24-8223-395C2302C1B3/f:SqlServerConfiguration.cs" caret="0" fromTop="0" />
+    <File id="9C1063E4-1A0B-4402-8D78-A3F8E23D3D98/f:StructureMapServiceLocator.cs" caret="1981" fromTop="26" />
+    <File id="65B52205-E45D-4D6B-8F48-AFBC4406BEE8/f:FileSnapshotStore.cs" caret="0" fromTop="0" />
+    <File id="65B52205-E45D-4D6B-8F48-AFBC4406BEE8/f:FileEventStore.cs" caret="0" fromTop="0" />
+    <File id="C9F25601-07CD-45D9-B4F8-E76414DD5501/f:AzureBlobSnapshotStore.cs" caret="0" fromTop="0" />
+    <File id="C9F25601-07CD-45D9-B4F8-E76414DD5501/f:AzureBlobEventStore.cs" caret="4227" fromTop="24" />
+  </RecentFiles>
+  <RecentEdits>
+    <File id="65B52205-E45D-4D6B-8F48-AFBC4406BEE8/f:FileEventStore.cs" caret="0" fromTop="0" />
+    <File id="1D8AE8E2-7BB6-4DA1-9F80-0B7C02965546/f:TestAzureBlobEventStore.cs" caret="48" fromTop="1" />
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Eventing/f:LocalEventBus.cs" caret="0" fromTop="0" />
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Domain/f:EventModifier.cs" caret="0" fromTop="0" />
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Domain/f:Entity.cs" caret="2365" fromTop="24" />
+    <File id="E04C12B5-A6D3-4D64-9F38-896BEE68162E/d:Domain/f:AggregateRoot.cs" caret="3355" fromTop="24" />
+    <File id="9C1063E4-1A0B-4402-8D78-A3F8E23D3D98/f:StructureMapServiceLocator.cs" caret="1981" fromTop="26" />
+    <File id="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74/f:RsbEventBus.cs" caret="637" fromTop="23" />
+    <File id="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74/f:RequestReplyMessageOwnersSelector.cs" caret="1349" fromTop="24" />
+    <File id="EE1B7085-F7BC-48BD-B058-C33DF4CD0F74/f:ReplyConsumer.cs" caret="0" fromTop="0" />
+    <File id="07C2BF77-9646-4C39-BDB2-852B76AA6C75/d:Eventing/f:ConfigEventBus.cs" caret="2775" fromTop="41" />
+    <File id="BEEBFC8E-91EC-4E24-8223-395C2302C1B3/f:IDomainEventSerializer.cs" caret="13" fromTop="0" />
+    <File id="BEEBFC8E-91EC-4E24-8223-395C2302C1B3/d:Serializers/f:JsonDomainEventSerializer.cs" caret="86" fromTop="2" />
+  </RecentEdits>
+</RecentFiles>

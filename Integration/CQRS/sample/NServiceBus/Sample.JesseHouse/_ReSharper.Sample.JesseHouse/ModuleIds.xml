@@ -1,0 +1,8 @@
+<Modules>
+  <Module PersistentId="D230A023-FAA1-4858-ACC9-86F800A6EFB7" ModuleId="Sample.JesseHouse.Processing" />
+  <Module PersistentId="A5BB06A5-78F4-4F61-91D4-ADED1A4670F1" ModuleId="Sample.JesseHouse.Commands" />
+  <Module PersistentId="C28D8A9E-EE20-4E73-9BD9-6227DADDBA76" ModuleId="Sample.JesseHouse.Domain" />
+  <Module PersistentId="FB617064-BEF2-4DD8-BF12-B1B4589F2FE2" ModuleId="Sample.JesseHouse.Events" />
+  <Module PersistentId="8DCAB6CE-680D-4BCB-B17F-8AE1487F1AE0" ModuleId="Sample.JesseHouse.ViewModel" />
+  <Module PersistentId="CEECD0F3-51E3-494D-8F69-3307638D5BCA" ModuleId="Sample.JesseHouse.Web" />
+</Modules>

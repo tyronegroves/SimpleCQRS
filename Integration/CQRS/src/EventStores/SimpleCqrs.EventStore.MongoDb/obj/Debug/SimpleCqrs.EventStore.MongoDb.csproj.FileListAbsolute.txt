@@ -1,0 +1,5 @@
+D:\Development\Git\SimpleCQRS-1\binaries\eventstores\mongodb\SimpleCqrs.EventStore.MongoDb.dll
+D:\Development\Git\SimpleCQRS-1\binaries\eventstores\mongodb\SimpleCqrs.EventStore.MongoDb.pdb
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.MongoDb\obj\Debug\SimpleCqrs.EventStore.MongoDb.csprojResolveAssemblyReference.cache
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.MongoDb\obj\Debug\SimpleCqrs.EventStore.MongoDb.dll
+D:\Development\Git\SimpleCQRS-1\src\EventStores\SimpleCqrs.EventStore.MongoDb\obj\Debug\SimpleCqrs.EventStore.MongoDb.pdb
