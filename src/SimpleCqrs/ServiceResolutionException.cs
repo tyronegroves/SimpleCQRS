@@ -39,9 +39,11 @@ namespace SimpleCqrs
             ServiceType = service;
         }
 
+#if ! NETSTANDARD
         public ServiceResolutionException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+#endif
 
         public Type ServiceType { get; set; }
     }

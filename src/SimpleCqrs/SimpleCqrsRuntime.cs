@@ -5,6 +5,11 @@ using System.Reflection;
 using SimpleCqrs.Commanding;
 using SimpleCqrs.Domain;
 using SimpleCqrs.Eventing;
+#if NETSTANDARD
+using Microsoft.DotNet.PlatformAbstractions;
+using Microsoft.Extensions.DependencyModel;
+using System.Diagnostics;
+#endif
 
 namespace SimpleCqrs
 {
@@ -111,7 +116,36 @@ namespace SimpleCqrs
         /// <returns>An <see cref="IEnumerable{Assembly}"/> containing the assemblies to scan.</returns>
         protected virtual IEnumerable<Assembly> GetAssembliesToScan(IServiceLocator serviceLocator)
         {
+#if NETSTANDARD
+            var programType = typeof(SimpleCqrsRuntime<>);
+            var dependencyModel = DependencyContext.Load(programType.GetTypeInfo().Assembly);
+            var assemblyNames = dependencyModel.GetRuntimeAssemblyNames(RuntimeEnvironment.GetRuntimeIdentifier());
+            return assemblyNames.Select(name =>
+            {
+                try
+                {
+                    try
+                    {
+                        var assembly = Assembly.Load(name);
+                        // just load all types and skip this assembly if one or more types cannot be resolved
+                        assembly.DefinedTypes.ToArray();
+                        return assembly;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Write(ex.Message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.Write(ex.Message);
+                }
+
+                return default(Assembly);
+            }).Where(w => w != default(Assembly)).OrderBy(o => o.FullName).ToArray();
+#else
             return AppDomain.CurrentDomain.GetAssemblies();
+#endif
         }
 
         /// <summary>
@@ -160,9 +194,15 @@ namespace SimpleCqrs
         protected virtual IEnumerable<IRegisterComponents> GetComponentRegistrars(Type componentRegistarType, IServiceLocator serviceLocator)
         {
             var typeCatalog = serviceLocator.Resolve<ITypeCatalog>();
-            var componentRegistrarTypes = componentRegistarType.IsInterface ? 
-                typeCatalog.GetInterfaceImplementations(componentRegistarType) : 
+#if NETSTANDARD
+            var componentRegistrarTypes = componentRegistarType.GetTypeInfo().IsInterface ?
+                typeCatalog.GetInterfaceImplementations(componentRegistarType) :
                 typeCatalog.GetDerivedTypes(componentRegistarType);
+#else
+            var componentRegistrarTypes = componentRegistarType.IsInterface ?
+                typeCatalog.GetInterfaceImplementations(componentRegistarType) :
+                typeCatalog.GetDerivedTypes(componentRegistarType);
+#endif
 
             return componentRegistrarTypes
                 .Select(serviceLocator.Resolve)

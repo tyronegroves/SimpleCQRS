@@ -19,8 +19,10 @@ namespace SimpleCqrs.Commanding
         {
         }
 
+#if ! NETSTANDARD
         protected ExecuteTimeoutException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+#endif
     }
 }

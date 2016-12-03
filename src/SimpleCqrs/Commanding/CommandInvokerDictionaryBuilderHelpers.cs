@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if NETSTANDARD
+using System.Diagnostics;
+using System.Reflection;
+#endif
 
 namespace SimpleCqrs.Commanding
 {
@@ -40,11 +44,19 @@ namespace SimpleCqrs.Commanding
 
         private static IEnumerable<Type> GetCommandTypesForCommandHandler(Type commandHandlerType)
         {
+#if NETSTANDARD
+            return (from interfaceType in commandHandlerType.GetInterfaces()
+                    where
+                        interfaceType.GetTypeInfo().IsGenericType &&
+                        interfaceType.GetGenericTypeDefinition() == typeof(IHandleCommands<>)
+                    select interfaceType.GetGenericArguments()[0]).ToArray();
+#else
             return (from interfaceType in commandHandlerType.GetInterfaces()
                     where
                         interfaceType.IsGenericType &&
-                        interfaceType.GetGenericTypeDefinition() == typeof (IHandleCommands<>)
+                        interfaceType.GetGenericTypeDefinition() == typeof(IHandleCommands<>)
                     select interfaceType.GetGenericArguments()[0]).ToArray();
+#endif
+        }
         }
     }
-}
