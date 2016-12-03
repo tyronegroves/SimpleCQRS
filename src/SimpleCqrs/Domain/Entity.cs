@@ -50,11 +50,17 @@ namespace SimpleCqrs.Domain
             var domainEventTypeName = domainEventType.Name;
             var entityType = GetType();
 
+#if NETSTANDARD
+            var methodInfo = entityType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                                       .FirstOrDefault(f => f.Name == GetEventHandlerMethodName(domainEventTypeName)
+                                                         && !f.GetParameters().Any(a => a.ParameterType != domainEventType));
+#else
             var methodInfo = entityType.GetMethod(GetEventHandlerMethodName(domainEventTypeName),
-                                                  BindingFlags.Instance | BindingFlags.Public |
-                                                  BindingFlags.NonPublic, null, new[] {domainEventType}, null);
+                                                  BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                                                  null, new[] {domainEventType}, null);
+#endif
 
-            if(methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
+            if (methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
 
             methodInfo.Invoke(this, new[] {domainEvent});
         }

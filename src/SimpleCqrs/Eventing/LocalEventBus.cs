@@ -1,7 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if NETSTANDARD
+using System.Reflection;
+#endif
+
 
 namespace SimpleCqrs.Eventing
 {
@@ -51,9 +54,15 @@ namespace SimpleCqrs.Eventing
 
         private static IEnumerable<Type> GetDomainEventTypes(Type eventHandlerType)
         {
+#if NETSTANDARD
+            return from interfaceType in eventHandlerType.GetInterfaces()
+                   where interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandleDomainEvents<>)
+                   select interfaceType.GetGenericArguments()[0];
+#else
             return from interfaceType in eventHandlerType.GetInterfaces()
                    where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandleDomainEvents<>)
                    select interfaceType.GetGenericArguments()[0];
+#endif
         }
 
         private class EventHandlerInvoker

@@ -36,19 +36,34 @@ namespace SimpleCqrs
 
         public Type[] GetGenericInterfaceImplementations(Type type)
         {
+#if NETSTANDARD
+            return (from derivedType in loadedTypes
+                    from interfaceType in derivedType.GetInterfaces()
+                    where interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == type
+                    select derivedType).Distinct().ToArray();
+#else
             return (from derivedType in loadedTypes
                     from interfaceType in derivedType.GetInterfaces()
                     where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == type
                     select derivedType).Distinct().ToArray();
+#endif
         }
 
         public Type[] GetInterfaceImplementations(Type type)
         {
+#if NETSTANDARD
+            return (from derivedType in loadedTypes
+                    where !derivedType.GetTypeInfo().IsInterface
+                    from interfaceType in derivedType.GetInterfaces()
+                    where interfaceType == type
+                    select derivedType).Distinct().ToArray();
+#else
             return (from derivedType in loadedTypes
                     where !derivedType.IsInterface
                     from interfaceType in derivedType.GetInterfaces()
                     where interfaceType == type
                     select derivedType).Distinct().ToArray();
+#endif
         }
 
         public Type[] GetInterfaceImplementations<T>()

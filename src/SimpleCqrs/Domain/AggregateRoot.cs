@@ -61,11 +61,17 @@ namespace SimpleCqrs.Domain
             var aggregateRootType = GetType();
 
         	var eventHandlerMethodName = GetEventHandlerMethodName(domainEventTypeName);
-        	var methodInfo = aggregateRootType.GetMethod(eventHandlerMethodName,
-                                                         BindingFlags.Instance | BindingFlags.Public |
-                                                         BindingFlags.NonPublic, null, new[] {domainEventType}, null);
+#if NETSTANDARD
+            var methodInfo = aggregateRootType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                                              .FirstOrDefault(f => f.Name == eventHandlerMethodName
+                                                                && !f.GetParameters().Any(a => a.ParameterType != domainEventType));
+#else
+            var methodInfo = aggregateRootType.GetMethod(eventHandlerMethodName,
+                                                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, 
+                                                         null, new[] { domainEventType }, null);
+#endif
 
-            if(methodInfo != null && EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType))
+            if (methodInfo != null && EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType))
             {
                 methodInfo.Invoke(this, new[] {domainEvent});
             }
