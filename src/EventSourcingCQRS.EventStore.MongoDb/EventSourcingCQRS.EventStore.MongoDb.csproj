@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.13.2" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.2" />
+    <PackageReference Include="MongoDB.Driver.Core" Version="2.13.2" />
+
+    <PackageReference Include="Polly" Version="7.2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\build\../runtimes/win/native/libzstd.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\build\../runtimes/win/native/snappy32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\build\../runtimes/win/native/snappy64.dll" />
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\contentFiles\any\netstandard2.1\Core\Compression\Snappy\lib\win\snappy32.dll" />
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\contentFiles\any\netstandard2.1\Core\Compression\Snappy\lib\win\snappy64.dll" />
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\contentFiles\any\netstandard2.1\Core\Compression\Zstandard\lib\win\libzstd.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\build\../runtimes/win/native/libzstd.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\build\../runtimes/win/native/snappy32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\build\../runtimes/win/native/snappy64.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\build\../runtimes/win/native/libzstd.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EventSourcing\EventSourcingCQRS.csproj" />
+  </ItemGroup>
+</Project>

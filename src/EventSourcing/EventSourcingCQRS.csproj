@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Event Sourcing CQRS</Title>
+    <Description>A simple framework to allow the creation of Event Sourced applications using the CQRS pattern.</Description>
+    <RepositoryUrl>https://github.com/LyndseyPaxton/EventSourcingCQRS</RepositoryUrl>
+    <PackageTags>EventSourcing CQRS EventSourced</PackageTags>
+    <PackageId>EventSourcingCQRS.2202.10.28.001.Test</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Lyndsey Paxton</Authors>
+    <Company>Mental Monkey Software</Company>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Commanding\**" />
+    <EmbeddedResource Remove="Commanding\**" />
+    <None Remove="Commanding\**" />
+  </ItemGroup>
+
+</Project>

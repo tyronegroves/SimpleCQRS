@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Commanding\**" />
+    <EmbeddedResource Remove="Commanding\**" />
+    <None Remove="Commanding\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Domain\AggregateRoot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Domain\DomainRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Domain\Entity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Domain\IDomainRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Domain\ISnapshotOriginator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Domain\Snapshot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>
