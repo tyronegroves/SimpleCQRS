@@ -1,17 +1,33 @@
-﻿namespace EventSourcingCQRS.Eventing
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace EventSourcingCQRS.Eventing
 {
+    [ExcludeFromCodeCoverage]
     public class DomainEventHandlerFactory : IDomainEventHandlerFactory
     {
-        private readonly IServiceLocator serviceLocator;
+        private readonly IServiceProvider _serviceLocator;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public DomainEventHandlerFactory(IServiceLocator serviceLocator)
+        public DomainEventHandlerFactory(IServiceProvider serviceLocator, IServiceScopeFactory serviceScopeFactory)
         {
-            this.serviceLocator = serviceLocator;
+            _serviceLocator = serviceLocator;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public object Create(Type domainEventHandlerType)
         {
-            return serviceLocator.Resolve(domainEventHandlerType);
+            //return _serviceLocator.GetService(domainEventHandlerType);
+
+            try
+            {
+                return _serviceLocator.GetService(domainEventHandlerType);
+            }
+            catch
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
+                return scope.ServiceProvider.GetService(domainEventHandlerType);
+            }
         }
     }
 }

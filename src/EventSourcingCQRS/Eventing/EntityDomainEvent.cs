@@ -1,5 +1,8 @@
-﻿namespace EventSourcingCQRS.Eventing
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace EventSourcingCQRS.Eventing
 {
+    [ExcludeFromCodeCoverage]
     [Serializable]
     public class EntityDomainEvent : DomainEvent
     {

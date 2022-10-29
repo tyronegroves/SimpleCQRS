@@ -2,7 +2,8 @@
 {
     public interface IEventBus
     {
-        void PublishEvent(DomainEvent domainEvent);
-        void PublishEvents(IEnumerable<DomainEvent> domainEvents);
+        Task Publish(DomainEvent domainEvent, CancellationToken cancellationToken);
+
+        Task PublishEvents(IEnumerable<DomainEvent> domainEvents, CancellationToken cancellationToken);
     }
 }

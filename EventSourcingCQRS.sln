@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventStores", "EventStores"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{51C20E77-8726-49E8-9061-161DF28973E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcingCQRS", "src\EventSourcing\EventSourcingCQRS.csproj", "{B3DE1DEF-D1B1-4F24-8C4B-776F6ED8A5BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcingCQRS", "src\EventSourcingCQRS\EventSourcingCQRS.csproj", "{B3DE1DEF-D1B1-4F24-8C4B-776F6ED8A5BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcingCQRS.EventStore.MongoDb", "src\EventSourcingCQRS.EventStore.MongoDb\EventSourcingCQRS.EventStore.MongoDb.csproj", "{B7131E9D-B08D-4C30-BE6B-A8AA5D7C597C}"
 EndProject

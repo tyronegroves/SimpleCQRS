@@ -4,7 +4,8 @@ namespace EventSourcingCQRS.Eventing
 {
     public interface ISnapshotStore
     {
-        Snapshot GetSnapshot(Guid aggregateRootId);
-        void SaveSnapshot<TSnapshot>(TSnapshot snapshot) where TSnapshot : Snapshot;
+        Task<Snapshot> GetSnapshot(Guid aggregateRootId, CancellationToken cancellationToken);
+
+        Task SaveSnapshot<TSnapshot>(TSnapshot snapshot, CancellationToken cancellationToken) where TSnapshot : Snapshot;
     }
 }

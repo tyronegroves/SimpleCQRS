@@ -4,41 +4,38 @@ using EventSourcingCQRS.Eventing;
 
 namespace EventSourcingCQRS.Domain
 {
-    public abstract class Entity : IHaveATestMode
+    public abstract class Entity
     {
-        private readonly Queue<EntityDomainEvent> uncommittedEvents = new Queue<EntityDomainEvent>();
+        private readonly Queue<EntityDomainEvent> _uncommittedEvents = new Queue<EntityDomainEvent>();
 
         public AggregateRoot AggregateRoot { get; set; }
-        public Guid Id { get; protected set; }
-        bool IHaveATestMode.IsInTestMode { get; set; }
 
-        public ReadOnlyCollection<EntityDomainEvent> UncommittedEvents
-        {
-            get { return new ReadOnlyCollection<EntityDomainEvent>(uncommittedEvents.ToList()); }
-        }
+        public Guid Id { get; protected set; }
+
+        public ReadOnlyCollection<EntityDomainEvent> UncommittedEvents =>
+            new ReadOnlyCollection<EntityDomainEvent>(_uncommittedEvents.ToList());
 
         public void Apply(EntityDomainEvent domainEvent)
         {
             domainEvent.EntityId = Id;
 
-            if(!((IHaveATestMode)this).IsInTestMode)
-                AggregateRoot.Apply(domainEvent);
+            AggregateRoot.Apply(domainEvent);
 
-            uncommittedEvents.Enqueue(domainEvent);
+            _uncommittedEvents.Enqueue(domainEvent);
             ApplyEventToInternalState(domainEvent);
         }
 
         public void ApplyHistoricalEvents(params EntityDomainEvent[] entityDomainEvents)
         {
-            foreach(var entityDomainEvent in entityDomainEvents)
+            foreach (var entityDomainEvent in entityDomainEvents)
             {
-                ApplyEventToInternalState(entityDomainEvent);    
+                ApplyEventToInternalState(entityDomainEvent);
             }
         }
 
         public void CommitEvents()
         {
-            uncommittedEvents.Clear();
+            _uncommittedEvents.Clear();
         }
 
         private void ApplyEventToInternalState(EntityDomainEvent domainEvent)
@@ -48,12 +45,15 @@ namespace EventSourcingCQRS.Domain
             var entityType = GetType();
 
             var methodInfo = entityType.GetMethod(GetEventHandlerMethodName(domainEventTypeName),
-                                                  BindingFlags.Instance | BindingFlags.Public |
-                                                  BindingFlags.NonPublic, null, new[] {domainEventType}, null);
+                BindingFlags.Instance | BindingFlags.Public |
+                BindingFlags.NonPublic, null, new[] { domainEventType }, null);
 
-            if(methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType)) return;
+            if (methodInfo == null || !EventHandlerMethodInfoHasCorrectParameter(methodInfo, domainEventType))
+            {
+                return;
+            }
 
-            methodInfo.Invoke(this, new[] {domainEvent});
+            methodInfo.Invoke(this, new[] { domainEvent });
         }
 
         private static string GetEventHandlerMethodName(string domainEventTypeName)
@@ -62,7 +62,8 @@ namespace EventSourcingCQRS.Domain
             return "On" + domainEventTypeName.Remove(eventIndex, 5);
         }
 
-        private static bool EventHandlerMethodInfoHasCorrectParameter(MethodInfo eventHandlerMethodInfo, Type domainEventType)
+        private static bool EventHandlerMethodInfoHasCorrectParameter(MethodInfo eventHandlerMethodInfo,
+            Type domainEventType)
         {
             var parameters = eventHandlerMethodInfo.GetParameters();
             return parameters.Length == 1 && parameters[0].ParameterType == domainEventType;

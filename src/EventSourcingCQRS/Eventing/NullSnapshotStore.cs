@@ -1,16 +1,20 @@
-﻿using EventSourcingCQRS.Domain;
+﻿using System.Diagnostics.CodeAnalysis;
+using EventSourcingCQRS.Domain;
 
 namespace EventSourcingCQRS.Eventing
 {
+    [ExcludeFromCodeCoverage]
     public class NullSnapshotStore : ISnapshotStore
     {
-        public Snapshot GetSnapshot(Guid aggregateRootId)
+        Task<Snapshot> ISnapshotStore.GetSnapshot(Guid aggregateRootId, CancellationToken cancellationToken)
+
         {
             return null;
         }
 
-        public void SaveSnapshot<TSnapshot>(TSnapshot snapshot) where TSnapshot : Snapshot
+        Task ISnapshotStore.SaveSnapshot<TSnapshot>(TSnapshot snapshot, CancellationToken cancellationToken)
         {
+            return Task.CompletedTask;
         }
     }
 }

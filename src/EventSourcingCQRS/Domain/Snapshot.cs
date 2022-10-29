@@ -1,5 +1,8 @@
-﻿namespace EventSourcingCQRS.Domain
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace EventSourcingCQRS.Domain
 {
+    [ExcludeFromCodeCoverage]
     public class Snapshot
     {
         public Guid AggregateRootId { get; set; }
