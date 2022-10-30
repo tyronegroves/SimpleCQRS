@@ -48,6 +48,7 @@
     <Content Remove="C:\Users\lyndsey.paxton\.nuget\packages\mongodb.driver.core\2.13.2\build\../runtimes/win/native/libzstd.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EventSourcingCQRS\EventSourcingCQRS.csproj" />
     <ProjectReference Include="..\EventSourcing\EventSourcingCQRS.csproj" />
   </ItemGroup>
 </Project>
