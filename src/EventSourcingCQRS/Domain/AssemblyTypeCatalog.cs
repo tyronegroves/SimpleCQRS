@@ -9,8 +9,9 @@ namespace EventSourcingCQRS.Domain
 
         public AssemblyTypeCatalog(IEnumerable<Assembly> assemblies)
         {
-            assemblies = AppDomain.CurrentDomain.GetAssemblies();
-               // .Where(a => a.FullName.Contains("MD.Vaccination") || a.FullName.Contains("MD.MyBsa.EventHandlers"));
+            //assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            assemblies = AppDomain.CurrentDomain.GetAssemblies()
+             .Where(a => a.FullName.Contains("EventSourcingCQRS"));
             _loadedTypes = LoadTypes(assemblies);
         }
 

@@ -2,7 +2,7 @@
 
 namespace EventSourcingCQRS.Commanding
 {
-    internal class CommandDispatcher : ICommandDispatcher
+    public class CommandDispatcher : ICommandDispatcher
     {
         private readonly IServiceProvider serviceProvider;
 
@@ -14,4 +14,4 @@ namespace EventSourcingCQRS.Commanding
             return handler.Handle(command, cancellation);
         }
     }
-}
+}  

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -10,7 +10,7 @@
     <RepositoryUrl>https://github.com/LyndseyPaxton/EventSourcingCQRS</RepositoryUrl>
     <PackageTags>EventSourcing CQRS EventSourced</PackageTags>
     <PackageId>EventSourcingCQRS.Beta</PackageId>
-    <Version>1.0.1</Version>
+    <Version>$([System.DateTime]::Now.ToString("yyyy.MM.dd.HHmm"))</Version>
     <Authors>Lyndsey Paxton</Authors>
     <Company>Mental Monkey Software</Company>
   </PropertyGroup>
@@ -33,7 +33,7 @@
     <Compile Remove="Commanding\LocalCommandBus.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="NuGet.exe" Version="3.4.3" />
   </ItemGroup>
 

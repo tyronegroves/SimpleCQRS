@@ -2,7 +2,7 @@
 
 namespace EventSourcingCQRS.Querying
 {
-    internal class QueryDispatcher : IQueryDispatcher
+    public class QueryDispatcher : IQueryDispatcher
     {
         private readonly IServiceProvider serviceProvider;
 
