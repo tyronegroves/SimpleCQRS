@@ -1,0 +1,1 @@
+nuget add C:\Repos\EventSourcingCQRS\src\EventSourcingCQRS\bin\Debug\EventSourcingCQRS.Beta.2022.11.13.6.nupkg -source \\z8\NugetPackages
