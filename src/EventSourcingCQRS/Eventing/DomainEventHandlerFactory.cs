@@ -21,7 +21,14 @@ namespace EventSourcingCQRS.Eventing
 
             try
             {
-                return _serviceLocator.GetService(domainEventHandlerType);
+                var eventHandler = _serviceLocator.GetService(domainEventHandlerType);
+
+                if (eventHandler == null)
+                {
+                    eventHandler = ActivatorUtilities.CreateInstance(_serviceLocator, domainEventHandlerType);
+                }
+
+                return eventHandler;
             }
             catch
             {

@@ -7,73 +7,82 @@ namespace EventSourcingCQRS.Domain
     {
         private readonly IEnumerable<Type> _loadedTypes;
 
-        public AssemblyTypeCatalog(IEnumerable<Assembly> assemblies)
+        //public AssemblyTypeCatalog(IEnumerable<Assembly> assemblies)
+        //{
+        //    assemblies = AppDomain.CurrentDomain.GetAssemblies()
+        //     .Where(a => a.FullName.Contains("EventSourcingCQRS"));
+        //    _loadedTypes = LoadTypes(assemblies);
+        //}
+
+        public AssemblyTypeCatalog(IEnumerable<Type> types)
         {
-            //assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            assemblies = AppDomain.CurrentDomain.GetAssemblies()
-             .Where(a => a.FullName.Contains("EventSourcingCQRS"));
-            _loadedTypes = LoadTypes(assemblies);
+            _loadedTypes = LoadTypes(types);
         }
 
         public Type[] LoadedTypes => _loadedTypes.ToArray();
 
-        public Type[] GetDerivedTypes(Type type)
+        //public Type[] GetDerivedTypes(Type type)
+        //{
+        //    return (
+        //        from derivedType in _loadedTypes
+        //        where type != derivedType
+        //        where type.IsAssignableFrom(derivedType)
+        //        select derivedType).ToArray();
+        //}
+
+        //public Type[] GetDerivedTypes<T>()
+        //{
+        //    return GetDerivedTypes(typeof(T));
+        //}
+
+        //public Type[] GetGenericInterfaceImplementations(Type type)
+        //{
+        //    return (from derivedType in _loadedTypes
+        //            from interfaceType in derivedType.GetInterfaces()
+        //            where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == type
+        //            select derivedType).Distinct().ToArray();
+        //}
+
+        //public Type[] GetInterfaceImplementations(Type type)
+        //{
+        //    return (from derivedType in _loadedTypes
+        //            where !derivedType.IsInterface
+        //            from interfaceType in derivedType.GetInterfaces()
+        //            where interfaceType == type
+        //            select derivedType).Distinct().ToArray();
+        //}
+
+        //public Type[] GetInterfaceImplementations<T>()
+        //{
+        //    return GetInterfaceImplementations(typeof(T));
+        //}
+
+        //public Type GetTypeFromUnqualifiedTypeName(string unqualifiedTypeName)
+        //{
+        //    var assembly =
+        //        LoadedTypes.FirstOrDefault(c => c.FullName != null && c.FullName.EndsWith(unqualifiedTypeName));
+        //    if (assembly == null || string.IsNullOrWhiteSpace(assembly.AssemblyQualifiedName))
+        //    {
+        //        return null;
+        //    }
+
+        //    return Type.GetType(assembly.AssemblyQualifiedName);
+        //}
+
+        //public Type GetTypeFromQualifiedTypeName(string qualifiedTypeName)
+        //{
+        //    var assembly = LoadedTypes.FirstOrDefault(c => c.AssemblyQualifiedName == qualifiedTypeName);
+        //    if (assembly == null || string.IsNullOrWhiteSpace(assembly.AssemblyQualifiedName))
+        //    {
+        //        return null;
+        //    }
+
+        //    return Type.GetType(assembly.AssemblyQualifiedName);
+        //}
+
+        private static IEnumerable<Type> LoadTypes(IEnumerable<Type> types)
         {
-            return (
-                from derivedType in _loadedTypes
-                where type != derivedType
-                where type.IsAssignableFrom(derivedType)
-                select derivedType).ToArray();
-        }
-
-        public Type[] GetDerivedTypes<T>()
-        {
-            return GetDerivedTypes(typeof(T));
-        }
-
-        public Type[] GetGenericInterfaceImplementations(Type type)
-        {
-            return (from derivedType in _loadedTypes
-                    from interfaceType in derivedType.GetInterfaces()
-                    where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == type
-                    select derivedType).Distinct().ToArray();
-        }
-
-        public Type[] GetInterfaceImplementations(Type type)
-        {
-            return (from derivedType in _loadedTypes
-                    where !derivedType.IsInterface
-                    from interfaceType in derivedType.GetInterfaces()
-                    where interfaceType == type
-                    select derivedType).Distinct().ToArray();
-        }
-
-        public Type[] GetInterfaceImplementations<T>()
-        {
-            return GetInterfaceImplementations(typeof(T));
-        }
-
-        public Type GetTypeFromUnqualifiedTypeName(string unqualifiedTypeName)
-        {
-            var assembly =
-                LoadedTypes.FirstOrDefault(c => c.FullName != null && c.FullName.EndsWith(unqualifiedTypeName));
-            if (assembly == null || string.IsNullOrWhiteSpace(assembly.AssemblyQualifiedName))
-            {
-                return null;
-            }
-
-            return Type.GetType(assembly.AssemblyQualifiedName);
-        }
-
-        public Type GetTypeFromQualifiedTypeName(string qualifiedTypeName)
-        {
-            var assembly = LoadedTypes.FirstOrDefault(c => c.AssemblyQualifiedName == qualifiedTypeName);
-            if (assembly == null || string.IsNullOrWhiteSpace(assembly.AssemblyQualifiedName))
-            {
-                return null;
-            }
-
-            return Type.GetType(assembly.AssemblyQualifiedName);
+            return types;
         }
 
         private static IEnumerable<Type> LoadTypes(IEnumerable<Assembly> assemblies)

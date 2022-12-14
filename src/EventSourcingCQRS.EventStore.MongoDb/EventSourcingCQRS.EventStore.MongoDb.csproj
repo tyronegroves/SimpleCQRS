@@ -49,6 +49,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EventSourcingCQRS\EventSourcingCQRS.csproj" />
-    <ProjectReference Include="..\EventSourcing\EventSourcingCQRS.csproj" />
   </ItemGroup>
 </Project>

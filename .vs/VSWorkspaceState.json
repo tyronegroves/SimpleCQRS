@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\EventSourcingCQRS",
+    "\\src\\EventSourcingCQRS\\Eventing"
   ],
+  "SelectedNode": "\\src\\EventSourcingCQRS\\Eventing\\LocalEventBus.cs",
   "PreviewInSolutionExplorer": false
 }

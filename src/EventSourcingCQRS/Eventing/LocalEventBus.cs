@@ -51,6 +51,7 @@
 
         private static IEnumerable<Type> GetDomainEventTypes(Type eventHandlerType)
         {
+
             return from interfaceType in eventHandlerType.GetInterfaces()
                    where interfaceType.IsGenericType &&
                          interfaceType.GetGenericTypeDefinition() == typeof(IHandleDomainEvents<>)
