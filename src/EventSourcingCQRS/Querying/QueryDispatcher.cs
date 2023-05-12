@@ -4,13 +4,13 @@ namespace EventSourcingCQRS.Querying
 {
     public class QueryDispatcher : IQueryDispatcher
     {
-        private readonly IServiceProvider serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
-        public QueryDispatcher(IServiceProvider serviceProvider) => this.serviceProvider = serviceProvider;
+        public QueryDispatcher(IServiceProvider serviceProvider) => this._serviceProvider = serviceProvider;
 
         public Task<TQueryResult> Dispatch<TQuery, TQueryResult>(TQuery query, CancellationToken cancellation)
         {
-            var handler = serviceProvider.GetRequiredService<IQueryHandler<TQuery, TQueryResult>>();
+            var handler = _serviceProvider.GetRequiredService<IQueryHandler<TQuery, TQueryResult>>();
             return handler.Handle(query, cancellation);
         }
     }

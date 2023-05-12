@@ -4,10 +4,10 @@ namespace EventSourcingCQRS.Eventing
 {
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public class DomainEvent
+    public partial class DomainEvent
     {
         public Guid AggregateRootId { get; set; }
         public int Sequence { get; set; }
-        public DateTime EventDate { get; set; }
+        public DateTimeOffset EventDate { get; set; }
     }
 }

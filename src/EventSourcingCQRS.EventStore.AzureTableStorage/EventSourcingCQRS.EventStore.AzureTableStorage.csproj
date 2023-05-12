@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Event Sourcing CQRS Azure Table Storage Event Store</Title>
+    <Description>A Azure Table Storage based event store for EventSourcingCQRS</Description>
+    <RepositoryUrl>https://github.com/LyndseyPaxton/EventSourcingCQRS</RepositoryUrl>
+    <PackageTags>EventSourcing CQRS EventSourced Azure Table Storage</PackageTags>
+    <PackageId>EventSourcingCQRS.EventStore.AzureTableStorage.Beta</PackageId>
+    <Version>$([System.DateTime]::Now.ToString("yyyy.MM.dd.HHmm"))</Version>
+    <Authors>Lyndsey Paxton</Authors>
+    <Company>Mental Monkey Software</Company>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Data.Tables" Version="12.8.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EventSourcingCQRS\EventSourcingCQRS.csproj" />
+  </ItemGroup>
+
+</Project>
