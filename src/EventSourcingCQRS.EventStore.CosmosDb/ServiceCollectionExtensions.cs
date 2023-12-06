@@ -51,21 +51,21 @@ namespace EventSourcingCQRS.EventStore.CosmosDb
 
                     var database = cosmosClient.GetDatabase(databaseName);
 
-                    var uniqueKey = new UniqueKey();
-                    uniqueKey.Paths.Add("/eventData/Sequence");
+                    //////var uniqueKey = new UniqueKey();
+                    //////uniqueKey.Paths.Add("/eventData/Sequence");
                     var containerProperties = new ContainerProperties()
                     {
                         Id = "Events", //Equates to table name
-                        UniqueKeyPolicy = new UniqueKeyPolicy()
-                        {
-                            UniqueKeys = { uniqueKey }
-                        },
-                        PartitionKeyPath = "/eventData/AggregateRootId"
+                        //////UniqueKeyPolicy = new UniqueKeyPolicy()
+                        //////{
+                        //////    UniqueKeys = { uniqueKey }
+                        //////},
+                        PartitionKeyPath = "/eventData/AggregateRootId" 
                     };
 
                     var containerResponse = Task.Run(() => database.CreateContainerIfNotExistsAsync(containerProperties)).GetAwaiter().GetResult();
 
-                    var container = database.GetContainer(containerId);
+                    var container = database.GetContainer(containerProperties.Id);
                     var serialiser = new JsonDomainEventSerializer();
                     return new CosmosDbEventStore(cosmosClient, serialiser, database, container);
                 });

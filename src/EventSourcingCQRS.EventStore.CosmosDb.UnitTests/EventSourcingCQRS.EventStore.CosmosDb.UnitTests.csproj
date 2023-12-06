@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\EventSourcingCQRS.EventStore.CosmosDb\EventSourcingCQRS.EventStore.CosmosDb.csproj" />
+    <ProjectReference Include="..\EventSourcingCQRS.EventStore.CosmosDb\EventSourcingCQRS.EventStore.CosmosDb.csproj" />
   </ItemGroup>
 
 </Project>
