@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Event Sourcing CQRS</Title>
+    <Description>A simple framework to allow the creation of Event Sourced applications using the CQRS pattern.</Description>
+    <RepositoryUrl>https://github.com/LyndseyPaxton/EventSourcingCQRS</RepositoryUrl>
+    <PackageTags>EventSourcing CQRS EventSourced</PackageTags>
+    <PackageId>EventSourcingCQRS.Beta</PackageId>
+    <Version>$([System.DateTime]::Now.ToString("yyyy.MM.dd.HHmm"))</Version>
+    <Authors>Lyndsey Paxton</Authors>
+    <Company>Mental Monkey Software</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Commanding\AggregateRootCommandHandler.cs" />
+    <Compile Remove="Commanding\CommandHandler.cs" />
+    <Compile Remove="Commanding\CommandHandlerNotFoundException.cs" />
+    <Compile Remove="Commanding\CommandInvokerDictionaryBuilderHelpers.cs" />
+    <Compile Remove="Commanding\CommandWithAggregateRootId.cs" />
+    <Compile Remove="Commanding\CreateCommandHandler.cs" />
+    <Compile Remove="Commanding\DuplicateCommandHandlersException.cs" />
+    <Compile Remove="Commanding\ExecuteTimeoutException.cs" />
+    <Compile Remove="Commanding\ICommand.cs" />
+    <Compile Remove="Commanding\ICommandBus.cs" />
+    <Compile Remove="Commanding\ICommandErrorHandler.cs" />
+    <Compile Remove="Commanding\ICommandHandlingContext.cs" />
+    <Compile Remove="Commanding\ICommandWithAggregateRootId.cs" />
+    <Compile Remove="Commanding\IHandleCommands.cs" />
+    <Compile Remove="Commanding\LocalCommandBus.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="NuGet.exe" Version="3.4.3" />
+    <PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
+  </ItemGroup>
+
+</Project>
